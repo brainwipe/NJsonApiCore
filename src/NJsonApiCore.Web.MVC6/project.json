@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "NJsonApiCore Class Library",
+  "description": "NJsonApiCore Web Class Library for .NET Core MVC 6",
   "authors": [ "Rob" ],
   "tags": [ "" ],
   "projectUrl": "",
@@ -13,14 +13,13 @@
         "System.Linq": "4.0.1-beta-23516",
         "System.Runtime": "4.0.21-beta-23516",
         "System.Threading": "4.0.11-beta-23516",
-        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final"
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+        "NJsonApiCore": "1.0.0-*"
       }
     }
   },
   "dependencies": {
     "Humanizer.Core": "2.0.1",
     "Newtonsoft.Json": "8.0.2"
-  },
-  "configurations": {
   },
 }
