@@ -1,6 +1,6 @@
 {
   "version": "1.0.0-*",
-  "description": "NJsonApi Class Library",
+  "description": "NJsonApiCore Class Library",
   "authors": [ "Rob" ],
   "tags": [ "" ],
   "projectUrl": "",
@@ -12,14 +12,16 @@
         "System.Collections": "4.0.11-beta-23516",
         "System.Linq": "4.0.1-beta-23516",
         "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
+        "System.Threading": "4.0.11-beta-23516",
+        "Microsoft.AspNet.Mvc": "6.0.0-rc1-final"
       }
-    },
-    "dnx451": { }
+    }
   },
   "dependencies": {
     "Humanizer.Core": "2.0.1",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Newtonsoft.Json": "8.0.2"
+  },
+  "configurations": {
+    "Debug 462": { }
   },
 }

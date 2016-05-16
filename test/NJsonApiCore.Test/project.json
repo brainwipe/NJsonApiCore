@@ -1,21 +1,20 @@
 {
   "version": "1.0.0-*",
-  "description": "NJsonApi.Test Class Library",
-  "authors": [ "Rob" ],
+  "description": "NJsonApiCore.Test Class Library",
+  "authors": [ "Rob Lang" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
 
   "frameworks": {
     "dnxcore50": { },
-    "dnx451": { }
   },
   "dependencies": {
     "Microsoft.AspNet.Http": "1.0.0-rc1-final",
-    "NJsonApi": "1.0.0-*",
+    "NJsonApiCore": "1.0.0-*",
     "xunit": "2.2.0-beta1-build3239",
     "xunit.runner.dnx": "2.1.0-rc1-build204",
-    "xunit.runner.visualstudio": "2.2.0-beta1-build1144",
+    "xunit.runner.visualstudio": "2.2.0-beta1-build1144"
   },
   "commands": {
     "test": "xunit.runner.dnx"

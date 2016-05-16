@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace NJsonApi.Common.Test.Utils
 {
-     public class ExpressionUtilsTest
+    public class ExpressionUtilsTest
     {
         [Fact]
         public void ToCompiledSetterAction_ReturnsWorkingDelegate()

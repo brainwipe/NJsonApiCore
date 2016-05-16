@@ -14,7 +14,7 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "NJsonApi": "1.0.0-*"
+    "NJsonApiCore": "1.0.0-*"
   },
 
   "commands": {
@@ -22,8 +22,7 @@
   },
 
   "frameworks": {
-    "dnxcore50": { },
-    "dnx451": { }
+    "dotnet5.4": { }
   },
 
   "exclude": [

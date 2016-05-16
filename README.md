@@ -1,15 +1,15 @@
-# NJsonApi
+# NJsonApiCore
 The .NET server implementation of the {**json:api**} standard running on .NET Core 1.0 (aka ASP.NET 5, MVC 6, DNX/vNext/OWIN).
 
 > This library is not a complete implementation of the JSONApi 1.0 specification and is under heavy development.
 
 ## History
-Originally courtesy of [**SocialCee**](http://socialcee.com) and forked from the work done by https://github.com/jacek-gorgon/NJsonApi
+Originally courtesy of [**SocialCee**](http://socialcee.com), forked NJsonApi from the work done by https://github.com/jacek-gorgon/NJsonApi and then formed into its own repository for [**My Clinical Outcomes**](http://www.myclinicaloutcomes.com).
 
 ## How to use
 There is currently no nuget package. You will need to download the code and build the NJsonApi.sln yourself, the nuget package is not part of this branch. 
 
-A HelloWorld project (running ASP.NET Core 1.0) implements the sample below.
+A HelloWorld project (running ASP.NET Core 1.0 RC1) implements the sample below.
 
 Unit tests are written using xUnit.
 
