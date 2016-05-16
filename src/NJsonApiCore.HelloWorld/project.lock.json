@@ -3,27 +3,6 @@
   "version": 2,
   "targets": {
     ".NETPlatform,Version=v5.4": {
-      "Humanizer.Core/2.0.1": {
-        "type": "package",
-        "dependencies": {
-          "System.Collections": "4.0.0",
-          "System.Diagnostics.Debug": "4.0.0",
-          "System.Globalization": "4.0.0",
-          "System.Linq": "4.0.0",
-          "System.Reflection": "4.0.0",
-          "System.Reflection.Extensions": "4.0.0",
-          "System.Resources.ResourceManager": "4.0.0",
-          "System.Runtime": "4.0.0",
-          "System.Runtime.Extensions": "4.0.0",
-          "System.Text.RegularExpressions": "4.0.0"
-        },
-        "compile": {
-          "lib/dotnet/Humanizer.dll": {}
-        },
-        "runtime": {
-          "lib/dotnet/Humanizer.dll": {}
-        }
-      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -1239,27 +1218,13 @@
           "ref/dotnet5.2/Microsoft.Win32.Registry.dll": {}
         }
       },
-      "Newtonsoft.Json/8.0.2": {
+      "Newtonsoft.Json/6.0.6": {
         "type": "package",
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NJsonApiCore/1.0.0": {
-        "type": "project",
-        "framework": ".NETPlatform,Version=v5.4",
-        "dependencies": {
-          "Humanizer.Core": "2.0.1",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.CSharp": "4.0.1-beta-23516",
-          "Newtonsoft.Json": "8.0.2",
-          "System.Collections": "4.0.11-beta-23516",
-          "System.Linq": "4.0.1-beta-23516",
-          "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         }
       },
       "System.AppContext/4.0.0": {
@@ -2005,27 +1970,6 @@
       }
     },
     ".NETPlatform,Version=v5.4/win7-x86": {
-      "Humanizer.Core/2.0.1": {
-        "type": "package",
-        "dependencies": {
-          "System.Collections": "4.0.0",
-          "System.Diagnostics.Debug": "4.0.0",
-          "System.Globalization": "4.0.0",
-          "System.Linq": "4.0.0",
-          "System.Reflection": "4.0.0",
-          "System.Reflection.Extensions": "4.0.0",
-          "System.Resources.ResourceManager": "4.0.0",
-          "System.Runtime": "4.0.0",
-          "System.Runtime.Extensions": "4.0.0",
-          "System.Text.RegularExpressions": "4.0.0"
-        },
-        "compile": {
-          "lib/dotnet/Humanizer.dll": {}
-        },
-        "runtime": {
-          "lib/dotnet/Humanizer.dll": {}
-        }
-      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -3244,27 +3188,13 @@
           "ref/dotnet5.2/Microsoft.Win32.Registry.dll": {}
         }
       },
-      "Newtonsoft.Json/8.0.2": {
+      "Newtonsoft.Json/6.0.6": {
         "type": "package",
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NJsonApiCore/1.0.0": {
-        "type": "project",
-        "framework": ".NETPlatform,Version=v5.4",
-        "dependencies": {
-          "Humanizer.Core": "2.0.1",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.CSharp": "4.0.1-beta-23516",
-          "Newtonsoft.Json": "8.0.2",
-          "System.Collections": "4.0.11-beta-23516",
-          "System.Linq": "4.0.1-beta-23516",
-          "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.any.System.Linq.Expressions/4.0.11-beta-23516": {
@@ -4274,27 +4204,6 @@
       }
     },
     ".NETPlatform,Version=v5.4/win7-x64": {
-      "Humanizer.Core/2.0.1": {
-        "type": "package",
-        "dependencies": {
-          "System.Collections": "4.0.0",
-          "System.Diagnostics.Debug": "4.0.0",
-          "System.Globalization": "4.0.0",
-          "System.Linq": "4.0.0",
-          "System.Reflection": "4.0.0",
-          "System.Reflection.Extensions": "4.0.0",
-          "System.Resources.ResourceManager": "4.0.0",
-          "System.Runtime": "4.0.0",
-          "System.Runtime.Extensions": "4.0.0",
-          "System.Text.RegularExpressions": "4.0.0"
-        },
-        "compile": {
-          "lib/dotnet/Humanizer.dll": {}
-        },
-        "runtime": {
-          "lib/dotnet/Humanizer.dll": {}
-        }
-      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -5513,27 +5422,13 @@
           "ref/dotnet5.2/Microsoft.Win32.Registry.dll": {}
         }
       },
-      "Newtonsoft.Json/8.0.2": {
+      "Newtonsoft.Json/6.0.6": {
         "type": "package",
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NJsonApiCore/1.0.0": {
-        "type": "project",
-        "framework": ".NETPlatform,Version=v5.4",
-        "dependencies": {
-          "Humanizer.Core": "2.0.1",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.CSharp": "4.0.1-beta-23516",
-          "Newtonsoft.Json": "8.0.2",
-          "System.Collections": "4.0.11-beta-23516",
-          "System.Linq": "4.0.1-beta-23516",
-          "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.any.System.Linq.Expressions/4.0.11-beta-23516": {
@@ -6544,25 +6439,6 @@
     }
   },
   "libraries": {
-    "NJsonApiCore/1.0.0": {
-      "type": "project",
-      "path": "../NJsonApiCore/project.json"
-    },
-    "Humanizer.Core/2.0.1": {
-      "type": "package",
-      "sha512": "NmkXfa0KvvalERU9vMOnRa/8QnkjH8bIWakxCXcYDyYiYhhkxB67AYR10UregyKdjXXGS+prTBMNfbFdp0zmow==",
-      "files": [
-        "Humanizer.Core.2.0.1.nupkg",
-        "Humanizer.Core.2.0.1.nupkg.sha512",
-        "Humanizer.Core.nuspec",
-        "lib/dotnet/Humanizer.dll",
-        "lib/dotnet/Humanizer.pdb",
-        "lib/dotnet/Humanizer.xml",
-        "lib/portable-win+net45+wp8+wpa81/Humanizer.dll",
-        "lib/portable-win+net45+wp8+wpa81/Humanizer.pdb",
-        "lib/portable-win+net45+wp8+wpa81/Humanizer.xml"
-      ]
-    },
     "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -7713,9 +7589,9 @@
         "ref/net46/Microsoft.Win32.Registry.dll"
       ]
     },
-    "Newtonsoft.Json/8.0.2": {
+    "Newtonsoft.Json/6.0.6": {
       "type": "package",
-      "sha512": "e5yWmEfu68rmtG431zl9N/7PlNKQDIuiDW5MHlEFAZcecakcxrIGnKqrPAtWNILzK2oNanRB5cD150MYhECK3g==",
+      "sha512": "w26uZNyCG5VeoKiEOJ4+9/o8koSofLKwHl7WLreIcp0U6r57L7WiRXmjp8MTKFw6dYNZ9AE0lw69WYbIhUsU9Q==",
       "files": [
         "lib/net20/Newtonsoft.Json.dll",
         "lib/net20/Newtonsoft.Json.xml",
@@ -7725,12 +7601,14 @@
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
         "lib/net45/Newtonsoft.Json.xml",
+        "lib/netcore45/Newtonsoft.Json.dll",
+        "lib/netcore45/Newtonsoft.Json.xml",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
-        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
-        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
-        "Newtonsoft.Json.8.0.2.nupkg",
-        "Newtonsoft.Json.8.0.2.nupkg.sha512",
+        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.xml",
+        "Newtonsoft.Json.6.0.6.nupkg",
+        "Newtonsoft.Json.6.0.6.nupkg.sha512",
         "Newtonsoft.Json.nuspec",
         "tools/install.ps1"
       ]
@@ -10576,8 +10454,7 @@
       "Microsoft.Extensions.Configuration.Json >= 1.0.0-rc1-final",
       "Microsoft.Extensions.Logging >= 1.0.0-rc1-final",
       "Microsoft.Extensions.Logging.Console >= 1.0.0-rc1-final",
-      "Microsoft.Extensions.Logging.Debug >= 1.0.0-rc1-final",
-      "NJsonApiCore >= 1.0.0-*"
+      "Microsoft.Extensions.Logging.Debug >= 1.0.0-rc1-final"
     ],
     ".NETPlatform,Version=v5.4": []
   }
