@@ -1,15 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using NJsonApi.Exceptions;
+using NJsonApi.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using NJsonApi.Serialization;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Microsoft.Net.Http.Headers;
-using NJsonApi.Utils;
-using NJsonApi.Exceptions;
-using NJsonApi.Web;
 
 namespace NJsonApi
 {
@@ -18,12 +14,7 @@ namespace NJsonApi
         private readonly Dictionary<string, IResourceMapping> resourcesMappingsByResourceType = new Dictionary<string, IResourceMapping>();
         private readonly Dictionary<Type, IResourceMapping> resourcesMappingsByType = new Dictionary<Type, IResourceMapping>();
 
-        public Configuration()
-        {
-            DefaultJsonApiMediaType = new MediaTypeHeaderValue("application/vnd.api+json");
-        }
-
-        public MediaTypeHeaderValue DefaultJsonApiMediaType { get; private set; }
+        public string DefaultJsonApiMediaType => "application/vnd.api+json";
 
         public void AddMapping(IResourceMapping resourceMapping)
         {
@@ -53,24 +44,6 @@ namespace NJsonApi
             return GetMapping(Reflection.GetObjectType(objectGraph));
         }
 
-        public void Apply(IServiceCollection services)
-        {
-            services.AddMvc(
-                options =>
-                    {
-                        options.Conventions.Add(new ApiExplorerVisibilityEnabledConvention());
-                        options.Filters.Add(typeof(JsonApiActionFilter));
-                        options.Filters.Add(typeof(JsonApiExceptionFilter));
-                        options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(this));
-                    });
-
-            services.AddSingleton<ILinkBuilder, LinkBuilder>();
-            services.AddInstance<JsonSerializer>(GetJsonSerializer());
-            services.AddSingleton<IJsonApiTransformer, JsonApiTransformer>();
-            services.AddInstance<IConfiguration>(this);
-            services.AddSingleton<TransformationHelper>();
-        }
-
         public bool ValidateIncludedRelationshipPaths(string[] includedPaths, object objectGraph)
         {
             var mapping = GetMapping(objectGraph);
@@ -81,11 +54,11 @@ namespace NJsonApi
             return mapping.ValidateIncludedRelationshipPaths(includedPaths);
         }
 
-        private static JsonSerializer GetJsonSerializer()
+        public JsonSerializer GetJsonSerializer()
         {
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.Converters.Add(new IsoDateTimeConverter());
-            serializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true});
+            serializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
 #if DEBUG
             serializerSettings.Formatting = Formatting.Indented;
 #endif

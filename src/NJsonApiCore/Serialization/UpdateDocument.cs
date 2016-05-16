@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NJsonApi.Serialization.Representations.Resources;
+using System.Collections.Generic;
 
 namespace NJsonApi.Serialization
 {
-    internal class UpdateDocument
+    public class UpdateDocument
     {
         [JsonProperty(PropertyName = "data", Required = Required.Always)]
         public SingleResource Data { get; set; }

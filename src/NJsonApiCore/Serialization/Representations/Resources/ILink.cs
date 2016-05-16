@@ -1,6 +1,6 @@
 ﻿namespace NJsonApi.Serialization.Representations
 {
-    internal interface ILink
+    public interface ILink
     {
         string Href { get; set; }
     }

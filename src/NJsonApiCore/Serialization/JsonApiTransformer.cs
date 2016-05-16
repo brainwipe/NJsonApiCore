@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations;
-using NJsonApi.Utils;
 using NJsonApi.Serialization.Representations.Relationships;
+using NJsonApi.Utils;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NJsonApi.Serialization
 {
-    internal class JsonApiTransformer : IJsonApiTransformer
+    public class JsonApiTransformer : IJsonApiTransformer
     {
         private JsonSerializer serializer;
 
@@ -19,7 +19,7 @@ namespace NJsonApi.Serialization
         private readonly IConfiguration configuration;
 
         public JsonApiTransformer(
-            JsonSerializer serializer, 
+            JsonSerializer serializer,
             IConfiguration configuration,
             TransformationHelper transformationHelper)
         {
@@ -124,7 +124,6 @@ namespace NJsonApi.Serialization
                             (collection.Elements as IList).Add(newInstance);
                         }
                         delta.CollectionDeltas.Add(relMapping.RelationshipName, collection);
-
                     }
                     else if (!relMapping.IsCollection && relationship.Data is SingleResourceIdentifier)
                     {
@@ -138,7 +137,6 @@ namespace NJsonApi.Serialization
                         throw new InvalidOperationException();
                     }
                 }
-
             }
             return delta;
         }

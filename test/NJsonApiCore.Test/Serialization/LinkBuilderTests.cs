@@ -1,11 +1,10 @@
-﻿using NJsonApi.Serialization;
-using NJsonApi.Test.Builders;
+﻿using NJsonApi.Test.Builders;
 using NJsonApi.Test.Fakes;
 using NJsonApi.Test.TestModel;
+using NJsonApi.Web.MVC6.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace NJsonApi.Test.Serialization
@@ -35,7 +34,6 @@ namespace NJsonApi.Test.Serialization
             // Assert
             Assert.Equal("http://www.example.com/posts/1", result.Href);
         }
-
 
         [Fact]
         public void GIVEN_PostResource_AND_LinkMapToAuthor_WHEN_RelationshipSelf_THEN_CorrectLink()

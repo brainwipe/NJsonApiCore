@@ -1,6 +1,6 @@
 ﻿namespace NJsonApi.Serialization.Representations
 {
-    internal interface IResourceLinkage
+    public interface IResourceLinkage
     {
     }
 }

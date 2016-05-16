@@ -1,17 +1,17 @@
+using NJsonApi.Exceptions;
+using NJsonApi.Infrastructure;
+using NJsonApi.Serialization.Representations;
+using NJsonApi.Serialization.Representations.Relationships;
+using NJsonApi.Serialization.Representations.Resources;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NJsonApi.Infrastructure;
-using NJsonApi.Exceptions;
-using NJsonApi.Serialization.Representations;
-using NJsonApi.Serialization.Representations.Relationships;
-using NJsonApi.Serialization.Representations.Resources;
 using System.Reflection;
 
 namespace NJsonApi.Serialization
 {
-    internal class TransformationHelper
+    public class TransformationHelper
     {
         private const string MetaCountAttribute = "count";
         private readonly IConfiguration configuration;
@@ -39,9 +39,9 @@ namespace NJsonApi.Serialization
             {
                 includedList.AddRange(
                     AppendIncludedRepresentationRecursive(
-                        resource, 
-                        resourceMapping, 
-                        alreadyVisitedObjects, 
+                        resource,
+                        resourceMapping,
+                        alreadyVisitedObjects,
                         context));
             }
 
@@ -53,15 +53,15 @@ namespace NJsonApi.Serialization
         }
 
         private List<SingleResource> AppendIncludedRepresentationRecursive(
-            object resource, 
-            IResourceMapping resourceMapping, 
-            HashSet<object> alreadyVisitedObjects, 
+            object resource,
+            IResourceMapping resourceMapping,
+            HashSet<object> alreadyVisitedObjects,
             Context context,
             string parentRelationshipPath = "")
         {
             var includedResources = new List<SingleResource>();
 
-            foreach(var relationship in resourceMapping.Relationships)
+            foreach (var relationship in resourceMapping.Relationships)
             {
                 if (relationship.InclusionRule == ResourceInclusionRules.ForceOmit)
                 {
@@ -75,7 +75,7 @@ namespace NJsonApi.Serialization
                 {
                     continue;
                 }
-                
+
                 foreach (var relatedResource in relatedResources)
                 {
                     if (alreadyVisitedObjects.Contains(relatedResource))
@@ -94,9 +94,9 @@ namespace NJsonApi.Serialization
 
             return includedResources;
         }
-        
+
         private string BuildRelationshipPath(string parentRelationshipPath, IRelationshipMapping relationship)
-        { 
+        {
             if (string.IsNullOrEmpty(parentRelationshipPath))
             {
                 return relationship.RelatedBaseResourceType;
@@ -155,8 +155,8 @@ namespace NJsonApi.Serialization
         }
 
         public SingleResource CreateResourceRepresentation(
-            object objectGraph, 
-            IResourceMapping resourceMapping, 
+            object objectGraph,
+            IResourceMapping resourceMapping,
             Context context)
         {
             var result = new SingleResource();

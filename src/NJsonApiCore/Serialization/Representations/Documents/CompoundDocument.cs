@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NJsonApi.Serialization.Representations;
 using NJsonApi.Serialization.Representations.Resources;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NJsonApi.Serialization.Documents
 {
-    internal class CompoundDocument
+    public class CompoundDocument
     {
         public CompoundDocument()
         {

@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNet.Mvc;
-using NJsonApi.Web.BadActionResultTransformers;
 using NJsonApi.Test.TestModel;
+using NJsonApi.Web.MVC6.BadActionResultTransformers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace NJsonApi.Test.Serialization
 {
     public class BadActionTransformerTests
     {
-
         [Fact]
         public void GIVEN_AGoodAction_WHEN_IsBadAction_THEN_False()
         {
@@ -24,7 +22,6 @@ namespace NJsonApi.Test.Serialization
             // Assert
             Assert.False(result);
         }
-
 
         [Fact]
         public void GIVEN_ABadAction_WHEN_IsBadAction_THEN_True()
@@ -39,7 +36,6 @@ namespace NJsonApi.Test.Serialization
             Assert.True(result);
         }
 
-
         [Fact]
         public void GIVEN_AGoodAction_WHEN_Transform_THEN_Exception()
         {
@@ -51,7 +47,6 @@ namespace NJsonApi.Test.Serialization
 
             // Assert
         }
-
 
         [Fact]
         public void GIVEN_ABadAction_WHEN_Transform_THEN_CompoundDocumentWithError()

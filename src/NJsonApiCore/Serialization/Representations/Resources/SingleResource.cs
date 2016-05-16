@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using NJsonApi.Serialization.Representations.Resources;
 using System.Collections.Generic;
 
 namespace NJsonApi.Serialization.Representations.Resources
 {
-    internal class SingleResource : IResourceRepresentation, IResourceIdentifier
+    public class SingleResource : IResourceRepresentation, IResourceIdentifier
     {
         [JsonProperty(PropertyName = "id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }

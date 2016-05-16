@@ -4,6 +4,7 @@ using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
 using NJsonApi.Web;
+using NJsonApi.Web.MVC6;
 using System.Linq;
 using Xunit;
 
@@ -38,14 +39,12 @@ namespace NJsonApi.Test.Serialization
             Assert.Equal(post.AuthorId, resource.Attributes["authorId"]);
         }
 
-
         [Fact]
         public void GIVEN_Exception_WHEN_OnActionExecuted_THEN_ExceptionIsInCompoundDocument()
         {
             // Arrange
             var transformer = new JsonApiTransformer(null, null, null);
             var exceptionFilter = new JsonApiExceptionFilter(transformer);
-
 
             var post = new PostBuilder()
                 .WithAuthor(PostBuilder.Asimov)
@@ -89,7 +88,6 @@ namespace NJsonApi.Test.Serialization
             Assert.Equal(1, value.Errors.Count());
         }
 
-
         [Fact]
         public void GIVEN_WrongContentType_WHEN_ActionExecuting_THEN_ResponseIs415()
         {
@@ -127,7 +125,6 @@ namespace NJsonApi.Test.Serialization
             Assert.Null(context.Result);
         }
 
-
         [Fact]
         public void GIVEN_CorrectContentType_AND_Parameters_WHEN_ActionExecuting_THEN_ResponseIs415()
         {
@@ -146,7 +143,6 @@ namespace NJsonApi.Test.Serialization
             var result = (UnsupportedMediaTypeResult)context.Result;
             Assert.Equal(415, result.StatusCode);
         }
-
 
         [Fact]
         public void GIVEN_IncorrectAcceptsHeader_WHEN_ActionExecuting_THEN_ResponseIs406()
@@ -188,7 +184,6 @@ namespace NJsonApi.Test.Serialization
             // Assert
             Assert.Null(context.Result);
         }
-
 
         [Fact]
         public void GIVEN_MutlipleAccept_AND_Correct_WHEN_ActionExecuting_THEN_ResponseIsNull()
