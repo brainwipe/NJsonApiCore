@@ -3,15 +3,18 @@ The .NET server implementation of the {**json:api**} standard running on .NET Co
 
 > This library is not a complete implementation of the JSONApi 1.0 specification and is under heavy development.
 
+## Current Development Effort
+The project is being reorganised to support .NET 4.6 as well as .NET Core. Once both frameworks are used then work on fixing issues will resume.
+
 ## History
-Originally courtesy of [**SocialCee**](http://socialcee.com), forked NJsonApi from the work done by https://github.com/jacek-gorgon/NJsonApi and then formed into its own repository for [**My Clinical Outcomes**](http://www.myclinicaloutcomes.com).
+Originally courtesy of [**SocialCee**](http://socialcee.com), forked NJsonApi from the work done by https://github.com/jacek-gorgon/NJsonApi and then formed into its own repository courtesy of [**My Clinical Outcomes**](http://www.myclinicaloutcomes.com).
 
 ## How to use
 There is currently no nuget package. You will need to download the code and build the NJsonApi.sln yourself, the nuget package is not part of this branch. 
 
-A HelloWorld project (running ASP.NET Core 1.0 RC1) implements the sample below.
+The MVC6.HelloWorld project runs (running ASP.NET Core 1.0 RC1) implements the below. It is best run using the DNX tooling (as called May 2015, soon to be renamed CLI) targeting the CoreCli framework. Once built, run this project using the DNX command line, a command window will open and the service will run on `http://localhost:5000`.
 
-Unit tests are written using xUnit.
+Unit tests are written using xUnit. No mocking framework is available.
 
 ## Example
 Using the same entities found on the [JSONApi homepage](http://jsonapi.org/). 
@@ -72,7 +75,7 @@ The Controller method requires no additional attributes or markup:
 	}
 ```
 
-A GET request to `http://localhost:5000/articles/1?include=comments.people` with header `application/vnd.api+json` gives the compound document:
+A GET request to `http://localhost:5000/articles/1?include=comments.people` with header `Content-Type` of `application/vnd.api+json` gives the compound document:
 
 ```json
 {
