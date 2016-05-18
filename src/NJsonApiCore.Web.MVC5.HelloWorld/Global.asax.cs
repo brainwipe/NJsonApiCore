@@ -12,6 +12,8 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+
+            var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
         }
     }
 }

@@ -9,7 +9,7 @@
   },
 
   "frameworks": {
-    "dnxcore5": {
+    "dnx50": {
       "dependencies": {
         "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
         "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",

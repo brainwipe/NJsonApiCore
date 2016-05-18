@@ -140,6 +140,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\StaticPersistentStore.cs" />
+    <Compile Include="NJsonApiConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
