@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace NJsonApi.Web.MVC6.HelloWorld.Controllers
+namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 {
-    [Route("people")]
+    [RoutePrefix("people")]
     public class PeopleController : ApiController
     {
+        [Route("")]
         [HttpGet]
         public IEnumerable<Person> Get()
         {

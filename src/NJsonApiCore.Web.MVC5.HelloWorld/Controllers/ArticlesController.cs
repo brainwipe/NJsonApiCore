@@ -7,9 +7,10 @@ using System.Web.Http;
 
 namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 {
-    [Route("articles")]
+    [RoutePrefix("articles")]
     public class ArticlesController : ApiController
     {
+        [Route("")]
         [HttpGet]
         public IEnumerable<Article> Get()
         {
@@ -23,6 +24,7 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
             return Ok(StaticPersistentStore.Articles.Single(w => w.Id == id));
         }
 
+        [Route("")]
         [HttpPost]
         public IHttpActionResult Post([FromBody]Delta<Article> article)
         {
