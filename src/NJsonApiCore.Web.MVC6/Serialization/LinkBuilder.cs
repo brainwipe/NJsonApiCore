@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.ApiExplorer;
+﻿using Microsoft.AspNet.Mvc.ApiExplorer;
 using Microsoft.AspNet.Routing.Template;
 using NJsonApi.Serialization;
 using NJsonApi.Serialization.Representations;
@@ -12,13 +11,10 @@ namespace NJsonApi.Web.MVC6.Serialization
     public class LinkBuilder : ILinkBuilder
     {
         private readonly IApiDescriptionGroupCollectionProvider descriptionProvider;
-        private readonly IUrlHelper urlHelper;
 
-        public LinkBuilder(IApiDescriptionGroupCollectionProvider descriptionProvider,
-            IUrlHelper urlHelper)
+        public LinkBuilder(IApiDescriptionGroupCollectionProvider descriptionProvider)
         {
             this.descriptionProvider = descriptionProvider;
-            this.urlHelper = urlHelper;
         }
 
         public ILink FindResourceSelfLink(Context context, string resourceId, IResourceMapping resourceMapping)
