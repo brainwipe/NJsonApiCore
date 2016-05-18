@@ -185,9 +185,17 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ArticlesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\PeopleController.cs" />
+    <Compile Include="Controllers\TestExamplesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Article.cs" />
+    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\StaticPersistentStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -205,11 +213,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NJsonApiCore.Web.MVC5\NJsonApiCore.Web.MVC5.csproj">
+      <Project>{806263c3-7903-4f1f-80c7-28793b51181b}</Project>
+      <Name>NJsonApiCore.Web.MVC5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NJsonApiCore\NJsonApiCore.csproj">
+      <Project>{b5c1de91-7ca4-46af-87dd-13dbadce73ce}</Project>
+      <Name>NJsonApiCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
