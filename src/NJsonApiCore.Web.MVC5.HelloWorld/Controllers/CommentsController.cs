@@ -17,9 +17,9 @@ namespace NJsonApi.Web.MVC6.HelloWorld.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public Comment Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return StaticPersistentStore.Comments.Single(w => w.Id == id);
+            return Ok(StaticPersistentStore.Comments.Single(w => w.Id == id));
         }
     }
 }

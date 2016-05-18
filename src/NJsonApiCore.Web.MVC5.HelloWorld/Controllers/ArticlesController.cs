@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Results;
 
 namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 {
@@ -19,13 +18,13 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public Article Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return StaticPersistentStore.Articles.Single(w => w.Id == id);
+            return Ok(StaticPersistentStore.Articles.Single(w => w.Id == id));
         }
 
         [HttpPost]
-        public RedirectToRouteResult Post([FromBody]Delta<Article> article)
+        public IHttpActionResult Post([FromBody]Delta<Article> article)
         {
             var newArticle = article.ToObject();
             newArticle.Id = StaticPersistentStore.GetNextId();
@@ -35,7 +34,7 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 
         [Route("{id}")]
         [HttpPatch]
-        public RedirectToRouteResult Patch([FromBody]Delta<Article> update, int id)
+        public IHttpActionResult Patch([FromBody]Delta<Article> update, int id)
         {
             var article = StaticPersistentStore.Articles.Single(w => w.Id == id);
             update.ApplySimpleProperties(article);
@@ -44,9 +43,9 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
 
         [Route("{id}")]
         [HttpDelete]
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            StaticPersistentStore.Articles.RemoveAll(x => x.Id == id);
+            return Ok(StaticPersistentStore.Articles.RemoveAll(x => x.Id == id));
         }
     }
 }

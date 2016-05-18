@@ -6,7 +6,7 @@ using System.Web.Http;
 
 namespace NJsonApi.Web.MVC6.HelloWorld.Controllers
 {
-    [Route("People")]
+    [Route("people")]
     public class PeopleController : ApiController
     {
         [HttpGet]
@@ -17,9 +17,9 @@ namespace NJsonApi.Web.MVC6.HelloWorld.Controllers
 
         [Route("{id}")]
         [HttpGet]
-        public Person Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return StaticPersistentStore.People.Single(w => w.Id == id);
+            return Ok(StaticPersistentStore.People.Single(w => w.Id == id));
         }
     }
 }
