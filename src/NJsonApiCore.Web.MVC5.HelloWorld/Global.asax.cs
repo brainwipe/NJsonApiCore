@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Practices.Unity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace NJsonApiCore.Web.MVC5.HelloWorld
 {
@@ -10,10 +10,10 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
     {
         protected void Application_Start()
         {
+            var container = new UnityContainer();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
-            UnityConfig.RegisterComponents(GlobalConfiguration.Configuration, nJsonApiConfig);
+            UnityConfig.RegisterComponents(container, GlobalConfiguration.Configuration);
+            FilterConfig.RegisterGlobalFilters(container, GlobalConfiguration.Configuration.Filters);
         }
     }
 }

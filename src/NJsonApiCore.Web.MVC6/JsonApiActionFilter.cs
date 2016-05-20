@@ -106,6 +106,7 @@ namespace NJsonApi.Web
             return string.IsNullOrEmpty(result) ? new string[0] : result.Split(',');
         }
 
+        // TODO - Merge into NJsonApiCore and remove from MVC support libraries
         private bool ValidateAcceptHeader(IHeaderDictionary headers)
         {
             var acceptsHeaders = headers["Accept"].FirstOrDefault();
