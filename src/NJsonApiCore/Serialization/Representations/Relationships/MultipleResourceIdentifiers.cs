@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NJsonApi.Serialization.Representations
 {
-    internal class MultipleResourceIdentifiers : List<SingleResourceIdentifier>, IResourceLinkage
+    public class MultipleResourceIdentifiers : List<SingleResourceIdentifier>, IResourceLinkage
     {
         public MultipleResourceIdentifiers()
         {

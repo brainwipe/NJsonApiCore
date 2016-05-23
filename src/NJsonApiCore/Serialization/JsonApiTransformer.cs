@@ -100,11 +100,11 @@ namespace NJsonApi.Serialization
                 foreach (var relMapping in mapping.Relationships)
                 {
                     var relatedTypeMapping = configuration.GetMapping(relMapping.RelatedBaseType);
-                    var relationship = updateDocument.Data.Relationships[relMapping.RelationshipName];
-                    if (relationship == null)
+                    if (!updateDocument.Data.Relationships.ContainsKey(relMapping.RelationshipName))
                     {
                         continue;
                     }
+                    var relationship = updateDocument.Data.Relationships[relMapping.RelationshipName];
 
                     if (relMapping.IsCollection && relationship.Data is MultipleResourceIdentifiers)
                     {
@@ -128,7 +128,15 @@ namespace NJsonApi.Serialization
                     else if (!relMapping.IsCollection && relationship.Data is SingleResourceIdentifier)
                     {
                         var singleId = relationship.Data as SingleResourceIdentifier;
-                        var instance = Activator.CreateInstance(relMapping.RelatedBaseType);
+                        object instance;
+                        try
+                        {
+                            instance = Activator.CreateInstance(relMapping.RelatedBaseType);
+                        }
+                        catch (MissingMethodException ex)
+                        {
+                            throw new Exception("Could not create the resource with the link given, ensure that you have a parameterless constructor on the linked entity", ex);
+                        }
                         relatedTypeMapping.IdSetter(instance, singleId.Id);
                         delta.ObjectPropertyValues.Add(relMapping.RelationshipName, instance);
                     }

@@ -17,7 +17,7 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
             return StaticPersistentStore.Articles;
         }
 
-        [Route("{id}")]
+        [Route("{id}", Name = "GetArticle")]
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
@@ -31,7 +31,8 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
             var newArticle = article.ToObject();
             newArticle.Id = StaticPersistentStore.GetNextId();
             StaticPersistentStore.Articles.Add(newArticle);
-            return RedirectToRoute("Get", new { id = newArticle.Id });
+
+            return Created(LinkForGet(newArticle.Id), newArticle);
         }
 
         [Route("{id}")]
@@ -40,7 +41,8 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
         {
             var article = StaticPersistentStore.Articles.Single(w => w.Id == id);
             update.ApplySimpleProperties(article);
-            return RedirectToRoute("Get", new { id = id });
+
+            return Ok(article);
         }
 
         [Route("{id}")]
@@ -48,6 +50,11 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
         public IHttpActionResult Delete(int id)
         {
             return Ok(StaticPersistentStore.Articles.RemoveAll(x => x.Id == id));
+        }
+
+        private Uri LinkForGet(int id)
+        {
+            return new Uri(Url.Link("GetArticle", new { id = id }));
         }
     }
 }

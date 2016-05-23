@@ -174,9 +174,9 @@ namespace NJsonApi.Serialization
             return result;
         }
 
-        public Dictionary<string, IRelationship> CreateRelationships(object objectGraph, string parentId, IResourceMapping resourceMapping, Context context)
+        public Dictionary<string, Relationship> CreateRelationships(object objectGraph, string parentId, IResourceMapping resourceMapping, Context context)
         {
-            var relationships = new Dictionary<string, IRelationship>();
+            var relationships = new Dictionary<string, Relationship>();
             foreach (var linkMapping in resourceMapping.Relationships)
             {
                 var relationshipName = linkMapping.RelationshipName;

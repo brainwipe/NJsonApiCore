@@ -2,9 +2,13 @@
 {
     public class Person
     {
-        public Person(string firstname, string lastname, string twitter)
+        public Person()
         {
-            Id = StaticPersistentStore.GetNextId();
+            StaticPersistentStore.GetNextId();
+        }
+
+        public Person(string firstname, string lastname, string twitter) : this()
+        {
             FirstName = firstname;
             LastName = lastname;
             Twitter = twitter;

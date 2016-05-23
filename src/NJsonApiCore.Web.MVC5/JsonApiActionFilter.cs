@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NJsonApi;
+using NJsonApi.Infrastructure;
 using NJsonApi.Serialization;
 using System;
 using System.Collections.Generic;
@@ -65,40 +66,38 @@ namespace NJsonApiCore.Web.MVC5
             return context.Response;
         }
 
-        public virtual void InternalActionExecuting(HttpActionContext actionContext, CancellationToken cancellationToken)
+        public virtual void InternalActionExecuting(HttpActionContext context, CancellationToken cancellationToken)
         {
-            // TODO Deal with POST etc
-
-            /*
-            var body = context.Request.Content.ReadAsStreamAsync().Result;
-            using (var reader = new StreamReader(body))
+            if (context.ActionArguments.Any(a => a.Value is UpdateDocument))
             {
-                using (var jsonReader = new JsonTextReader(reader))
+                var argument = context.ActionArguments.First(a => a.Value is UpdateDocument);
+                var updateDocument = argument.Value as UpdateDocument;
+
+                if (updateDocument != null)
                 {
-                    var updateDocument = serializer.Deserialize(jsonReader, typeof(UpdateDocument)) as UpdateDocument;
+                    var typeInsideDeltaGeneric = GetTypeToUpdate(context);
 
-                    // TODO - this is required for POST operations, have get working first
-                    if (updateDocument != null)
-                    {
-                        //context.ActionDescriptor.GetParameters().Single(x => x.ParameterBinderAttribute)
-
-                        //var actionDescriptorForBody = context.ActionDescriptor
-                        //    .GetParameters()
-                        //    .Single(x => x. == BindingSource.Body);
-
-                        //var typeInsideDeltaGeneric = actionDescriptorForBody
-                        //    .ParameterType
-                        //    .GenericTypeArguments
-                        //    .Single();
-                        //var jsonApiContext = new Context(new Uri(context.Request.RequestUri.AbsoluteUri));
-                        //var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
-                        //context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
-                        //context.ModelState.Clear();
-                    }
+                    var jsonApiContext = new Context(new Uri(context.Request.RequestUri.AbsoluteUri));
+                    var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
+                    context.ActionArguments[argument.Key] = transformed;
+                    context.ModelState.Clear();
                 }
             }
+        }
 
-            */
+        private Type GetTypeToUpdate(HttpActionContext context)
+        {
+            var paramBinding = context.ActionDescriptor
+                .ActionBinding
+                .ParameterBindings
+                .Single(x => x.WillReadBody);
+
+            if (paramBinding.Descriptor.ParameterType.GetGenericTypeDefinition() != typeof(Delta<>))
+            {
+                throw new InvalidOperationException("The action parameter that represents the body of the request must be wrapped in the generic type Delta<YourEntity>");
+            }
+
+            return paramBinding.Descriptor.ParameterType.GetGenericArguments().First();
         }
 
         public virtual void InternalActionExecuted(HttpActionExecutedContext context, CancellationToken cancellationToken)
@@ -108,6 +107,15 @@ namespace NJsonApiCore.Web.MVC5
             if (content == null)
             {
                 return;
+            }
+
+            var relationshipPaths = FindRelationshipPathsToInclude(context.Request);
+
+            if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, content.Value))
+            {
+                // TODO - It would be better to give a little JSON Api styled error with details of the relationship
+                // paths that were not found
+                context.Response = context.Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
             if (!context.Response.IsSuccessStatusCode)
@@ -121,15 +129,6 @@ namespace NJsonApiCore.Web.MVC5
                 //};
                 return;
             }
-
-            var relationshipPaths = FindRelationshipPathsToInclude(context.Request);
-
-            // TODO validate that there are correct relationship paths
-            //if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, responseResult.Value))
-            //{
-            //    context.Result = new HttpStatusCodeResult(400);
-            //    return;
-            //}
 
             var jsonApiContext = new Context(
                 context.Request.RequestUri,

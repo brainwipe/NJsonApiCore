@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Web.Http;
 
 namespace NJsonApiCore.Web.MVC5
 {
@@ -35,6 +36,11 @@ namespace NJsonApiCore.Web.MVC5
         public override bool CanWriteType(Type type)
         {
             if (type == typeof(CompoundDocument))
+            {
+                return true;
+            }
+
+            if (type == typeof(HttpError))
             {
                 return true;
             }

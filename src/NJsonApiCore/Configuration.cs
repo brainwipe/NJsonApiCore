@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using NJsonApi.Exceptions;
+using NJsonApi.Serialization.Converters;
 using NJsonApi.Utils;
 using System;
 using System.Collections;
@@ -58,6 +59,7 @@ namespace NJsonApi
         {
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.Converters.Add(new IsoDateTimeConverter());
+            serializerSettings.Converters.Add(new RelationshipDataConverter());
             serializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
 #if DEBUG
             serializerSettings.Formatting = Formatting.Indented;
