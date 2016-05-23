@@ -1,37 +1,39 @@
 ﻿using NJsonApi.Serialization;
 using NJsonApi.Serialization.Representations;
+using NJsonApiCore.Web.MVC5;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace NJsonApi.Web.MVC5.Serialization
 {
     public class LinkBuilder : ILinkBuilder
     {
         private readonly HttpConfiguration configuration;
+        private readonly IApiExplorer descriptionProvider;
 
-        public LinkBuilder(HttpConfiguration configuration)
+        public LinkBuilder(HttpConfiguration configuration, IApiExplorer descriptionProvider)
         {
             this.configuration = configuration;
+            this.descriptionProvider = descriptionProvider;
         }
 
         public ILink FindResourceSelfLink(Context context, string resourceId, IResourceMapping resourceMapping)
         {
-            return new SimpleLink();
+            var actions = descriptionProvider.From(resourceMapping.Controller);
 
-            //var actions = descriptionProvider.From(resourceMapping.Controller).Items;
+            var action = actions.Single(a =>
+                a.HttpMethod.Method == "GET" &&
+                a.ParameterDescriptions.Count(p => p.Name == "id") == 1);
 
-            //var action = actions.Single(a =>
-            //    a.HttpMethod == "GET" &&
-            //    a.ParameterDescriptions.Count(p => p.Name == "id") == 1);
+            var formattedUri = action.RelativePath.Replace("{id}", resourceId);
 
-            //var values = new Dictionary<string, object>();
-            //values.Add("id", resourceId);
-
-            //return ToUrl(context, action, values);
+            return new SimpleLink(new Uri(context.BaseUri, formattedUri));
         }
 
+        // TODO - Move into NJsonApiCore base library from here and .mVC6
         public ILink RelationshipRelatedLink(Context context, string resourceId, IResourceMapping resourceMapping, IRelationshipMapping linkMapping)
         {
             var selfLink = FindResourceSelfLink(context, resourceId, resourceMapping).Href;
@@ -39,26 +41,12 @@ namespace NJsonApi.Web.MVC5.Serialization
             return new SimpleLink(new Uri(completeLink));
         }
 
+        // TODO - Move into NJsonApiCore base library from here and .mVC6
         public ILink RelationshipSelfLink(Context context, string resourceId, IResourceMapping resourceMapping, IRelationshipMapping linkMapping)
         {
             var selfLink = FindResourceSelfLink(context, resourceId, resourceMapping).Href;
             var completeLink = $"{selfLink}/relationships/{linkMapping.RelationshipName}";
             return new SimpleLink(new Uri(completeLink));
         }
-
-        // TODO replace with UrlHelper method once RC2 has been released
-        //private SimpleLink ToUrl(Context context, ApiDescription action, Dictionary<string, object> values)
-        //{
-        //    var template = TemplateParser.Parse(action.RelativePath);
-        //    var result = action.RelativePath.ToLowerInvariant();
-
-        //    foreach (var parameter in template.Parameters)
-        //    {
-        //        var value = values[parameter.Name];
-        //        result = result.Replace(parameter.ToPlaceholder(), value.ToString());
-        //    }
-
-        //    return new SimpleLink(new Uri(context.BaseUri, result));
-        //}
     }
 }

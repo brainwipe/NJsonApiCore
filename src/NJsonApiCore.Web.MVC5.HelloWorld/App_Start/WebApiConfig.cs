@@ -9,7 +9,6 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API routes
             config.MapHttpAttributeRoutes();
         }
     }

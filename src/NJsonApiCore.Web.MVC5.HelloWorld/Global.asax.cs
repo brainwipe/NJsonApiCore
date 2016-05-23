@@ -11,9 +11,12 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
         protected void Application_Start()
         {
             var container = new UnityContainer();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
             UnityConfig.RegisterComponents(container, GlobalConfiguration.Configuration);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(container, GlobalConfiguration.Configuration.Filters);
+
+            GlobalConfiguration.Configuration.Formatters.Clear();
+            GlobalConfiguration.Configuration.Formatters.Add(container.Resolve<JsonApiMediaTypeFormatter>());
         }
     }
 }

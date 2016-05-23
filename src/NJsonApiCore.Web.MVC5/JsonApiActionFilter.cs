@@ -3,7 +3,6 @@ using NJsonApi;
 using NJsonApi.Serialization;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,17 +21,21 @@ namespace NJsonApiCore.Web.MVC5
         private readonly IConfiguration configuration;
         private readonly JsonSerializer serializer;
 
-        public JsonApiActionFilter(IJsonApiTransformer jsonApiTransformer, IConfiguration configuration)
+        public JsonApiActionFilter(
+            IJsonApiTransformer jsonApiTransformer,
+            IConfiguration configuration,
+            JsonSerializer serializer)
         {
             this.jsonApiTransformer = jsonApiTransformer;
             this.configuration = configuration;
+            this.serializer = serializer;
         }
 
         public async Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext context, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
         {
-            var contentType = context.Request.Content.Headers.FirstOrDefault(x => x.Key == "Content-Type");
+            var contentType = context.Request.Content.Headers.ContentType;
 
-            if (contentType.Value == null || contentType.Value.First() != configuration.DefaultJsonApiMediaType)
+            if (contentType == null || contentType.MediaType != configuration.DefaultJsonApiMediaType)
             {
                 return new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
             }
@@ -42,9 +45,31 @@ namespace NJsonApiCore.Web.MVC5
                 return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
             }
 
-            // TODO REMOVE this line when fixing GET
-            return context.Response;
+            InternalActionExecuting(context, cancellationToken);
 
+            HttpActionExecutedContext executedContext;
+
+            if (context.Response != null)
+            {
+                return context.Response;
+            }
+
+            var response = await continuation();
+            executedContext = new HttpActionExecutedContext(context, null)
+            {
+                Response = response
+            };
+
+            InternalActionExecuted(executedContext, cancellationToken);
+
+            return context.Response;
+        }
+
+        public virtual void InternalActionExecuting(HttpActionContext actionContext, CancellationToken cancellationToken)
+        {
+            // TODO Deal with POST etc
+
+            /*
             var body = context.Request.Content.ReadAsStreamAsync().Result;
             using (var reader = new StreamReader(body))
             {
@@ -69,10 +94,20 @@ namespace NJsonApiCore.Web.MVC5
                         //var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
                         //context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
                         //context.ModelState.Clear();
-
-                        //return context.Response;
                     }
                 }
+            }
+
+            */
+        }
+
+        public virtual void InternalActionExecuted(HttpActionExecutedContext context, CancellationToken cancellationToken)
+        {
+            var content = context.Response.Content as ObjectContent;
+
+            if (content == null)
+            {
+                return;
             }
 
             if (!context.Response.IsSuccessStatusCode)
@@ -84,25 +119,24 @@ namespace NJsonApiCore.Web.MVC5
                 //{
                 //    StatusCode = transformed.Errors.First().Status
                 //};
-                //return;
-            }
-
-            var responseResult = context.Response.Content;
-            var relationshipPaths = FindRelationshipPathsToInclude(context.Request);
-            /*
-            if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, responseResult.Value))
-            {
-                context.Result = new HttpStatusCodeResult(400);
                 return;
             }
 
-            var jsonApiContext = new Context(
-                new Uri(context.Request.RequestUri.AbsolutePath),
-                relationshipPaths);
-            responseResult.Value = jsonApiTransformer.Transform(responseResult.Value, jsonApiContext);
-            */
+            var relationshipPaths = FindRelationshipPathsToInclude(context.Request);
 
-            return context.Response;
+            // TODO validate that there are correct relationship paths
+            //if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, responseResult.Value))
+            //{
+            //    context.Result = new HttpStatusCodeResult(400);
+            //    return;
+            //}
+
+            var jsonApiContext = new Context(
+                context.Request.RequestUri,
+                relationshipPaths);
+            var transformedIntoJsonApi = jsonApiTransformer.Transform(content.Value, jsonApiContext);
+
+            context.Response = context.Request.CreateResponse(HttpStatusCode.OK, transformedIntoJsonApi, configuration.DefaultJsonApiMediaType);
         }
 
         private string[] FindRelationshipPathsToInclude(HttpRequestMessage request)
