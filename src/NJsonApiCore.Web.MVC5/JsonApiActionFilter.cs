@@ -113,20 +113,11 @@ namespace NJsonApiCore.Web.MVC5
 
             if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, content.Value))
             {
-                // TODO - It would be better to give a little JSON Api styled error with details of the relationship
-                // paths that were not found
                 context.Response = context.Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 
             if (!context.Response.IsSuccessStatusCode)
             {
-                // TODO - Deal with errors do GET first
-                //var transformed = BadActionResultTransformer.Transform(context.Result);
-
-                //context.Result = new ObjectResult(transformed)
-                //{
-                //    StatusCode = transformed.Errors.First().Status
-                //};
                 return;
             }
 
