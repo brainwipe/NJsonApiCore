@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="NJsonApiCore : A .NET Core / 4.6.2 implementation of the {json:api} specification http://jsonapi.org/">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>NJsonApiCore</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/brainwipe/NJsonApiCore">View on GitHub</a>
+
+          <h1 id="project_title">NJsonApiCore</h1>
+          <h2 id="project_tagline">A .NET Core / 4.6.2 implementation of the {json:api} specification http://jsonapi.org/</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/brainwipe/NJsonApiCore/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/brainwipe/NJsonApiCore/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="njsonapicore" class="anchor" href="#njsonapicore" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NJsonApiCore</h1>
+
+<p>The .NET server implementation of the {<strong>json:api</strong>} standard running on .NET Core 1.0 (aka ASP.NET 5, MVC 6, DNX/vNext/OWIN).</p>
+
+<blockquote>
+<p>This library is not a complete implementation of the JSONApi 1.0 specification and is under heavy development.</p>
+</blockquote>
+
+<h2>
+<a id="current-development-effort" class="anchor" href="#current-development-effort" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Current Development Effort</h2>
+
+<p>The project is being reorganised to support .NET 4.6 as well as .NET Core. Once both frameworks are used then work on fixing issues will resume.</p>
+
+<h2>
+<a id="history" class="anchor" href="#history" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>History</h2>
+
+<p>Originally courtesy of <a href="http://socialcee.com"><strong>SocialCee</strong></a>, forked NJsonApi from the work done by <a href="https://github.com/jacek-gorgon/NJsonApi">https://github.com/jacek-gorgon/NJsonApi</a> and then formed into its own repository courtesy of <a href="http://www.myclinicaloutcomes.com"><strong>My Clinical Outcomes</strong></a>.</p>
+
+<h2>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
+
+<p>There is currently no nuget package. You will need to download the code and build the NJsonApi.sln yourself, the nuget package is not part of this branch. </p>
+
+<p>The MVC6.HelloWorld project runs (running ASP.NET Core 1.0 RC1) implements the below. It is best run using the DNX tooling (as called May 2015, soon to be renamed CLI) targeting the CoreCli framework. Once built, run this project using the DNX command line, a command window will open and the service will run on <code>http://localhost:5000</code>.</p>
+
+<p>Unit tests are written using xUnit. No mocking framework is available.</p>
+
+<h2>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h2>
+
+<p>Using the same entities found on the <a href="http://jsonapi.org/">JSONApi homepage</a>. </p>
+
+<div class="highlight highlight-source-cs"><pre>    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Article</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Title</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> List&lt;Person&gt; <span class="pl-en">Author</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> List&lt;Comment&gt; <span class="pl-en">Comments</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>}
+    }
+
+      <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Person</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Firstname</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Lastname</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Twitter</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Comment</span>
+    {
+        <span class="pl-k">public</span> <span class="pl-k">int</span> <span class="pl-en">Id</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+        <span class="pl-k">public</span> <span class="pl-k">string</span> <span class="pl-en">Body</span> { <span class="pl-k">get</span>; <span class="pl-k">set</span>; }
+    }
+</pre></div>
+
+<p>During Startup, the entities are registered with the <code>ConfigurationBuilder</code> to build a Configuration. This is done in the ASP.NET Core method: <code>ConfigureServices(IServiceCollection services)</code>.</p>
+
+<div class="highlight highlight-source-cs"><pre>    <span class="pl-k">var</span> configBuilder = <span class="pl-k">new</span> ConfigurationBuilder();
+
+    configBuilder
+      .Resource&lt;Article, ArticlesController&gt;()
+      .WithAllProperties();
+
+  configBuilder
+      .Resource&lt;Person, PeopleController&gt;()
+      .WithAllProperties();
+
+  configBuilder
+      .Resource&lt;Comment, CommentsController&gt;()
+      .WithAllProperties();
+
+    <span class="pl-k">var</span> nJsonApiConfig = configBuilder.Build();
+    nJsonApiConfig.Apply(httpConfiguration);</pre></div>
+
+<p>The Controller method requires no additional attributes or markup:</p>
+
+<div class="highlight highlight-source-cs"><pre>    [Route(<span class="pl-s"><span class="pl-pds">"</span>[controller]<span class="pl-pds">"</span></span>)]
+    <span class="pl-k">public</span> IEnumerable&lt;Article&gt; Get()
+    {
+        <span class="pl-k">return</span> <span class="pl-k">new</span> List&lt;Article&gt;() { ... };
+    }</pre></div>
+
+<p>A GET request to <code>http://localhost:5000/articles/1?include=comments.people</code> with header <code>Content-Type</code> of <code>application/vnd.api+json</code> gives the compound document:</p>
+
+<div class="highlight highlight-source-json"><pre>{
+  <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>articles<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span>: {
+      <span class="pl-s"><span class="pl-pds">"</span>title<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>JSON API paints my bikeshed!<span class="pl-pds">"</span></span>
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>relationships<span class="pl-pds">"</span></span>: {
+      <span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1/relationships/author<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1/author<span class="pl-pds">"</span></span>
+        },
+        <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>
+        }
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1/relationships/comments<span class="pl-pds">"</span></span>,
+          <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1/comments<span class="pl-pds">"</span></span>
+        },
+        <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>: [
+          {
+            <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>5<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>
+          },
+          {
+            <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>6<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>
+          }
+        ],
+        <span class="pl-s"><span class="pl-pds">"</span>meta<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>count<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>
+        }
+      }
+    },
+    <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+      <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1<span class="pl-pds">"</span></span>
+    }
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/articles/1?include=comments.people<span class="pl-pds">"</span></span>
+  },
+  <span class="pl-s"><span class="pl-pds">"</span>included<span class="pl-pds">"</span></span>: [
+    {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>firstName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Dan<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>lastName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Gebhardt<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>twitter<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>dgeb<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/people/3<span class="pl-pds">"</span></span>
+      }
+    },
+    {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>5<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>body<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>First!<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>relationships<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+            <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/5/relationships/author<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/5/author<span class="pl-pds">"</span></span>
+          },
+          <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>: {
+            <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>
+          }
+        }
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/5<span class="pl-pds">"</span></span>
+      }
+    },
+    {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>6<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>comments<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>body<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>I like XML Better<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>relationships<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span>: {
+          <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+            <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/6/relationships/author<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>related<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/6/author<span class="pl-pds">"</span></span>
+          },
+          <span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>: {
+            <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span>,
+            <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>
+          }
+        }
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/comments/6<span class="pl-pds">"</span></span>
+      }
+    },
+    {
+      <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>4<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>people<span class="pl-pds">"</span></span>,
+      <span class="pl-s"><span class="pl-pds">"</span>attributes<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>firstName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Rob<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>lastName<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Lang<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>twitter<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>brainwipe<span class="pl-pds">"</span></span>
+      },
+      <span class="pl-s"><span class="pl-pds">"</span>links<span class="pl-pds">"</span></span>: {
+        <span class="pl-s"><span class="pl-pds">"</span>self<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>http://localhost:5000/people/4<span class="pl-pds">"</span></span>
+      }
+    }
+  ],
+  <span class="pl-s"><span class="pl-pds">"</span>jsonapi<span class="pl-pds">"</span></span>: {
+    <span class="pl-s"><span class="pl-pds">"</span>Version<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>1.0<span class="pl-pds">"</span></span>
+  }
+}</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">NJsonApiCore maintained by <a href="https://github.com/brainwipe">brainwipe</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
