@@ -6,6 +6,7 @@ using NJsonApi.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace NJsonApi
@@ -68,9 +69,24 @@ namespace NJsonApi
             return jsonSerializer;
         }
 
-        public IEnumerable<IResourceMapping> All()
+        public bool ValidateAcceptHeader(string acceptsHeaders)
         {
-            return resourcesMappingsByType.Values;
+            if (string.IsNullOrEmpty(acceptsHeaders))
+            {
+                return true;
+            }
+
+            return acceptsHeaders
+                .Split(',')
+                .Select(x => x.Trim())
+                .Any(x =>
+                    x == "*/*" ||
+                    x == DefaultJsonApiMediaType);
+        }
+
+        public string[] FindRelationshipPathsToInclude(string includeQueryParameter)
+        {
+            return string.IsNullOrEmpty(includeQueryParameter) ? new string[0] : includeQueryParameter.Split(',');
         }
     }
 }

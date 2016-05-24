@@ -131,27 +131,17 @@ namespace NJsonApiCore.Web.MVC5
 
         private string[] FindRelationshipPathsToInclude(HttpRequestMessage request)
         {
-            var result = request.GetQueryNameValuePairs().Where(x => x.Key == "include").FirstOrDefault();
+            var includeQueryParameter = request
+                .GetQueryNameValuePairs()
+                .Where(x => x.Key == "include")
+                .FirstOrDefault();
 
-            return string.IsNullOrEmpty(result.Value) ? new string[0] : result.Value.Split(',');
+            return configuration.FindRelationshipPathsToInclude(includeQueryParameter.Value);
         }
 
-        // TODO - Merge into NJsonApiCore and remove from MVC support libraries
         private bool ValidateAcceptHeader(HttpRequestHeaders headers)
         {
-            var acceptsHeaders = headers.Accept.FirstOrDefault().MediaType;
-
-            if (string.IsNullOrEmpty(acceptsHeaders))
-            {
-                return true;
-            }
-
-            return acceptsHeaders
-                .Split(',')
-                .Select(x => x.Trim())
-                .Any(x =>
-                    x == "*/*" ||
-                    x == configuration.DefaultJsonApiMediaType);
+            return configuration.ValidateAcceptHeader(headers.Accept.FirstOrDefault().MediaType);
         }
     }
 }

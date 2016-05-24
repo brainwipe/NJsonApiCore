@@ -19,5 +19,9 @@ namespace NJsonApi
         bool IsMappingRegistered(Type type);
 
         bool ValidateIncludedRelationshipPaths(string[] includedPaths, object objectGraph);
+
+        bool ValidateAcceptHeader(string acceptsHeaders);
+
+        string[] FindRelationshipPathsToInclude(string includeQueryParameter);
     }
 }

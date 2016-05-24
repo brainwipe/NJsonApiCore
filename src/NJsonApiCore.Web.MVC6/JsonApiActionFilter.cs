@@ -101,27 +101,14 @@ namespace NJsonApi.Web
 
         private string[] FindRelationshipPathsToInclude(HttpRequest request)
         {
-            var result = request.Query["include"].FirstOrDefault();
+            var includeQueryParameter = request.Query["include"].FirstOrDefault();
 
-            return string.IsNullOrEmpty(result) ? new string[0] : result.Split(',');
+            return configuration.FindRelationshipPathsToInclude(includeQueryParameter);
         }
 
-        // TODO - Merge into NJsonApiCore and remove from MVC support libraries
         private bool ValidateAcceptHeader(IHeaderDictionary headers)
         {
-            var acceptsHeaders = headers["Accept"].FirstOrDefault();
-
-            if (string.IsNullOrEmpty(acceptsHeaders))
-            {
-                return true;
-            }
-
-            return acceptsHeaders
-                .Split(',')
-                .Select(x => x.Trim())
-                .Any(x =>
-                    x == "*/*" ||
-                    x == configuration.DefaultJsonApiMediaType);
+            return configuration.ValidateAcceptHeader(headers["Accept"].FirstOrDefault());
         }
     }
 }
