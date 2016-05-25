@@ -1,10 +1,9 @@
 {
   "version": "1.0.0-*",
   "description": "NJsonApiCore Class Library",
-  "authors": [ "Rob" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Rob Lang" ],
+  "tags": [ "nsjonapi jsonapi" ],
+  "projectUrl": "http://brainwipe.github.io/NJsonApiCore/",
   "frameworks": {
     "dnx50": {
       "dependencies": {

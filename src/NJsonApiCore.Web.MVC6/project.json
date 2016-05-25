@@ -1,10 +1,9 @@
 {
   "version": "1.0.0-*",
   "description": "NJsonApiCore Web Class Library for .NET Core MVC 6",
-  "authors": [ "Rob" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Rob Lang" ],
+  "tags": [ "njsonapi jsonapi" ],
+  "projectUrl": "http://brainwipe.github.io/NJsonApiCore/",
   "frameworks": {
     "dnx50": {
       "dependencies": {
@@ -21,5 +20,5 @@
   "dependencies": {
     "Humanizer.Core": "2.0.1",
     "Newtonsoft.Json": "8.0.2"
-  },
+  }
 }
