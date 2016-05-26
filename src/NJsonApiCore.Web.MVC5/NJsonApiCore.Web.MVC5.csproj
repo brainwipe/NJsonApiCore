@@ -128,6 +128,12 @@
     <Content Include="njsonapi.png.ico" />
     <Content Include="njsonapicore-logo.png.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NJsonApiCore\NJsonApiCore.csproj">
+      <Project>{b5c1de91-7ca4-46af-87dd-13dbadce73ce}</Project>
+      <Name>NJsonApiCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
