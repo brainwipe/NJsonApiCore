@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace NJsonApiCore.Web.MVC5.HelloWorld
 {
-    public static class NJsonApiConfiguration
+    public static class MyNJsonApiConfigurationBuilder
     {
         public static IConfiguration BuildConfiguration()
         {

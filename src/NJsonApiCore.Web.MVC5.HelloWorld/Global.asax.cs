@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Mvc;
+using Unity.Mvc5;
 
 namespace NJsonApiCore.Web.MVC5.HelloWorld
 {
@@ -11,12 +13,13 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
         protected void Application_Start()
         {
             var container = new UnityContainer();
-            UnityConfig.RegisterComponents(container, GlobalConfiguration.Configuration);
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(container, GlobalConfiguration.Configuration.Filters);
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
             GlobalConfiguration.Configuration.Formatters.Clear();
-            GlobalConfiguration.Configuration.Formatters.Add(container.Resolve<JsonApiMediaTypeFormatter>());
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            var jsonApiConfiguration = MyNJsonApiConfigurationBuilder.BuildConfiguration();
+            JsonApiAppStart.Configure(GlobalConfiguration.Configuration, container, jsonApiConfiguration);
         }
     }
 }

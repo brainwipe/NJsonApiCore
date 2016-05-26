@@ -152,8 +152,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ArticlesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
@@ -166,7 +164,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\StaticPersistentStore.cs" />
-    <Compile Include="NJsonApiConfiguration.cs" />
+    <Compile Include="MyNJsonApiConfigurationBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

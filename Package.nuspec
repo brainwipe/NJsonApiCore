@@ -7,14 +7,13 @@
     <authors>Rob Lang</authors>
     <owners>Rob Lang</owners>
     <projectUrl>http://brainwipe.github.io/NJsonApiCore</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/brainwipe/NJsonApiCore/gh-pages/images/njsonapicore-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NJsonApiCore extends a ASP.NET json web service so that it returns JSON in the {json:api} format. </description>
     <copyright>Copyright 2016</copyright>
     <releaseNotes>The first version of the NJsonApiCore library</releaseNotes>
     <tags>jsonapi njsonapi webapi core</tags>
     <dependencies>
-      <dependency id="NJsonApiCore" version="1.0.0" />
       <dependency id="Humanizer" version="2.0.1" />
       <dependency id="Newtonsoft.Json" version="6.0.0" />
     </dependencies>
