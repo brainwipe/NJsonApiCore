@@ -1,23 +1,70 @@
 # NJsonApiCore
-The .NET server implementation of the {**json:api**} standard running on .NET Core 1.0 (aka ASP.NET 5, MVC 6, DNX/vNext/OWIN).
+The .NET server implementation of the {**json:api**} standard running on .NET Core 1.0 (aka ASP.NET 5, MVC 6, DNX/vNext/OWIN) and .NET 4.5.2 MVC 5.
 
-> This library is not a complete implementation of the JSONApi 1.0 specification and is under heavy development.
+> This library is not a complete implementation of the JSONApi 1.0.
 
 ## Current Development Effort
-The project is being reorganised to support .NET 4.6 as well as .NET Core. Once both frameworks are used then work on fixing issues will resume.
+NJsonApiCore supports .NET 4.6.2 and .NET Core RC1. Development on .NET Core has paused until .NET Core is properly released to manufacturers (RTM).
 
 ## History
 Originally courtesy of [**SocialCee**](http://socialcee.com), forked NJsonApi from the work done by https://github.com/jacek-gorgon/NJsonApi and then formed into its own repository courtesy of [**My Clinical Outcomes**](http://www.myclinicaloutcomes.com).
 
 ## How to use
-There is currently no nuget package. You will need to download the code and build the NJsonApi.sln yourself, the nuget package is not part of this branch. 
 
-The MVC6.HelloWorld project runs (running ASP.NET Core 1.0 RC1) implements the below. It is best run using the DNX tooling (as called May 2015, soon to be renamed CLI) targeting the CoreCli framework. Once built, run this project using the DNX command line, a command window will open and the service will run on `http://localhost:5000`.
+### 1. Install
+For your ASP.NET 4.5.2/MVC 5 project, install using nuget:
 
-Unit tests are written using xUnit. No mocking framework is available.
+`Install-Package NJsonApiCore`
+
+### 2. Create your NJsonApiCore configuration
+You need to tell NJsonApiCore which controllers serve which resources. Create a satic C# class with a single method that returns `NJsonApi.IConfiguration`. The method will build up your resource configuration using a fluid API:
+
+```
+public static class MyNJsonApiConfiguration {
+  public static IConfiguration Build()
+  {
+    var configBuilder = new ConfigurationBuilder();
+    configBuilder
+      .Resource<MyResource, MyResourceController>()
+      .WithAllProperties();
+    return configBuilder.Build();
+  }
+}
+```
+
+See the MVC5 HelloWorld project for [an example](https://github.com/brainwipe/NJsonApiCore/blob/master/src/NJsonApiCore.Web.MVC5.HelloWorld/MyNJsonApiConfigurationBuilder.cs).
+
+### 3. ASP.NET 4.6.2: Update Application_Start() 
+If you are using ASP.NET 4.6.2/MVC5 then you need to update your `Application_Start()` method in Global.asax.cs. The bare minimum you will need is:
+
+```protected void Application_Start()
+{
+    // Setup the dependency injection container
+    var container = new UnityContainer();
+    DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+
+    // Remove the generic XML formatter
+    GlobalConfiguration.Configuration.Formatters.Clear();
+
+    // Register the routes
+    GlobalConfiguration.Configure(WebApiConfig.Register);
+
+    // Build your NJsonApi configuration and pass it into the JsonApiAppStart configure method
+    var jsonApiConfiguration = MyNJsonApiConfiguration.Build();
+    JsonApiAppStart.Configure(GlobalConfiguration.Configuration, container, jsonApiConfiguration);
+}
+```
+
+### 3. ASP.NET Core: Wait for RTM!
+You can check out the MVC6 HelloWorld project in the source code but the instructions are not finalised until the Core is ready.
+
+## Example of use
+There are two example projects in this repository, one for [API.NET 4.5.2/MVC 5](https://github.com/brainwipe/NJsonApiCore/tree/master/src/NJsonApiCore.Web.MVC5.HelloWorld) and one for [.NET Core/MVC 6](https://github.com/brainwipe/NJsonApiCore/tree/master/src/NJsonApiCore.Web.MVC6.HelloWorld). A solution file is included for each.
 
 ## Example
-Using the same entities found on the [JSONApi homepage](http://jsonapi.org/). 
+Load the *NJsonApiCore.Web.MVC5.HelloWorld* solution and run the HelloWorld project. It runs under IISExpress. You can then send requests to the NJsonApi using a REST client, such as [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en).
+
+The example HelloWorld projects both implement the entities found on the [JSONApi homepage](http://jsonapi.org/). 
 
 ```cs
     public class Article
@@ -42,37 +89,6 @@ Using the same entities found on the [JSONApi homepage](http://jsonapi.org/).
         public string Body { get; set; }
     }
 
-```
-
-During Startup, the entities are registered with the `ConfigurationBuilder` to build a Configuration. This is done in the ASP.NET Core method: `ConfigureServices(IServiceCollection services)`.
-
-```cs
-	var configBuilder = new ConfigurationBuilder();
-
-	configBuilder
-      .Resource<Article, ArticlesController>()
-      .WithAllProperties();
-
-  configBuilder
-      .Resource<Person, PeopleController>()
-      .WithAllProperties();
-
-  configBuilder
-      .Resource<Comment, CommentsController>()
-      .WithAllProperties();
-
-	var nJsonApiConfig = configBuilder.Build();
-	nJsonApiConfig.Apply(httpConfiguration);
-```
-
-The Controller method requires no additional attributes or markup:
-
-```cs
-	[Route("[controller]")]
-	public IEnumerable<Article> Get()
-	{
-		return new List<Article>() { ... };
-	}
 ```
 
 A GET request to `http://localhost:5000/articles/1?include=comments.people` with header `Content-Type` of `application/vnd.api+json` gives the compound document:
