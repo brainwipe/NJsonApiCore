@@ -31,7 +31,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>njsonapicore-logo.png.ico</ApplicationIcon>
+    <ApplicationIcon>njsonapi.png.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -112,6 +112,7 @@
     <None Include="nuget.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="njsonapi.png.ico" />
     <Content Include="njsonapicore-logo.png.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
