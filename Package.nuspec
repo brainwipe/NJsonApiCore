@@ -7,15 +7,24 @@
     <authors>Rob Lang</authors>
     <owners>Rob Lang</owners>
     <projectUrl>http://brainwipe.github.io/NJsonApiCore</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/brainwipe/NJsonApiCore/gh-pages/images/njsonapicore-logo.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/brainwipe/NJsonApiCore/gh-pages/images/njsonapi.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NJsonApiCore extends a ASP.NET json web service so that it returns JSON in the {json:api} format. </description>
     <copyright>Copyright 2016</copyright>
     <releaseNotes>The first version of the NJsonApiCore library</releaseNotes>
     <tags>jsonapi njsonapi webapi core</tags>
     <dependencies>
-      <dependency id="Humanizer" version="2.0.1" />
-      <dependency id="Newtonsoft.Json" version="6.0.0" />
+      <group targetFramework="dnx50">
+        <dependency id="Humanizer" version="2.0.1" />
+        <dependency id="Newtonsoft.Json" version="8.0.2" />
+        <dependency id="Unity" version="4.0.1" />
+      </group>
+      <group targetFramework="net452">
+        <dependency id="Humanizer" version="2.0.1" />
+        <dependency id="Newtonsoft.Json" version="8.0.2" />
+        <dependency id="Unity" version="4.0.1" />
+        <dependency id="Unity.Mvc5" version="1.2.3" />
+      </group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Core" targetFramework="net452"/>
