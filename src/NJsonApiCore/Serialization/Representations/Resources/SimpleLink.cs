@@ -18,14 +18,8 @@ namespace NJsonApi.Serialization.Representations
 
         public string Href { get; set; }
 
-        public void Serialize(JsonWriter writer)
-        {
-            writer.WriteValue(Href);
-        }
+        public void Serialize(JsonWriter writer) => writer.WriteValue(Href);
 
-        public override string ToString()
-        {
-            return Href;
-        }
+        public override string ToString() => Href;
     }
 }

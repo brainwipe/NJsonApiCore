@@ -1,13 +1,13 @@
-﻿using System;
+﻿using NJsonApi.Conventions;
+using NJsonApi.Infrastructure;
+using NJsonApi.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using NJsonApi.Conventions;
-using NJsonApi.Utils;
-using NJsonApi.Infrastructure;
 
 namespace NJsonApi
 {
@@ -48,7 +48,7 @@ namespace NJsonApi
         public ResourceConfigurationBuilder<TResource, TController> WithSimpleProperty(Expression<Func<TResource, object>> propertyAccessor)
         {
             var propertyInfo = propertyAccessor.GetPropertyInfo();
-            AddProperty(propertyInfo, typeof(TResource));
+            AddProperty(propertyInfo);
             return this;
         }
 
@@ -56,7 +56,7 @@ namespace NJsonApi
         {
             var propertyInfo = propertyAccessor.GetPropertyInfo();
             RemoveProperty(propertyInfo);
-            AddProperty(propertyInfo, typeof(TResource), direction);
+            AddProperty(propertyInfo, direction);
             return this;
         }
 
@@ -78,7 +78,9 @@ namespace NJsonApi
                     BuiltResourceMapping.IdSetter = CreateIdSetter(info);
                 }
                 else if (!PropertyScanningConvention.IsLinkedResource(propertyInfo) && !PropertyScanningConvention.ShouldIgnore(propertyInfo))
-                    AddProperty(propertyInfo, typeof(TResource));
+                {
+                    AddProperty(propertyInfo);
+                }
             }
             return this;
         }
@@ -139,13 +141,11 @@ namespace NJsonApi
         }
 
         public ResourceConfigurationBuilder<TResource, TController> WithLinkedResource<TNested>(
-            Expression<Func<TResource, TNested>> objectAccessor, 
-            Expression<Func<TResource, object>> idAccessor = null, 
-            string linkedResourceType = null, 
-            string linkName = null, 
-            ResourceInclusionRules inclusionRule = ResourceInclusionRules.Smart, 
-            string relatedURLTemplate = null, 
-            string selfURLTemplate = null) 
+            Expression<Func<TResource, TNested>> objectAccessor,
+            Expression<Func<TResource, object>> idAccessor = null,
+            string linkedResourceType = null,
+            string linkName = null,
+            ResourceInclusionRules inclusionRule = ResourceInclusionRules.Smart)
             where TNested : class
         {
             if (typeof(TNested).Name == "Array")
@@ -177,7 +177,7 @@ namespace NJsonApi
             return this;
         }
 
-        private void AddProperty(PropertyInfo propertyInfo, Type type, SerializationDirection direction = SerializationDirection.Both)
+        private void AddProperty(PropertyInfo propertyInfo, SerializationDirection direction = SerializationDirection.Both)
         {
             var name = PropertyScanningConvention.GetPropertyName(propertyInfo);
             if (BuiltResourceMapping.PropertyGetters.ContainsKey(name) ||
@@ -195,7 +195,7 @@ namespace NJsonApi
             {
                 BuiltResourceMapping.PropertySetters[name] = propertyInfo.SetValue;
             }
-            
+
             var instance = Expression.Parameter(typeof(object), "i");
             var argument = Expression.Parameter(typeof(object), "a");
             var setterCall = Expression.Call(

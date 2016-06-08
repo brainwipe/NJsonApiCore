@@ -17,7 +17,6 @@ namespace NJsonApiCore.Web.MVC5
 {
     public class JsonApiActionFilter : IActionFilter
     {
-        public bool AllowMultiple { get { return false; } }
         private readonly IJsonApiTransformer jsonApiTransformer;
         private readonly IConfiguration configuration;
         private readonly JsonSerializer serializer;
@@ -31,6 +30,8 @@ namespace NJsonApiCore.Web.MVC5
             this.configuration = configuration;
             this.serializer = serializer;
         }
+
+        public bool AllowMultiple => false;
 
         public async Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext context, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
         {

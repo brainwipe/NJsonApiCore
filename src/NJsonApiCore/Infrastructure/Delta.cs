@@ -2,21 +2,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading;
 
 namespace NJsonApi.Infrastructure
 {
     public class Delta<T> : IDelta<T> where T : new()
     {
         private readonly Dictionary<string, Action<T, object>> currentTypeSetters;
-        private static Dictionary<string, Action<T, object>> typeSettersTemplates;
+        private readonly Dictionary<string, Action<T, object>> typeSettersTemplates;
 
         private readonly Dictionary<string, CollectionInfo<T>> currentCollectionInfos;
-        private static Dictionary<string, CollectionInfo<T>> collectionInfoTemplates;
+        private readonly Dictionary<string, CollectionInfo<T>> collectionInfoTemplates;
 
         public Dictionary<string, object> ObjectPropertyValues { get; set; }
         public Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
@@ -24,9 +21,13 @@ namespace NJsonApi.Infrastructure
         public Delta()
         {
             if (typeSettersTemplates == null)
+            {
                 typeSettersTemplates = ScanForProperties();
+            }
             if (collectionInfoTemplates == null)
+            {
                 collectionInfoTemplates = ScanForCollections();
+            }
 
             currentTypeSetters = typeSettersTemplates.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             currentCollectionInfos = collectionInfoTemplates.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -57,10 +58,12 @@ namespace NJsonApi.Infrastructure
             ObjectPropertyValues.TryGetValue(propertyInfo.Name, out val);
             return (TProperty)val;
         }
+
         public static string ToProperCase(string the_string)
         {
             return the_string.Substring(0, 1).ToUpper() + the_string.Substring(1);
         }
+
         public void ApplySimpleProperties(T inputObject)
         {
             if (ObjectPropertyValues == null) return;

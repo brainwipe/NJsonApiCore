@@ -7,19 +7,19 @@ namespace NJsonApi.Infrastructure
 {
     public class CollectionDelta<TElement> : ICollectionDelta<TElement>
     {
+        private readonly IEqualityComparer<TElement> EqualityComparer;
+
+        public CollectionDelta(Func<TElement, object> idGetter)
+        {
+            EqualityComparer = new IdAndTypeComparer<TElement>(idGetter);
+        }
+
         public IEnumerable<TElement> Elements { get; set; }
 
         IEnumerable ICollectionDelta.Elements
         {
             get { return Elements; }
             set { Elements = value.Cast<TElement>().ToList(); }
-        }
-
-        private IEqualityComparer<TElement> EqualityComparer;
-
-        public CollectionDelta(Func<TElement, object> idGetter)
-        {
-            EqualityComparer = new IdAndTypeComparer<TElement>(idGetter);
         }
 
         public void Apply(ICollection<TElement> input)
