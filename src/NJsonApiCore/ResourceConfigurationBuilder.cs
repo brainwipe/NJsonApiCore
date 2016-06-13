@@ -125,7 +125,7 @@ namespace NJsonApi
                     // Because the expression is constructed in run-time and we need to invoke the convention that expects
                     // a compile-time-safe generic method, reflection must be used to invoke it.
                     MethodInfo closedMethod = openMethod.MakeGenericMethod(nestedType);
-                    closedMethod.Invoke(this, new object[] { propertyAccessor, null, null, null, ResourceInclusionRules.Smart, null, null });
+                    closedMethod.Invoke(this, new object[] { propertyAccessor, null, null, null, ResourceInclusionRules.Smart });
                 }
             }
             return this;
