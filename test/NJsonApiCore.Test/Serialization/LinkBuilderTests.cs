@@ -72,9 +72,7 @@ namespace NJsonApi.Test.Serialization
                 .WithPostsController()
                 .WithGetAction();
 
-            return new LinkBuilder(
-                provider,
-                new FakeUrlHelper());
+            return new LinkBuilder(provider);
         }
     }
 }

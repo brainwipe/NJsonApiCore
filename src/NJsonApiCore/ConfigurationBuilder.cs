@@ -1,10 +1,10 @@
-﻿using System;
+﻿using NJsonApi.Conventions;
+using NJsonApi.Conventions.Impl;
+using NJsonApi.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using NJsonApi.Conventions;
-using NJsonApi.Conventions.Impl;
-using NJsonApi.Utils;
 
 namespace NJsonApi
 {
@@ -13,6 +13,7 @@ namespace NJsonApi
         public readonly Dictionary<Type, IResourceConfigurationBuilder> ResourceConfigurationsByType = new Dictionary<Type, IResourceConfigurationBuilder>();
 
         private readonly Stack<IConvention> conventions = new Stack<IConvention>();
+
         public ConfigurationBuilder()
         {
             //add the default conventions
@@ -34,7 +35,7 @@ namespace NJsonApi
                 .OfType<T>()
                 .FirstOrDefault();
             if (firstMatchingConvention == null)
-                throw new InvalidOperationException(string.Format("No convention found for type {0}", typeof(T).Name));
+                throw new InvalidOperationException($"No convention found for type {typeof(T).Name}");
             return firstMatchingConvention;
         }
 
@@ -44,7 +45,12 @@ namespace NJsonApi
 
             if (DoesModelHaveReservedWordsRecursive(resource))
             {
-                throw new InvalidOperationException("The model being registered for a resource contains properties that are reserved words by JsonApi.");
+                throw new InvalidOperationException($"The resource being registered ({resource.FullName}) contains properties that are reserved words by JsonApi (Relationships, Links).");
+            }
+
+            if (!AssertModelHasIdProperty(resource))
+            {
+                throw new InvalidOperationException($"The resource being registered ({resource.FullName}) must contain an Id property. It can be of any value type.");
             }
 
             if (!ResourceConfigurationsByType.ContainsKey(resource))
@@ -77,11 +83,7 @@ namespace NJsonApi
                         if (propertyScanningConvention.ThrowOnUnmappedLinkedType)
                         {
                             throw new InvalidOperationException(
-                                string.Format(
-                                    "Type {0} was registered to have a linked resource {1} of type {2} which was not registered. Register resource type {2} or disable serialization of that property.",
-                                    link.ParentType.Name,
-                                    link.RelationshipName,
-                                    link.RelatedBaseType.Name));
+                                $"Type {link.ParentType.Name} was registered to have a linked resource {link.RelationshipName} of type {link.RelatedBaseType.Name} which was not registered. Register resource type {link.RelatedBaseType.Name} or disable serialization of that property.");
                         }
                         else
                             links.RemoveAt(i);
@@ -94,6 +96,18 @@ namespace NJsonApi
             }
 
             return configuration;
+        }
+
+        private bool AssertModelHasIdProperty(Type model)
+        {
+            foreach (var property in model.GetProperties())
+            {
+                if (property.Name == "Id" || property.Name == "id")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool DoesModelHaveReservedWordsRecursive(Type model, List<Type> checkedTypes = null)
@@ -119,7 +133,7 @@ namespace NJsonApi
 
                 var childTypesToScan = Reflection.FromWithinGeneric(property.PropertyType);
 
-                foreach(var childType in childTypesToScan)
+                foreach (var childType in childTypesToScan)
                 {
                     if (childType.GetTypeInfo().IsClass)
                     {

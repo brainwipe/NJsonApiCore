@@ -1,13 +1,10 @@
-﻿using System;
+﻿using NJsonApi.Conventions.Impl;
+using NJsonApi.Test.TestControllers;
+using NJsonApi.Test.TestModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using NJsonApi.Test.TestModel;
-using NJsonApi.Conventions;
-using NJsonApi.Conventions.Impl;
 using Xunit;
-using NJsonApi.Test.TestControllers;
 
 namespace NJsonApi.Test.Configuration
 {
@@ -122,7 +119,7 @@ namespace NJsonApi.Test.Configuration
             Assert.Equal(linkToAuthor.RelatedResourceId(post), 4);
             Assert.Same(linkToAuthor.ResourceMapping, authorMapping);
             Assert.Equal(authorMapping.Relationships.Count, 1);
-            
+
             var linkToPosts = authorMapping.Relationships.Single();
 
             Assert.True(linkToPosts.IsCollection);
@@ -132,7 +129,6 @@ namespace NJsonApi.Test.Configuration
             Assert.Same(linkToPosts.RelatedResource(author), author.Posts);
             Assert.Null(linkToPosts.RelatedResourceId);
             Assert.Same(linkToPosts.ResourceMapping, postMapping);
-            
         }
 
         // TODO - Mocking framework not currently available for .NET Core
@@ -156,12 +152,11 @@ namespace NJsonApi.Test.Configuration
         //    var linkedIdConventionMock = A.Fake<ILinkIdConvention>();
         //    A.CallTo(() => linkedIdConventionMock.GetIdExpression(A<Expression<Func<Post, Author>>>._)).Returns(testIdExpression);
 
-            
         //    builder
         //        .WithConvention(linkNameConventionMock)
         //        .WithConvention(resourceTypeMock)
         //        .WithConvention(linkedIdConventionMock);
-            
+
         //    //Act
         //    builder
         //        .Resource<Post>()
@@ -200,7 +195,7 @@ namespace NJsonApi.Test.Configuration
             builder
                 .Resource<Post, PostsController>()
                 .WithAllSimpleProperties();
-            
+
             var configuration = builder.Build();
             var postMapping = configuration.GetMapping(typeof(Post));
 
@@ -223,7 +218,7 @@ namespace NJsonApi.Test.Configuration
                 .WithConvention(new CamelCaseLinkNameConvention())
                 .WithConvention(new PluralizedCamelCaseTypeConvention())
                 .WithConvention(new SimpleLinkedIdConvention());
-            
+
             //Act
             builder
                 .Resource<Post, PostsController>()

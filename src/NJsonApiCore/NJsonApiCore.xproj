@@ -19,6 +19,10 @@
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleCompile Include="Serialization\JsonApiFormatter.cs" />
+    <DnxInvisibleCompile Include="NJsonApiCore.project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <DnxInvisibleContent Include="NJsonApiCore.project.json" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
