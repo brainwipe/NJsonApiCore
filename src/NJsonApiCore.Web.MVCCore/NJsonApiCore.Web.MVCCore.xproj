@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>2fa32b71-2bad-4f4d-85a3-48743cec489c</ProjectGuid>
-    <RootNamespace>NJsonApi</RootNamespace>
+    <ProjectGuid>ed4f18ff-7d61-4413-b2ea-96dda140a442</ProjectGuid>
+    <RootNamespace>NJsonApi.Web.MVCCore</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>

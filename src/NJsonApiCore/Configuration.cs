@@ -56,7 +56,7 @@ namespace NJsonApi
             return mapping.ValidateIncludedRelationshipPaths(includedPaths);
         }
 
-        public JsonSerializer GetJsonSerializer()
+        public JsonSerializerSettings GetJsonSerializerSettings()
         {
             var serializerSettings = new JsonSerializerSettings();
             serializerSettings.Converters.Add(new IsoDateTimeConverter());
@@ -65,7 +65,12 @@ namespace NJsonApi
 #if DEBUG
             serializerSettings.Formatting = Formatting.Indented;
 #endif
-            var jsonSerializer = JsonSerializer.Create(serializerSettings);
+            return serializerSettings;
+        }
+
+        public JsonSerializer GetJsonSerializer()
+        {
+            var jsonSerializer = JsonSerializer.Create(GetJsonSerializerSettings());
             return jsonSerializer;
         }
 
