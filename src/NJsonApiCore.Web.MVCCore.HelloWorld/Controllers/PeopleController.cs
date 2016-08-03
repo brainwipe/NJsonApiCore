@@ -10,9 +10,9 @@ namespace NJsonApi.Web.MVCCore.HelloWorld.Controllers
     public class PeopleController : Controller
     {
         [HttpGet]
-        public IEnumerable<Comment> Get()
+        public IEnumerable<Person> Get()
         {
-            return StaticPersistentStore.Comments;
+            return StaticPersistentStore.People;
         }
 
         [HttpGet("{id}")]
