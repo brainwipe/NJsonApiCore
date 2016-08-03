@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
+using Newtonsoft.Json.Serialization;
 using NJsonApi.Web.MVCCore.Serialization;
 
 namespace NJsonApi.Web.MVCCore.HelloWorld
@@ -39,12 +42,14 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
                     options.Filters.Add(typeof(JsonApiExceptionFilter));
                     options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(nJsonApiConfig));
                 });
-            
+           
             services.AddSingleton<ILinkBuilder, LinkBuilder>();
             services.AddSingleton(nJsonApiConfig.GetJsonSerializer());
-            services.AddSingleton<IJsonApiTransformer, JsonApiTransformer>();
+            services.AddSingleton<IJsonApiTransformer, JsonApiTransformer >();
             services.AddSingleton(nJsonApiConfig);
             services.AddSingleton<TransformationHelper>();
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +57,8 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            //TODO resolve error with Static Files: Ensure the type is concrete and services are registered for all parameters of a public constructor.
+            //app.UseMiddleware<StaticFileMiddleware>(new StaticFileOptions(new SharedOptions()));
             app.UseMvc();
         }
 
