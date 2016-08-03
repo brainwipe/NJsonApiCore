@@ -31,7 +31,8 @@ namespace NJsonApi.Web
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            if (context.HttpContext.Request.ContentType != configuration.DefaultJsonApiMediaType)
+            // Don't enforce content-type on GET requests 
+            if (context.HttpContext.Request.Method != "GET" && context.HttpContext.Request.ContentType != configuration.DefaultJsonApiMediaType)
             {
                 context.Result = new UnsupportedMediaTypeResult();
             }

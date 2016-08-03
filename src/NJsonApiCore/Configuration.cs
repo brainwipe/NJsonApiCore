@@ -16,6 +16,19 @@ namespace NJsonApi
         private readonly Dictionary<string, IResourceMapping> resourcesMappingsByResourceType = new Dictionary<string, IResourceMapping>();
         private readonly Dictionary<Type, IResourceMapping> resourcesMappingsByType = new Dictionary<Type, IResourceMapping>();
 
+        private readonly JsonSerializerSettings jsonSerializerSettings;
+
+        public Configuration()
+        {
+            jsonSerializerSettings = new JsonSerializerSettings();
+            jsonSerializerSettings.Converters.Add(new IsoDateTimeConverter());
+            jsonSerializerSettings.Converters.Add(new RelationshipDataConverter());
+            jsonSerializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
+#if DEBUG
+            jsonSerializerSettings.Formatting = Formatting.Indented;
+#endif
+        }
+
         public string DefaultJsonApiMediaType => "application/vnd.api+json";
 
         public void AddMapping(IResourceMapping resourceMapping)
@@ -58,14 +71,7 @@ namespace NJsonApi
 
         public JsonSerializerSettings GetJsonSerializerSettings()
         {
-            var serializerSettings = new JsonSerializerSettings();
-            serializerSettings.Converters.Add(new IsoDateTimeConverter());
-            serializerSettings.Converters.Add(new RelationshipDataConverter());
-            serializerSettings.Converters.Add(new StringEnumConverter() { CamelCaseText = true });
-#if DEBUG
-            serializerSettings.Formatting = Formatting.Indented;
-#endif
-            return serializerSettings;
+            return jsonSerializerSettings;
         }
 
         public JsonSerializer GetJsonSerializer()

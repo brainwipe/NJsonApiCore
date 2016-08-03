@@ -59,6 +59,14 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
             loggerFactory.AddDebug();
             //TODO resolve error with Static Files: Ensure the type is concrete and services are registered for all parameters of a public constructor.
             //app.UseMiddleware<StaticFileMiddleware>(new StaticFileOptions(new SharedOptions()));
+
+            app.UseCors(builder =>
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+            );
+
+
             app.UseMvc();
         }
 
