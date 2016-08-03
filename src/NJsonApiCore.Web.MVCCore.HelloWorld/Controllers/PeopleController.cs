@@ -18,7 +18,7 @@ namespace NJsonApi.Web.MVCCore.HelloWorld.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            return new ObjectResult(StaticPersistentStore.Comments.Single(w => w.Id == id));
+            return new ObjectResult(StaticPersistentStore.People.Single(w => w.Id == id));
         }
     }
 }
