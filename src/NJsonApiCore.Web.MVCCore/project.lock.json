@@ -2735,6 +2735,23 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
+      },
+      "NJsonApiCore/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v1.0",
+        "dependencies": {
+          "Humanizer.Core": "2.1.0",
+          "Microsoft.AspNetCore.Mvc": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
+          "NETStandard.Library": "1.6.0",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "compile": {
+          "netcoreapp1.0/NJsonApiCore.dll": {}
+        },
+        "runtime": {
+          "netcoreapp1.0/NJsonApiCore.dll": {}
+        }
       }
     }
   },
@@ -7635,6 +7652,11 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
+    },
+    "NJsonApiCore/1.0.0": {
+      "type": "project",
+      "path": "../NJsonApiCore/project.json",
+      "msbuildProject": "../NJsonApiCore/NJsonApiCore.xproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -7643,6 +7665,7 @@
       "Microsoft.AspNetCore.Mvc >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Core >= 1.0.0",
       "NETStandard.Library >= 1.6.0",
+      "NJsonApiCore >= 1.0.0-*",
       "Newtonsoft.Json >= 9.0.1"
     ],
     ".NETCoreApp,Version=v1.0": []

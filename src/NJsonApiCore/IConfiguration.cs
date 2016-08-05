@@ -23,5 +23,7 @@ namespace NJsonApi
         bool ValidateAcceptHeader(string acceptsHeaders);
 
         string[] FindRelationshipPathsToInclude(string includeQueryParameter);
+
+        JsonSerializerSettings GetJsonSerializerSettings();
     }
 }

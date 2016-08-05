@@ -1,14 +1,16 @@
-﻿{
+{
   "version": "1.0.0-*",
 
     "dependencies": {
-        "Humanizer.Core": "2.1.0",
+        "NETStandard.Library": "1.6.0",
         "Microsoft.AspNetCore.Mvc": "1.0.0",
         "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
-        "NETStandard.Library": "1.6.0",
+        "NJsonApiCore": "1.0.0-*",
+        "Humanizer.Core": "2.1.0",
         "Newtonsoft.Json": "9.0.1"
     },
-    "frameworks": {
+
+  "frameworks": {
         "netcoreapp1.0": {
             "imports": [
                 "dotnet5.6",
