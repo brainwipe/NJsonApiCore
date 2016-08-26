@@ -18,7 +18,6 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
     {
         public Startup(IHostingEnvironment env)
         {
-            // Set up configuration sources.
             var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
@@ -28,10 +27,8 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
 
         public IConfigurationRoot Configuration { get; set; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
 
             services.AddMvc(
@@ -48,8 +45,6 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
             services.AddSingleton<IJsonApiTransformer, JsonApiTransformer >();
             services.AddSingleton(nJsonApiConfig);
             services.AddSingleton<TransformationHelper>();
-            
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

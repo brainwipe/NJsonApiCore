@@ -4,7 +4,7 @@ The .NET server implementation of the {**json:api**} standard running on .NET Co
 > This library is not a complete implementation of the JSONApi 1.0.
 
 ## Current Development Effort
-NJsonApiCore supports .NET 4.6.2 and .NET Core RC1. Development on .NET Core has paused until .NET Core is properly released to manufacturers (RTM).
+NJsonApiCore supports .NET 4.6.2 and .NET Core 1.0.
 
 ## History
 Originally courtesy of [**SocialCee**](http://socialcee.com), forked NJsonApi from the work done by https://github.com/jacek-gorgon/NJsonApi and then formed into its own repository courtesy of [**My Clinical Outcomes**](http://www.myclinicaloutcomes.com).
@@ -32,12 +32,15 @@ public static class MyNJsonApiConfiguration {
 }
 ```
 
-See the MVC5 HelloWorld project for [an example](https://github.com/brainwipe/NJsonApiCore/blob/master/src/NJsonApiCore.Web.MVC5.HelloWorld/MyNJsonApiConfigurationBuilder.cs).
+For .NET 4.6.2, see the MVC5 HelloWorld project for [an example](https://github.com/brainwipe/NJsonApiCore/blob/master/src/NJsonApiCore.Web.MVC5.HelloWorld/MyNJsonApiConfigurationBuilder.cs).
+
+For .NET Core, see the MVC Core HelloWorld project for [an example](https://github.com/brainwipe/NJsonApiCore/blob/master/src/NJsonApiCore.Web.MVCCore.HelloWorld/NJsonApiConfiguration.cs)
 
 ### 3. ASP.NET 4.6.2: Update Application_Start() 
 If you are using ASP.NET 4.6.2/MVC5 then you need to update your `Application_Start()` method in Global.asax.cs. The bare minimum you will need is:
 
-```protected void Application_Start()
+```cs
+protected void Application_Start()
 {
     // Setup the dependency injection container
     var container = new UnityContainer();
@@ -55,11 +58,45 @@ If you are using ASP.NET 4.6.2/MVC5 then you need to update your `Application_St
 }
 ```
 
-### 3. ASP.NET Core: Wait for RTM!
-You can check out the MVC6 HelloWorld project in the source code but the instructions are not finalised until the Core is ready.
+### 3. ASP.NET Core: 
+If you are using ASP.NET Core 1.0 then you need to update your `Startup.cs` class in two places.
+
+```cs
+public Startup(IHostingEnvironment env)
+      {
+          var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
+              .SetBasePath(env.ContentRootPath)
+              .AddJsonFile("appsettings.json")
+              .AddEnvironmentVariables();
+          Configuration = builder.Build();
+      }
+
+      public IConfigurationRoot Configuration { get; set; }
+
+      public void ConfigureServices(IServiceCollection services)
+      {
+          var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
+
+          services.AddMvc(
+              options =>
+              {
+                  options.Conventions.Add(new ApiExplorerVisibilityEnabledConvention());
+                  options.Filters.Add(typeof(JsonApiActionFilter));
+                  options.Filters.Add(typeof(JsonApiExceptionFilter));
+                  options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(nJsonApiConfig));
+              });
+         
+          services.AddSingleton<ILinkBuilder, LinkBuilder>();
+          services.AddSingleton(nJsonApiConfig.GetJsonSerializer());
+          services.AddSingleton<IJsonApiTransformer, JsonApiTransformer >();
+          services.AddSingleton(nJsonApiConfig);
+          services.AddSingleton<TransformationHelper>();
+      }
+
+```
 
 ## Example of use
-There are two example projects in this repository, one for [API.NET 4.5.2/MVC 5](https://github.com/brainwipe/NJsonApiCore/tree/master/src/NJsonApiCore.Web.MVC5.HelloWorld) and one for [.NET Core/MVC 6](https://github.com/brainwipe/NJsonApiCore/tree/master/src/NJsonApiCore.Web.MVC6.HelloWorld). A solution file is included for each.
+There are two example projects in this repository, one for [API.NET 4.5.2/MVC 5](https://github.com/brainwipe/NJsonApiCore/tree/master/src/NJsonApiCore.Web.MVC5.HelloWorld) and one for [.NET Core](https://github.com/brainwipe/NJsonApiCore/blob/master/src/NJsonApiCore.Web.MVCCore.HelloWorld). A solution file is included for each.
 
 ## Example
 Load the *NJsonApiCore.Web.MVC5.HelloWorld* solution and run the HelloWorld project. It runs under IISExpress. You can then send requests to the NJsonApi using a REST client, such as [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en).
