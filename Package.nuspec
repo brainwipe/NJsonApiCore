@@ -28,7 +28,7 @@
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Core" targetFramework="net452"/>
-      <frameworkAssembly assemblyName="System.Core" targetFramework="netcoreapp1.0" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="dotnet" />
     </frameworkAssemblies>
   </metadata>
   <files>

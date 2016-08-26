@@ -19,7 +19,7 @@ For your ASP.NET 4.5.2/MVC 5 project, install using nuget:
 ### 2. Create your NJsonApiCore configuration
 You need to tell NJsonApiCore which controllers serve which resources. Create a satic C# class with a single method that returns `NJsonApi.IConfiguration`. The method will build up your resource configuration using a fluid API:
 
-```
+```cs
 public static class MyNJsonApiConfiguration {
   public static IConfiguration Build()
   {
@@ -58,41 +58,40 @@ protected void Application_Start()
 }
 ```
 
-### 3. ASP.NET Core: 
+### 3. ASP.NET Core: Update Startup.cs
 If you are using ASP.NET Core 1.0 then you need to update your `Startup.cs` class in two places.
 
 ```cs
 public Startup(IHostingEnvironment env)
-      {
-          var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
-              .SetBasePath(env.ContentRootPath)
-              .AddJsonFile("appsettings.json")
-              .AddEnvironmentVariables();
-          Configuration = builder.Build();
-      }
+{
+    var builder = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
+        .SetBasePath(env.ContentRootPath)
+        .AddJsonFile("appsettings.json")
+        .AddEnvironmentVariables();
+    Configuration = builder.Build();
+}
 
-      public IConfigurationRoot Configuration { get; set; }
+public IConfigurationRoot Configuration { get; set; }
 
-      public void ConfigureServices(IServiceCollection services)
-      {
-          var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
+public void ConfigureServices(IServiceCollection services)
+{
+    var nJsonApiConfig = NJsonApiConfiguration.BuildConfiguration();
 
-          services.AddMvc(
-              options =>
-              {
-                  options.Conventions.Add(new ApiExplorerVisibilityEnabledConvention());
-                  options.Filters.Add(typeof(JsonApiActionFilter));
-                  options.Filters.Add(typeof(JsonApiExceptionFilter));
-                  options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(nJsonApiConfig));
-              });
-         
-          services.AddSingleton<ILinkBuilder, LinkBuilder>();
-          services.AddSingleton(nJsonApiConfig.GetJsonSerializer());
-          services.AddSingleton<IJsonApiTransformer, JsonApiTransformer >();
-          services.AddSingleton(nJsonApiConfig);
-          services.AddSingleton<TransformationHelper>();
-      }
-
+    services.AddMvc(
+        options =>
+        {
+            options.Conventions.Add(new ApiExplorerVisibilityEnabledConvention());
+            options.Filters.Add(typeof(JsonApiActionFilter));
+            options.Filters.Add(typeof(JsonApiExceptionFilter));
+            options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(nJsonApiConfig));
+        });
+   
+    services.AddSingleton<ILinkBuilder, LinkBuilder>();
+    services.AddSingleton(nJsonApiConfig.GetJsonSerializer());
+    services.AddSingleton<IJsonApiTransformer, JsonApiTransformer >();
+    services.AddSingleton(nJsonApiConfig);
+    services.AddSingleton<TransformationHelper>();
+}
 ```
 
 ## Example of use
@@ -104,31 +103,30 @@ Load the *NJsonApiCore.Web.MVC5.HelloWorld* solution and run the HelloWorld proj
 The example HelloWorld projects both implement the entities found on the [JSONApi homepage](http://jsonapi.org/). 
 
 ```cs
-    public class Article
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public List<Person> Author { get; set; }
-        public List<Comment> Comments { get; set}
-    }
+public class Article
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public List<Person> Author { get; set; }
+    public List<Comment> Comments { get; set}
+}
 
-	  public class Person
-    {
-        public int Id { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Twitter { get; set; }
-    }
+public class Person
+{
+    public int Id { get; set; }
+    public string Firstname { get; set; }
+    public string Lastname { get; set; }
+    public string Twitter { get; set; }
+}
 
-    public class Comment
-    {
-        public int Id { get; set; }
-        public string Body { get; set; }
-    }
-
+public class Comment
+{
+    public int Id { get; set; }
+    public string Body { get; set; }
+}
 ```
 
-A GET request to `http://localhost:5000/articles/1?include=comments.people` with header `Content-Type` of `application/vnd.api+json` gives the compound document:
+A GET request to `http://localhost:5000/articles/1?include=comments.people` gives the compound document:
 
 ```json
 {
