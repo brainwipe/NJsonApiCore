@@ -8,8 +8,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>2fa32b71-2bad-4f4d-85a3-48743cec489c</ProjectGuid>
     <RootNamespace>NJsonApi</RootNamespace>
-    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
-    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
+    <OutputPath>..\..\artifacts\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>

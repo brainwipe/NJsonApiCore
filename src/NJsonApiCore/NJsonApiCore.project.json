@@ -13,17 +13,11 @@
     "win": {}
   },
   "frameworks": {
-    "net452": {
-      "dependencies": {
-        "Microsoft.AspNet.Mvc": "5.2.3",
-        "Humanizer.Core": "2.0.1",
-        "Newtonsoft.Json": "8.0.2"
-      }
-    }
+    "net452": {}
   },
   "dependencies": {
-    "Humanizer": "2.0.1",
+    "Humanizer.Core": "2.1.0",
     "Microsoft.AspNet.Mvc": "5.2.3",
-    "Newtonsoft.Json": "8.0.2"
+    "Newtonsoft.Json": "9.0.1"
   }
 }

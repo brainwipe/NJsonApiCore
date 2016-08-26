@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <package>
-
   <metadata>
     <id>NJsonApiCore</id>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <authors>Rob Lang</authors>
     <owners>Rob Lang</owners>
     <projectUrl>http://brainwipe.github.io/NJsonApiCore</projectUrl>
@@ -11,17 +10,17 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NJsonApiCore extends a ASP.NET json web service so that it returns JSON in the {json:api} format. </description>
     <copyright>Copyright 2016</copyright>
-    <releaseNotes>The first version of the NJsonApiCore library</releaseNotes>
+    <releaseNotes>Support for .NET Core 1.0, update to dependencies for .NET 4</releaseNotes>
     <tags>jsonapi njsonapi webapi core</tags>
     <dependencies>
-      <group targetFramework="dnx50">
-        <dependency id="Humanizer" version="2.0.1" />
-        <dependency id="Newtonsoft.Json" version="8.0.2" />
-        <dependency id="Unity" version="4.0.1" />
+      <group targetFramework="dotnet">
+        <dependency id="Humanizer.Core" version="2.1.0" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
       </group>
       <group targetFramework="net452">
-        <dependency id="Humanizer" version="2.0.1" />
-        <dependency id="Newtonsoft.Json" version="8.0.2" />
+        <dependency id="CommonServiceLocator" version="1.3.0" />
+        <dependency id="Humanizer.Core" version="2.1.0" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
         <dependency id="Unity" version="4.0.1" />
         <dependency id="Unity.Mvc5" version="1.2.3" />
@@ -29,13 +28,13 @@
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.Core" targetFramework="net452"/>
-      <frameworkAssembly assemblyName="System.Core" targetFramework="dnx50" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="netcoreapp1.0" />
     </frameworkAssemblies>
   </metadata>
   <files>
-    <file src="artifacts\bin\NJsonApiCore.Web.MVC5\release\net452\NJsonApiCore.dll" target="lib/net452" />
-    <file src="artifacts\bin\NJsonApiCore.Web.MVC5\release\net452\NJsonApiCore.Web.MVC5.dll" target="lib/net452" />
-    <file src="artifacts\bin\NJsonApiCore\Release\dnx50\NJsonApiCore.dll" target="lib/dnx50" />
-    <file src="artifacts\bin\NJsonApiCore.Web.MVC6\Release\dnx50\NJsonApiCore.Web.MVC6.dll" target="lib/dnx50" />
+    <file src="artifacts\src\NJsonApiCore.Web.MVC5\bin\release\net452\NJsonApiCore.dll" target="lib/net452" />
+    <file src="artifacts\src\NJsonApiCore.Web.MVC5\bin\release\net452\NJsonApiCore.Web.MVC5.dll" target="lib/net452" />
+    <file src="artifacts\src\NJsonApiCore.Web.MVCCore\bin\Release\netcoreapp1.0\NJsonApiCore.dll" target="lib/dotnet" />
+    <file src="artifacts\src\NJsonApiCore.Web.MVCCore\bin\Release\netcoreapp1.0\NJsonApiCore.Web.MVCCore.dll" target="lib/dotnet" />
   </files>
 </package>
