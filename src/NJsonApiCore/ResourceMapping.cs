@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NJsonApi.Utils;
+using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using NJsonApi.Utils;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace NJsonApi
 {
@@ -27,6 +27,7 @@ namespace NJsonApi
             PropertySettersExpressions = new Dictionary<string, Expression<Action<object, object>>>();
             Relationships = new List<IRelationshipMapping>();
         }
+
         public ResourceMapping(Expression<Func<TEntity, object>> idPointer, string urlResource)
         {
             IdGetter = ExpressionUtils.CompileToObjectTypedFunction(idPointer);
@@ -67,6 +68,11 @@ namespace NJsonApi
                 }
             }
             return true;
+        }
+
+        public Dictionary<string, object> GetAttributes(object objectGraph)
+        {
+            return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
         }
     }
 }

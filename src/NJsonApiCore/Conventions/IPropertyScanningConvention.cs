@@ -23,16 +23,11 @@ namespace NJsonApi.Conventions
         bool ShouldIgnore(PropertyInfo pi);
 
         /// <summary>
-        /// If set to true, any scanned property that is discovered to be a linked resource, but is never registered in the builder, 
+        /// If set to true, any scanned property that is discovered to be a linked resource, but is never registered in the builder,
         /// will cause an exception to be thrown during build time.
         /// If set to false, scanned properties that are discovered to be linked resources are silently removed from the mapping during build
         /// and ignored.
         /// </summary>
         bool ThrowOnUnmappedLinkedType { get; }
-
-        /// <summary>
-        /// Gets the name of the property as it gets serialized in JSON.
-        /// </summary>
-        string GetPropertyName(PropertyInfo pi);
     }
 }

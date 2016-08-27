@@ -163,7 +163,7 @@ namespace NJsonApi.Serialization
 
             result.Id = resourceMapping.IdGetter(objectGraph).ToString();
             result.Type = resourceMapping.ResourceType;
-            result.Attributes = resourceMapping.PropertyGetters.ToDictionary(kvp => kvp.Key, kvp => kvp.Value(objectGraph));
+            result.Attributes = resourceMapping.GetAttributes(objectGraph);
             result.Links = new Dictionary<string, ILink>() { { "self", linkBuilder.FindResourceSelfLink(context, result.Id, resourceMapping) } };
 
             if (resourceMapping.Relationships.Any())

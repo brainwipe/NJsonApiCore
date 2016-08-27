@@ -213,7 +213,7 @@ namespace NJsonApi
 
         private void RemoveProperty(PropertyInfo propertyInfo)
         {
-            var name = PropertyScanningConvention.GetPropertyName(propertyInfo);
+            var name = propertyInfo.Name;
             BuiltResourceMapping.PropertyGetters.Remove(name);
             BuiltResourceMapping.PropertySetters.Remove(name);
             BuiltResourceMapping.PropertySettersExpressions.Remove(name);

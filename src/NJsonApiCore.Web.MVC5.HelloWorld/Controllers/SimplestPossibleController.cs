@@ -6,6 +6,7 @@ using System.Web.Http;
 
 namespace NJsonApiCore.Web.MVC5.HelloWorld.Controllers
 {
+    [RoutePrefix("simplestpossibles")]
     public class SimplestPossibleController : ApiController
     {
         [Route("{id}")]
