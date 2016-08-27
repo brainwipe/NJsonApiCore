@@ -179,7 +179,7 @@ namespace NJsonApi
 
         private void AddProperty(PropertyInfo propertyInfo, SerializationDirection direction = SerializationDirection.Both)
         {
-            var name = PropertyScanningConvention.GetPropertyName(propertyInfo);
+            var name = propertyInfo.Name;
             if (BuiltResourceMapping.PropertyGetters.ContainsKey(name) ||
                 BuiltResourceMapping.PropertySetters.ContainsKey(name))
             {
