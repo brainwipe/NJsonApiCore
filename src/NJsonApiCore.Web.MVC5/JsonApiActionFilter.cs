@@ -37,7 +37,7 @@ namespace NJsonApiCore.Web.MVC5
         {
             var contentType = context.Request.Content.Headers.ContentType;
 
-            if (contentType == null || contentType.MediaType != configuration.DefaultJsonApiMediaType)
+            if (contentType != null && contentType.MediaType != configuration.DefaultJsonApiMediaType)
             {
                 return new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
             }
