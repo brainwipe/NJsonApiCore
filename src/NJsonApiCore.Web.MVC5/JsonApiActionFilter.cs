@@ -62,8 +62,10 @@ namespace NJsonApiCore.Web.MVC5
                 Response = response
             };
 
-            InternalActionExecuted(executedContext, cancellationToken);
-
+            if (response.IsSuccessStatusCode)
+            {
+                InternalActionExecuted(executedContext, cancellationToken);
+            }
             return context.Response;
         }
 
