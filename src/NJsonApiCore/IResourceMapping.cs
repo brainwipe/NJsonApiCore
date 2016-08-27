@@ -19,5 +19,7 @@ namespace NJsonApi
         bool ValidateIncludedRelationshipPaths(string[] includedPaths);
 
         Dictionary<string, object> GetAttributes(object objectGraph);
+
+        Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
     }
 }

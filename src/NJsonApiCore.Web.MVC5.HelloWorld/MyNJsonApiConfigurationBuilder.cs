@@ -3,6 +3,7 @@ using NJsonApi.Web.MVC5.HelloWorld.Controllers;
 using NJsonApi.Web.MVC5.HelloWorld.Models;
 using NJsonApiCore.Web.MVC5.HelloWorld.Controllers;
 using NJsonApiCore.Web.MVC5.HelloWorld.Models;
+using NJsonApiCore.Web.MVC5.HelloWorld.Models.Test;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,10 @@ namespace NJsonApiCore.Web.MVC5.HelloWorld
 
             configBuilder
                 .Resource<SimplestPossibleModel, SimplestPossibleController>()
+                .WithAllProperties();
+
+            configBuilder
+                .Resource<ModelWithPascalCase, TestExamplesController>()
                 .WithAllProperties();
 
             var nJsonApiConfig = configBuilder.Build();

@@ -28,7 +28,7 @@ namespace NJsonApi
             Relationships = new List<IRelationshipMapping>();
         }
 
-        public ResourceMapping(Expression<Func<TEntity, object>> idPointer, string urlResource)
+        public ResourceMapping(Expression<Func<TEntity, object>> idPointer)
         {
             IdGetter = ExpressionUtils.CompileToObjectTypedFunction(idPointer);
             ResourceRepresentationType = typeof(TEntity);
@@ -73,6 +73,23 @@ namespace NJsonApi
         public Dictionary<string, object> GetAttributes(object objectGraph)
         {
             return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+        }
+
+        public Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes)
+        {
+            var values = new Dictionary<string, object>();
+
+            foreach (var propertySetter in PropertySettersExpressions)
+            {
+                object value;
+                attributes.TryGetValue(CamelCaseUtil.ToCamelCase(propertySetter.Key), out value);
+                if (value != null)
+                {
+                    values.Add(propertySetter.Key, value);
+                }
+            }
+
+            return values;
         }
     }
 }

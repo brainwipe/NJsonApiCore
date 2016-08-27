@@ -86,14 +86,7 @@ namespace NJsonApi.Serialization
                 return null;
             }
 
-            // Scan the data for which properties are only set
-            foreach (var propertySetter in mapping.PropertySettersExpressions)
-            {
-                object value;
-                updateDocument.Data.Attributes.TryGetValue(propertySetter.Key, out value);
-                if (value != null)
-                    delta.ObjectPropertyValues.Add(propertySetter.Key, value);
-            }
+            delta.ObjectPropertyValues = mapping.GetValuesFromAttributes(updateDocument.Data.Attributes);
 
             if (updateDocument.Data.Relationships != null)
             {
