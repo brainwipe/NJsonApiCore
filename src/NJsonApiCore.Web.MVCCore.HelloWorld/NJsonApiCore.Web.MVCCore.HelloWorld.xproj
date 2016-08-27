@@ -9,7 +9,7 @@
     <ProjectGuid>3309a597-a8c0-4eb8-9956-7860a5f44f22</ProjectGuid>
     <RootNamespace>NJsonApiCore.Web.MVCCore.HelloWorld</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
-    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">..\..\artifacts\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
