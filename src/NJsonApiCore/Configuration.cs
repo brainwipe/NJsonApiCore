@@ -37,7 +37,7 @@ namespace NJsonApi
             resourcesMappingsByType[resourceMapping.ResourceRepresentationType] = resourceMapping;
         }
 
-        public bool IsMappingRegistered(Type type)
+        public bool IsResourceRegistered(Type type)
         {
             if (typeof(IEnumerable).IsAssignableFrom(type) && type.GetTypeInfo().IsGenericType)
             {
@@ -45,6 +45,11 @@ namespace NJsonApi
             }
 
             return resourcesMappingsByType.ContainsKey(type);
+        }
+
+        public bool IsControllerRegistered(Type controller)
+        {
+            return resourcesMappingsByType.Any(m => m.Value.Controller == controller);
         }
 
         public IResourceMapping GetMapping(Type type)

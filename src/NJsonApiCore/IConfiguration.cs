@@ -16,7 +16,9 @@ namespace NJsonApi
 
         JsonSerializer GetJsonSerializer();
 
-        bool IsMappingRegistered(Type type);
+        bool IsResourceRegistered(Type resource);
+
+        bool IsControllerRegistered(Type controller);
 
         bool ValidateIncludedRelationshipPaths(string[] includedPaths, object objectGraph);
 

@@ -36,33 +36,42 @@ namespace NJsonApiCore.Web.MVC5
         public async Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext context, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
         {
             var contentType = context.Request.Content.Headers.ContentType;
+            var controllerType = context.ControllerContext.Controller.GetType();
+            var isControllerRegistered = configuration.IsControllerRegistered(controllerType);
+            var isValidContentType = ValidateContentTypeHeader(contentType);
+            var isValidAcceptsHeader = ValidateAcceptHeader(context.Request.Headers);
 
-            if (contentType != null && contentType.MediaType != configuration.DefaultJsonApiMediaType)
+            if (isControllerRegistered)
             {
-                return new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
-            }
+                if (!isValidContentType)
+                    return new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
 
-            if (!ValidateAcceptHeader(context.Request.Headers))
+                if (!isValidAcceptsHeader)
+                    return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+
+                InternalActionExecuting(context, cancellationToken);
+            }
+            else
             {
-                return new HttpResponseMessage(HttpStatusCode.NotAcceptable);
+                if (isValidContentType)
+                {
+                    var unsupported = new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
+                    unsupported.Content = new StringContent($"The Content-Type provided was {contentType} but there was no NJsonApiCore configuration mapping for {controllerType.FullName}");
+                    return unsupported;
+                }
             }
-
-            InternalActionExecuting(context, cancellationToken);
-
-            HttpActionExecutedContext executedContext;
 
             if (context.Response != null)
-            {
                 return context.Response;
-            }
 
+            HttpActionExecutedContext executedContext;
             var response = await continuation();
             executedContext = new HttpActionExecutedContext(context, null)
             {
                 Response = response
             };
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && isControllerRegistered)
             {
                 InternalActionExecuted(executedContext, cancellationToken);
             }
@@ -103,30 +112,27 @@ namespace NJsonApiCore.Web.MVC5
             return paramBinding.Descriptor.ParameterType.GetGenericArguments().First();
         }
 
+        private bool ValidateContentTypeHeader(MediaTypeHeaderValue contentType)
+        {
+            return contentType == null || contentType.MediaType == configuration.DefaultJsonApiMediaType;
+        }
+
         public virtual void InternalActionExecuted(HttpActionExecutedContext context, CancellationToken cancellationToken)
         {
             var content = context.Response.Content as ObjectContent;
 
             if (content == null)
-            {
                 return;
-            }
 
             var relationshipPaths = FindRelationshipPathsToInclude(context.Request);
 
             if (!configuration.ValidateIncludedRelationshipPaths(relationshipPaths, content.Value))
-            {
                 context.Response = context.Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
 
             if (!context.Response.IsSuccessStatusCode)
-            {
                 return;
-            }
 
-            var jsonApiContext = new Context(
-                context.Request.RequestUri,
-                relationshipPaths);
+            var jsonApiContext = new Context(context.Request.RequestUri, relationshipPaths);
             var transformedIntoJsonApi = jsonApiTransformer.Transform(content.Value, jsonApiContext);
 
             context.Response = context.Request.CreateResponse(HttpStatusCode.OK, transformedIntoJsonApi, configuration.DefaultJsonApiMediaType);

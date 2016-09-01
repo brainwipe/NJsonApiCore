@@ -254,7 +254,7 @@ namespace NJsonApi.Serialization
 
         public void AssureAllMappingsRegistered(Type type, IConfiguration config)
         {
-            if (!config.IsMappingRegistered(type))
+            if (!config.IsResourceRegistered(type))
             {
                 throw new MissingMappingException(type);
             }

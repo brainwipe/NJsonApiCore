@@ -50,7 +50,7 @@ namespace NJsonApiCore.Web.MVC5
                 return true;
             }
 
-            return configuration.IsMappingRegistered(type);
+            return configuration.IsResourceRegistered(type);
         }
 
         public override void WriteToStream(Type type, object value, Stream writeStream, HttpContent content)
