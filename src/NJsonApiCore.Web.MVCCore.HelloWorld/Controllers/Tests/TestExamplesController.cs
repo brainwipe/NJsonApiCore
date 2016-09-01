@@ -1,10 +1,10 @@
-﻿using NJsonApi.Web.MVCCore.HelloWorld.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using NJsonApi.Web.MVCCore.HelloWorld.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 
-namespace NJsonApi.Web.MVCCore.HelloWorld.Controllers
+namespace NJsonApi.Web.MVCCore.HelloWorld.Controllers.Tests
 {
     [Route("[controller]")]
     public class TestExamplesController : Controller

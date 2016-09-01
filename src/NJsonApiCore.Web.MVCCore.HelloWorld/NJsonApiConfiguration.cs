@@ -26,7 +26,3 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
         }
     }
 }
-
-
-
-
