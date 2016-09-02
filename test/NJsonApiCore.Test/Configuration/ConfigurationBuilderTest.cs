@@ -289,13 +289,13 @@ namespace NJsonApi.Test.Configuration
         }
 
         [Fact]
-        public void GIVEN_ModelWithSelfRefernce_WHEN_ValidateReservedWords_THEN_NotInfiniteLoop()
+        public void GIVEN_ModelWithSelfReference_WHEN_ValidateReservedWords_THEN_NotInfiniteLoop()
         {
             // Arrange
             var configurationBuilder = new ConfigurationBuilder();
 
             // Act - Will not throw an infinite loop error
-            configurationBuilder.Resource<ModelThatCausesInfiniteLoop, DummyController>();
+            configurationBuilder.Resource<ModelThatCausesInfiniteLoop, ModelThatCausesInfiniteLoopController>();
         }
 
         [Fact]
@@ -306,6 +306,26 @@ namespace NJsonApi.Test.Configuration
 
             // Act - Exception!
             Assert.Throws<InvalidOperationException>(() => configurationBuilder.Resource<ModelWithoutAnId, DummyController>());
+        }
+
+        [Fact]
+        public void GIVEN_ControllerWithMoreThanOneGet_WHEN_BuilderConfiguration_THEN_InvalidOperationException()
+        {
+            // Arrange
+            var configurationBuilder = new ConfigurationBuilder();
+
+            // Act - Exception!
+            Assert.Throws<InvalidOperationException>(() => configurationBuilder.Resource<Post, ControllerWithMoreThanOneGetForAResource>());
+        }
+
+        [Fact]
+        public void GIVEN_ControllerWithoutAGetMethod_WHEN_BuilderConfiguration_THEN_InvalidOperationException()
+        {
+            // Arrange
+            var configurationBuilder = new ConfigurationBuilder();
+
+            // Act - Exception!
+            Assert.Throws<InvalidOperationException>(() => configurationBuilder.Resource<Post, DummyController>());
         }
     }
 }

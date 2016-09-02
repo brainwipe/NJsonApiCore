@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace NJsonApi.Test.TestControllers
 {
-    internal class PostsController : Controller
+    internal class ModelThatCausesInfiniteLoopController : Controller
     {
         [HttpGet]
-        public Post Get(int id)
+        public ModelThatCausesInfiniteLoop Get(int id)
         {
-            return new Post();
+            return new ModelThatCausesInfiniteLoop();
         }
     }
 }

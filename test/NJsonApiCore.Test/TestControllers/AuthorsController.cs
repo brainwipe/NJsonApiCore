@@ -1,11 +1,17 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using NJsonApi.Test.TestModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NJsonApi.Test.TestControllers
 {
-    public class AuthorsController
+    internal class AuthorsController
     {
+        [HttpGet]
+        public Author Get(int id)
+        {
+            return new Author();
+        }
     }
 }

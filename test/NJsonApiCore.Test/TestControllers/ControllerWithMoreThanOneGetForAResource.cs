@@ -6,10 +6,16 @@ using System.Linq;
 
 namespace NJsonApi.Test.TestControllers
 {
-    internal class PostsController : Controller
+    internal class ControllerWithMoreThanOneGetForAResource : Controller
     {
         [HttpGet]
-        public Post Get(int id)
+        public Post First(int id)
+        {
+            return new Post();
+        }
+
+        [HttpGet]
+        public Post Second(int id)
         {
             return new Post();
         }

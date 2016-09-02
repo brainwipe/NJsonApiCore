@@ -42,11 +42,10 @@ namespace NJsonApi
         public ResourceConfigurationBuilder<TResource, TController> Resource<TResource, TController>()
         {
             var resource = typeof(TResource);
-            var controller = typeof(TResource);
 
-            if (DoesControllerHaveMoreThanOneGetForThisResource(controller, resource))
+            if (!HasOnlyOneGetMethod<TResource, TController>())
             {
-                throw new InvalidOperationException($"The controller being registered ({controller.FullName}) can only have one GET method with single id parameter for this resource type.");
+                throw new InvalidOperationException($"The controller being registered ({typeof(TController).FullName}) can only have one GET method with single id parameter for the resource type {typeof(TResource).FullName}.");
             }
 
             if (DoesModelHaveReservedWordsRecursive(resource))
@@ -54,7 +53,7 @@ namespace NJsonApi
                 throw new InvalidOperationException($"The resource being registered ({resource.FullName}) contains properties that are reserved words by JsonApi (Relationships, Links).");
             }
 
-            if (!AssertModelHasIdProperty(resource))
+            if (!AssertModelHasIdProperty<TResource>())
             {
                 throw new InvalidOperationException($"The resource being registered ({resource.FullName}) must contain an Id property. It can be of any value type.");
             }
@@ -71,14 +70,18 @@ namespace NJsonApi
             }
         }
 
-        private bool DoesControllerHaveMoreThanOneGetForThisResource(Type resource, Type controller)
+        private bool HasOnlyOneGetMethod<TResource, TController>()
         {
-            return controller.GetMethods().Any(m =>
-                m.ReturnType == resource
-                &&
-                m.GetParameters().Any(p => p.Name == "id")
-                &&
-                m.GetParameters().Count() == 1);
+            // TODO this feels like a reproduction of logic, should be shared here and in the link builder
+            return typeof(TController)
+               .GetMethods()
+               .Where(m =>
+                   m.ReturnType == typeof(TResource)
+                   &&
+                   m.GetParameters().Any(p => p.Name == "id")
+                   &&
+                   m.GetParameters().Count() == 1)
+               .Count() == 1;
         }
 
         public Configuration Build()
@@ -114,9 +117,9 @@ namespace NJsonApi
             return configuration;
         }
 
-        private bool AssertModelHasIdProperty(Type model)
+        private bool AssertModelHasIdProperty<TResource>()
         {
-            foreach (var property in model.GetProperties())
+            foreach (var property in typeof(TResource).GetProperties())
             {
                 if (property.Name == "Id" || property.Name == "id")
                 {
