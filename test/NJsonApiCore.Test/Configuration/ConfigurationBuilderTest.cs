@@ -131,51 +131,6 @@ namespace NJsonApi.Test.Configuration
             Assert.Same(linkToPosts.ResourceMapping, postMapping);
         }
 
-        // TODO - Mocking framework not currently available for .NET Core
-        // Replace this test when there is one
-        //[TestMethod]
-        //public void WithLinkedResource_uses_conventions()
-        //{
-        //    //Arrange
-        //    const string testResourceType = "testResourceType";
-        //    const string testLinkName = "testLinkName";
-        //    Expression<Func<Post, object>> testIdExpression = p => 4;
-
-        //    var builder = new ConfigurationBuilder();
-
-        //    var linkNameConventionMock = A.Fake<ILinkNameConvention>();
-        //    A.CallTo(() => linkNameConventionMock.GetLinkNameFromExpression(A<Expression<Func<Post, Author>>>._)).Returns(testLinkName);
-
-        //    var resourceTypeMock = A.Fake<IResourceTypeConvention>();
-        //    A.CallTo(() => resourceTypeMock.GetResourceTypeFromRepresentationType(A<Type>._)).Returns(testResourceType);
-
-        //    var linkedIdConventionMock = A.Fake<ILinkIdConvention>();
-        //    A.CallTo(() => linkedIdConventionMock.GetIdExpression(A<Expression<Func<Post, Author>>>._)).Returns(testIdExpression);
-
-        //    builder
-        //        .WithConvention(linkNameConventionMock)
-        //        .WithConvention(resourceTypeMock)
-        //        .WithConvention(linkedIdConventionMock);
-
-        //    //Act
-        //    builder
-        //        .Resource<Post>()
-        //        .WithLinkedResource(p => p.Author);
-
-        //    builder
-        //        .Resource<Author>()
-        //        .WithResourceType(testResourceType);
-
-        //    var configuration = builder.Build();
-        //    var postMapping = configuration.GetMapping(typeof(Post));
-        //    var link = postMapping.Relationships.Single();
-
-        //    //Assert
-        //    link.RelationshipName.ShouldEqual(testLinkName);
-        //    link.RelatedBaseResourceType.ShouldEqual(testResourceType);
-        //    link.RelatedResourceId(new Post()).ShouldEqual(4);
-        //}
-
         [Fact]
         public void GIVEN_ConfigurationWithOneResource_WHEN_Build_THEN_ConfigurationIsCorrect()
         {
@@ -264,71 +219,6 @@ namespace NJsonApi.Test.Configuration
             Assert.Equal(postMapping.PropertySetters.Count, 2);
             Assert.NotNull(postMapping.IdGetter);
         }
-
-        // TODO - Mocking framework not currently available for .NET Core
-        // Replace this test when there is one
-        //[TestMethod]
-        //public void WithAllProperties_uses_conventions()
-        //{
-        //    //Arrange
-        //    const string testResourceType = "testResourceType";
-        //    const string testLinkName = "testLinkName";
-        //    string testname = "testName";
-
-        //    Expression<Func<Post, object>> testIdExpression = p => 4;
-
-        //    var builder = new ConfigurationBuilder();
-
-        //    var linkNameConventionMock = A.Fake<ILinkNameConvention>();
-        //    A.CallTo(() => linkNameConventionMock.GetLinkNameFromExpression(A<Expression<Func<Post, Author>>>._)).Returns(testLinkName);
-
-        //    var resourceTypeMock = A.Fake<IResourceTypeConvention>();
-        //    A.CallTo(() => resourceTypeMock.GetResourceTypeFromRepresentationType(A<Type>._)).Returns(testResourceType);
-
-        //    var linkedIdConventionMock = A.Fake<ILinkIdConvention>();
-        //    A.CallTo(() => linkedIdConventionMock.GetIdExpression(A<Expression<Func<Post, Author>>>._)).Returns(testIdExpression);
-
-        //    var propertyScanningConventionMock = A.Fake<IPropertyScanningConvention>();
-        //    A
-        //        .CallTo(() => propertyScanningConventionMock.IsLinkedResource(A<PropertyInfo>
-        //            .That.Matches(pi => pi.Name == "Replies" || pi.Name == "Author")))
-        //        .Returns(true);
-
-        //    A.CallTo(() => propertyScanningConventionMock.IsPrimaryId(A<PropertyInfo>.That.Matches(pi => pi.Name == "Id"))).Returns(true);
-
-        //    A.CallTo(() => propertyScanningConventionMock.GetPropertyName(A<PropertyInfo>.That.Matches(pi => pi.Name == "Title"))).Returns(testname);
-        //    A.CallTo(() => propertyScanningConventionMock.GetPropertyName(A<PropertyInfo>.That.Matches(pi => pi.Name == "AuthorId"))).Returns("authorId");
-
-        //    builder
-        //        .WithConvention(propertyScanningConventionMock)
-        //        .WithConvention(linkNameConventionMock)
-        //        .WithConvention(resourceTypeMock)
-        //        .WithConvention(linkedIdConventionMock);
-
-        //    //Act
-        //    builder
-        //        .Resource<Post>()
-        //        .WithAllProperties();
-
-        //    builder
-        //        .Resource<Author>()
-        //        .WithResourceType(testResourceType);
-
-        //    var configuration = builder.Build();
-        //    var postMapping = configuration.GetMapping(typeof(Post));
-        //    var link = postMapping.Relationships.Single();
-
-        //    //Assert
-        //    link.RelationshipName.ShouldEqual(testLinkName);
-        //    link.RelatedBaseResourceType.ShouldEqual(testResourceType);
-        //    link.RelatedResourceId(new Post()).ShouldEqual(4);
-        //    postMapping.PropertyGetters.ContainsKey(testname).ShouldBeTrue();
-
-        //    A.CallTo(() => propertyScanningConventionMock.IsLinkedResource(A<PropertyInfo>._)).MustHaveHappened();
-        //    A.CallTo(() => propertyScanningConventionMock.IsPrimaryId(A<PropertyInfo>._)).MustHaveHappened();
-        //    A.CallTo(() => propertyScanningConventionMock.ShouldIgnore(A<PropertyInfo>._)).MustHaveHappened();
-        //    A.CallTo(() => propertyScanningConventionMock.ThrowOnUnmappedLinkedType).MustHaveHappened();
-        //}
 
         [Fact]
         public void WithComplexObjectTest()
