@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.ApiExplorer;
-using Newtonsoft.Json;
-using NJsonApi.Serialization;
+﻿using NJsonApi.Serialization;
 using NJsonApi.Test.Fakes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NJsonApi.Test.Builders
 {

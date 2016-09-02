@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NJsonApi.Infrastructure;
-using NJsonApi.Serialization;
+﻿using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations;
 using NJsonApi.Serialization.Representations.Resources;
-using Xunit;
 using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestControllers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestCollection
     {
-        readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-           
+        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
+
         [Fact]
         public void Creates_CompondDocument_for_collection_not_nested_class_and_propertly_map_resourceName()
         {
             // Arrange
-            var context = CreateContext();            
+            var context = CreateContext();
             IEnumerable<SampleClass> objectsToTransform = CreateObjectToTransform();
             var transformer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
@@ -53,7 +52,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             var transformedObject = result.Data as ResourceCollection;
             Assert.NotNull(transformedObject);
         }
-
 
         [Fact]
         public void Creates_CompondDocument_for_collection_not_nested_class_and_propertly_map_id()
@@ -162,7 +160,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
         private Context CreateContext()
         {
-            
             var requestUri = new Uri("http://fakeUri:1234/fakecontroller");
 
             return new Context(requestUri);
@@ -170,7 +167,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
         private IConfiguration CreateConfiguration()
         {
-            var mapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id, "http://sampleClass/{id}");
+            var mapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id);
             mapping.ResourceType = "sampleClasses";
             mapping.AddPropertyGetter("someValue", c => c.SomeValue);
             mapping.AddPropertyGetter("date", c => c.DateTime);
@@ -179,7 +176,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             return config;
         }
 
-        class SampleClass
+        private class SampleClass
         {
             public int Id { get; set; }
             public string SomeValue { get; set; }

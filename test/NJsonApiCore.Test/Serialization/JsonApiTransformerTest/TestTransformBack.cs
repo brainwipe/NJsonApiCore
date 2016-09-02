@@ -1,11 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using NJsonApi.Test.TestModel;
-using NJsonApi.Serialization;
-using System.Collections.Generic;
-using System;
-using Xunit;
+﻿using NJsonApi.Serialization;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
+using NJsonApi.Test.TestModel;
+using System;
+using System.Collections.Generic;
+using Xunit;
 
 namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
@@ -37,7 +36,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             var resultDelta = transformer.TransformBack(updateDocument, typeof(Post), context);
 
             // Assert
-            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("title"));
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Title"));
         }
 
         [Fact]
@@ -62,21 +61,20 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             var context = new Context(new Uri("http://fakehost:1234", UriKind.Absolute));
             var transformer = new JsonApiTransformerBuilder().With(config).Build();
 
-
             // Act
             var resultDelta = transformer.TransformBack(updateDocument, typeof(Post), context);
 
             // Assert
-            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("title"));
-            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("authorId"));
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Title"));
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("AuthorId"));
         }
 
-        class PostUpdateOneField
+        private class PostUpdateOneField
         {
             public string Title { get; set; }
         }
 
-        class PostUpdateTwoFields
+        private class PostUpdateTwoFields
         {
             public int AuthorId { get; set; }
             public string Title { get; set; }

@@ -1,7 +1,7 @@
-﻿using NJsonApi.Test.TestModel;
-using NJsonApi.Conventions.Impl;
-using Xunit;
+﻿using NJsonApi.Conventions.Impl;
+using NJsonApi.Test.TestModel;
 using System.Reflection;
+using Xunit;
 
 namespace NJsonApi.Test.Conventions
 {
@@ -41,7 +41,6 @@ namespace NJsonApi.Test.Conventions
             var authorIdPiIsPrimaryId = convention.IsPrimaryId(authorIdPi);
             var idIsPrimaryId = convention.IsPrimaryId(idPi);
 
-
             // Assert
             Assert.False(titleIsPrimaryId);
             Assert.False(authorIdPiIsPrimaryId);
@@ -63,20 +62,6 @@ namespace NJsonApi.Test.Conventions
             // Assert
             Assert.False(shouldIgnoreTitle);
             Assert.True(shouldIgnoreInternalNumber);
-        }
-
-        [Fact]
-        public void Converts_property_name_to_camel_case()
-        {
-            // Arrange
-            var convention = new DefaultPropertyScanningConvention();
-            var titlePi = typeof(Post).GetProperty("Title");
-
-            // Act
-            var name = convention.GetPropertyName(titlePi);
-
-            // Assert
-            Assert.Equal(name, "title");
         }
     }
 }

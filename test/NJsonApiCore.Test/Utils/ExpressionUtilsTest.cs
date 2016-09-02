@@ -1,8 +1,8 @@
-﻿using System;
-using NJsonApi.Utils;
+﻿using NJsonApi.Utils;
+using System;
 using System.Diagnostics;
-using Xunit;
 using System.Reflection;
+using Xunit;
 
 namespace NJsonApi.Common.Test.Utils
 {
@@ -111,7 +111,7 @@ namespace NJsonApi.Common.Test.Utils
                 getterMi.Invoke(foo, null);
             }
             watch.Stop();
-            Trace.WriteLine($"{count} invocations of MethodInfo.Invoke() took {watch.ElapsedMilliseconds}ms.");
+            Debug.WriteLine($"{count} invocations of MethodInfo.Invoke() took {watch.ElapsedMilliseconds}ms.");
 
             watch.Restart();
             for (int i = 0; i < count; i++)
@@ -119,7 +119,7 @@ namespace NJsonApi.Common.Test.Utils
                 compiledLambda(foo);
             }
             watch.Stop();
-            Trace.WriteLine($"{count} invocations of compiled lambda took {watch.ElapsedMilliseconds}ms.");
+            Debug.WriteLine($"{count} invocations of compiled lambda took {watch.ElapsedMilliseconds}ms.");
         }
 
         private class Foo

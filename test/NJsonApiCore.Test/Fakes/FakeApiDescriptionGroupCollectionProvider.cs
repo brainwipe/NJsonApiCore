@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNet.Mvc.ApiExplorer;
-using Microsoft.AspNet.Mvc.Controllers;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using NJsonApi.Test.TestControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 
 namespace NJsonApi.Test.Fakes
@@ -28,7 +27,7 @@ namespace NJsonApi.Test.Fakes
             group = new ApiDescriptionGroup("posts", actions);
             groups.Add(group);
             return this;
-        } 
+        }
 
         public FakeApiDescriptionGroupCollectionProvider WithGetAction()
         {

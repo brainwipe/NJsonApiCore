@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NJsonApi.Test.TestControllers
 {
-    public class PostsController : Controller
+    public class ControllerThatIsNotConfigured : Controller
     {
     }
 }

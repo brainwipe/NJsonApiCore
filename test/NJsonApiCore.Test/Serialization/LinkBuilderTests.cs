@@ -1,7 +1,7 @@
 ﻿using NJsonApi.Test.Builders;
 using NJsonApi.Test.Fakes;
 using NJsonApi.Test.TestModel;
-using NJsonApi.Web.MVC6.Serialization;
+using NJsonApi.Web.MVCCore.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;

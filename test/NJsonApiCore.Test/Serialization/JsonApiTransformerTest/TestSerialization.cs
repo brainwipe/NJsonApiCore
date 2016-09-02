@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NJsonApi.Serialization;
 using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestControllers;
 using System;
@@ -74,21 +73,18 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         private IConfiguration CreateConfiguration()
         {
             var conf = new NJsonApi.Configuration();
-            var sampleClassMapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id, "http://sampleClass/{id}");
+            var sampleClassMapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id);
             sampleClassMapping.ResourceType = "sampleClasses";
             sampleClassMapping.AddPropertyGetter("someValue", c => c.SomeValue);
             sampleClassMapping.AddPropertyGetter("date", c => c.DateTime);
 
-
-            var nestedClassMapping = new ResourceMapping<NestedClass, DummyController>(c => c.Id, "http://nestedclass/{id}");
+            var nestedClassMapping = new ResourceMapping<NestedClass, DummyController>(c => c.Id);
             nestedClassMapping.ResourceType = "nestedClasses";
             nestedClassMapping.AddPropertyGetter("nestedText", c => c.NestedText);
 
-
-            var deeplyNestedMapping = new ResourceMapping<DeeplyNestedClass, DummyController>(c => c.Id, "http://deep/{id}");
+            var deeplyNestedMapping = new ResourceMapping<DeeplyNestedClass, DummyController>(c => c.Id);
             deeplyNestedMapping.ResourceType = "deeplyNestedClasses";
             deeplyNestedMapping.AddPropertyGetter("value", c => c.Value);
-
 
             var linkMapping = new RelationshipMapping<SampleClass, NestedClass>()
             {
@@ -115,7 +111,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             return conf;
         }
 
-        class SampleClass
+        private class SampleClass
         {
             public int Id { get; set; }
             public string SomeValue { get; set; }
@@ -124,7 +120,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             public IEnumerable<NestedClass> NestedClass { get; set; }
         }
 
-        class NestedClass
+        private class NestedClass
         {
             public int Id { get; set; }
             public string NestedText { get; set; }

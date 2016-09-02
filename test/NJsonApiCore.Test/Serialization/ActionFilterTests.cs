@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NJsonApi.Serialization;
 using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
+using NJsonApi.Test.TestControllers;
 using NJsonApi.Web;
-using NJsonApi.Web.MVC6;
+using NJsonApi.Web.MVCCore;
 using System.Linq;
 using Xunit;
 
@@ -23,6 +24,7 @@ namespace NJsonApi.Test.Serialization
                 .Build();
 
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithResult(new ObjectResult(post))
                 .BuildActionExecuted();
 
@@ -72,7 +74,7 @@ namespace NJsonApi.Test.Serialization
             // Arrange
             var actionFilter = GetActionFilterForTestModel();
 
-            var idNotFoundResult = new HttpNotFoundObjectResult(42);
+            var idNotFoundResult = new NotFoundObjectResult(42);
 
             var context = new FilterContextBuilder()
                 .WithResult(idNotFoundResult)
@@ -96,6 +98,7 @@ namespace NJsonApi.Test.Serialization
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithContentType(contentType)
                 .BuildActionExecuting();
 
@@ -112,10 +115,13 @@ namespace NJsonApi.Test.Serialization
         {
             // Arrange
             string contentType = "application/vnd.api+json";
+            string acceptsHeader = "application/vnd.api+json";
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithContentType(contentType)
+                .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
             // Act
@@ -133,6 +139,7 @@ namespace NJsonApi.Test.Serialization
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithContentType(contentType)
                 .BuildActionExecuting();
 
@@ -154,6 +161,7 @@ namespace NJsonApi.Test.Serialization
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithContentType(contentType)
+                .WithController<PostsController>()
                 .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
@@ -161,12 +169,12 @@ namespace NJsonApi.Test.Serialization
             actionFilter.OnActionExecuting(context);
 
             // Assert
-            var result = (HttpStatusCodeResult)context.Result;
+            var result = (StatusCodeResult)context.Result;
             Assert.Equal(406, result.StatusCode);
         }
 
         [Fact]
-        public void GIVEN_CorrectAcceptsHeader_WHEN_ActionExecuting_THEN_ResponseIsNull()
+        public void GIVEN_CorrectAcceptsHeader_AND_NoConfiguration_WHEN_ActionExecuting_THEN_ResponseIs406()
         {
             // Arrange
             string acceptsHeader = "application/vnd.api+json";
@@ -175,6 +183,29 @@ namespace NJsonApi.Test.Serialization
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithContentType(contentType)
+                .WithController<ControllerThatIsNotConfigured>()
+                .WithHeader("Accept", acceptsHeader)
+                .BuildActionExecuting();
+
+            // Act
+            actionFilter.OnActionExecuting(context);
+
+            // Assert
+            var result = (ContentResult)context.Result;
+            Assert.Equal(406, result.StatusCode);
+        }
+
+        [Fact]
+        public void GIVEN_CorrectAcceptsHeader_AND_Configured_WHEN_ActionExecuting_THEN_ResponseIsNull()
+        {
+            // Arrange
+            string acceptsHeader = "application/vnd.api+json";
+            string contentType = "application/vnd.api+json";
+
+            var actionFilter = GetActionFilterForTestModel();
+            var context = new FilterContextBuilder()
+                .WithContentType(contentType)
+                .WithController<PostsController>()
                 .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
@@ -195,6 +226,7 @@ namespace NJsonApi.Test.Serialization
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithContentType(contentType)
+                .WithController<PostsController>()
                 .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
@@ -215,6 +247,7 @@ namespace NJsonApi.Test.Serialization
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithContentType(contentType)
+                .WithController<PostsController>()
                 .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
@@ -222,7 +255,7 @@ namespace NJsonApi.Test.Serialization
             actionFilter.OnActionExecuting(context);
 
             // Assert
-            var result = (HttpStatusCodeResult)context.Result;
+            var result = (StatusCodeResult)context.Result;
             Assert.Equal(406, result.StatusCode);
         }
 
@@ -236,6 +269,7 @@ namespace NJsonApi.Test.Serialization
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithContentType(contentType)
+                .WithController<PostsController>()
                 .WithHeader("Accept", acceptsHeader)
                 .BuildActionExecuting();
 
@@ -262,13 +296,14 @@ namespace NJsonApi.Test.Serialization
             var context = new FilterContextBuilder()
                 .WithResult(new ObjectResult(post))
                 .WithQuery("include", includePath)
+                .WithController<PostsController>()
                 .BuildActionExecuted();
 
             // Act
             actionFilter.OnActionExecuted(context);
 
             // Assert
-            var result = (HttpStatusCodeResult)context.Result;
+            var result = (StatusCodeResult)context.Result;
             Assert.Equal(400, result.StatusCode);
         }
 
@@ -282,6 +317,7 @@ namespace NJsonApi.Test.Serialization
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithResult(new ObjectResult(post))
                 .WithQuery("include", "authors")
                 .BuildActionExecuted();
@@ -307,6 +343,7 @@ namespace NJsonApi.Test.Serialization
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
+                .WithController<PostsController>()
                 .WithResult(new ObjectResult(post))
                 .WithQuery("include", "authors,comments")
                 .BuildActionExecuted();

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NJsonApi.Test.TestModel;
-using NJsonApi.Web.MVC6.BadActionResultTransformers;
+using NJsonApi.Web.MVCCore.BadActionResultTransformers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace NJsonApi.Test.Serialization
         public void GIVEN_ABadAction_WHEN_IsBadAction_THEN_True()
         {
             // Arrange
-            var objectResult = new HttpNotFoundObjectResult("1234");
+            var objectResult = new NotFoundObjectResult("1234");
 
             // Act
             var result = BadActionResultTransformer.IsBadAction(objectResult);
@@ -52,7 +52,7 @@ namespace NJsonApi.Test.Serialization
         public void GIVEN_ABadAction_WHEN_Transform_THEN_CompoundDocumentWithError()
         {
             // Arrange
-            var objectResult = new HttpNotFoundObjectResult(123);
+            var objectResult = new NotFoundObjectResult(123);
 
             // Act
             var result = BadActionResultTransformer.Transform(objectResult);

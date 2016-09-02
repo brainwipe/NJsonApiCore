@@ -1,5 +1,4 @@
-﻿using NJsonApi.Serialization;
-using NJsonApi.Serialization.Documents;
+﻿using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestControllers;
@@ -11,8 +10,8 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestSingleClass
     {
-        readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-           
+        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
+
         [Fact]
         public void Creates_CompondDocument_for_single_not_nested_class_and_propertly_map_resourceName()
         {
@@ -106,17 +105,17 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
         private IConfiguration CreateConfiguration()
         {
-            var mapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id, "http://sampleClass/{id}");
+            var mapping = new ResourceMapping<SampleClass, DummyController>(c => c.Id);
             mapping.ResourceType = "sampleClasses";
             mapping.AddPropertyGetter("someValue", c => c.SomeValue);
             mapping.AddPropertyGetter("date", c => c.DateTime);
 
             var config = new NJsonApi.Configuration();
             config.AddMapping(mapping);
-            return config; 
+            return config;
         }
 
-        class SampleClass
+        private class SampleClass
         {
             public int Id { get; set; }
             public string SomeValue { get; set; }

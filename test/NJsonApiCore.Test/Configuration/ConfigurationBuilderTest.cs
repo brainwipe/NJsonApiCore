@@ -22,7 +22,7 @@ namespace NJsonApi.Test.Configuration
             var result = builder.Build();
 
             //Assert
-            Assert.True(result.IsMappingRegistered(typeof(Post)));
+            Assert.True(result.IsResourceRegistered(typeof(Post)));
             Assert.NotNull(result.GetMapping(typeof(Post)));
         }
 
@@ -177,14 +177,12 @@ namespace NJsonApi.Test.Configuration
         //}
 
         [Fact]
-        public void WithAllSimpleProperties_maps_properly()
+        public void GIVEN_ConfigurationWithOneResource_WHEN_Build_THEN_ConfigurationIsCorrect()
         {
             //Arrange
             var builder = new ConfigurationBuilder();
-            builder
-                .WithConvention(new DefaultPropertyScanningConvention());
 
-            const string testTitle = "test";
+            var testTitle = "test";
             var post = new Post
             {
                 Id = 4,
@@ -204,8 +202,8 @@ namespace NJsonApi.Test.Configuration
             Assert.Equal(postMapping.IdGetter(post), 4);
             Assert.Equal(postMapping.PropertyGetters.Count, 2);
             Assert.Equal(postMapping.PropertySetters.Count, 2);
-            Assert.Equal(postMapping.PropertyGetters["title"](post), testTitle);
-            Assert.True(postMapping.PropertyGetters.ContainsKey("authorId"));
+            Assert.Equal(postMapping.PropertyGetters["Title"](post), testTitle);
+            Assert.True(postMapping.PropertyGetters.ContainsKey("AuthorId"));
         }
 
         [Fact]

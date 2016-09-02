@@ -42,6 +42,12 @@ namespace NJsonApi
         public ResourceConfigurationBuilder<TResource, TController> Resource<TResource, TController>()
         {
             var resource = typeof(TResource);
+            var controller = typeof(TResource);
+
+            if (DoesControllerHaveMoreThanOneGetForThisResource(controller, resource))
+            {
+                throw new InvalidOperationException($"The controller being registered ({controller.FullName}) can only have one GET method with single id parameter for this resource type.");
+            }
 
             if (DoesModelHaveReservedWordsRecursive(resource))
             {
@@ -63,6 +69,16 @@ namespace NJsonApi
             {
                 return ResourceConfigurationsByType[resource] as ResourceConfigurationBuilder<TResource, TController>;
             }
+        }
+
+        private bool DoesControllerHaveMoreThanOneGetForThisResource(Type resource, Type controller)
+        {
+            return controller.GetMethods().Any(m =>
+                m.ReturnType == resource
+                &&
+                m.GetParameters().Any(p => p.Name == "id")
+                &&
+                m.GetParameters().Count() == 1);
         }
 
         public Configuration Build()
