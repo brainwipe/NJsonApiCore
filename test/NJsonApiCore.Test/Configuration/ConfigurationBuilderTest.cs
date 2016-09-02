@@ -221,15 +221,15 @@ namespace NJsonApi.Test.Configuration
         }
 
         [Fact]
-        public void WithComplexObjectTest()
+        public void GIVEN_Model_WITH_Relationships_WHEN_ConfigIsBuilt_THEN_MapsAreCorrect()
         {
             //Arrange
-            const int authorId = 5;
-            const string authorName = "Valentin";
-            const int postId = 6;
-            const string postTitle = "The measure of a man";
-            const string commentBody = "Comment body";
-            const int commentId = 7;
+            var authorId = 5;
+            var authorName = "Valentin";
+            var postId = 6;
+            var postTitle = "The measure of a man";
+            var commentBody = "Comment body";
+            var commentId = 7;
             var author = new Author() { Id = authorId, Name = authorName };
             var post = new Post() { Id = postId, Title = postTitle, Author = author };
             var comment = new Comment() { Id = commentId, Body = commentBody, Post = post };
@@ -296,6 +296,16 @@ namespace NJsonApi.Test.Configuration
 
             // Act - Will not throw an infinite loop error
             configurationBuilder.Resource<ModelThatCausesInfiniteLoop, DummyController>();
+        }
+
+        [Fact]
+        public void GIVEN_ModelWithoutId_WHEN_BuildConfiguration_THEN_InvalidOperationException()
+        {
+            // Arrange
+            var configurationBuilder = new ConfigurationBuilder();
+
+            // Act - Exception!
+            Assert.Throws<InvalidOperationException>(() => configurationBuilder.Resource<ModelWithoutAnId, DummyController>());
         }
     }
 }
