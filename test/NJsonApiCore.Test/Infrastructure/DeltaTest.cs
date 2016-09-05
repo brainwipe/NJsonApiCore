@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using NJsonApi.Infrastructure;
+﻿using NJsonApi.Infrastructure;
+using NJsonApi.Test.TestModel;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NJsonApi.Test.Infrastructure
@@ -7,76 +9,42 @@ namespace NJsonApi.Test.Infrastructure
     public class DeltaTest
     {
         [Fact]
-        public void SimpleTestOfFunction()
+        public void GIVEN_IncompleteProperties_WHEN_DeltaApply_THEN_OnlyThoseSpecifiedApplied()
         {
             //Arange
-            var simpleObject = new SimpleTestClass();
-            var classUnderTest = new Delta<SimpleTestClass>();
+            var author = new Author();
+            var classUnderTest = new Delta<Author>();
 
-            classUnderTest.FilterOut(t => t.Prop1NotIncluded);
-            classUnderTest.ObjectPropertyValues = new Dictionary<string, object>()
-                                         {
-                                           {"Prop2","b"}
-                                         };
+            classUnderTest.FilterOut(t => t.Name);
+            classUnderTest.ObjectPropertyValues =
+                new Dictionary<string, object>()
+                {
+                    {"Id", 1},
+                    {"DateTimeCreated", new DateTime(2016,1,1)}
+                };
             //Act
-            classUnderTest.ApplySimpleProperties(simpleObject);
+            classUnderTest.ApplySimpleProperties(author);
 
             //Assert
-            Assert.NotNull(simpleObject.Prop2);
-            Assert.Equal(simpleObject.Prop2, "b");
-            Assert.Null(simpleObject.Prop1NotIncluded);
+            Assert.Equal(author.Id, 1);
+            Assert.Equal(author.DateTimeCreated, new DateTime(2016, 1, 1));
+            Assert.Null(author.Name);
         }
 
         [Fact]
-        public void TestNotIncludedProperties()
+        public void GIVEN_NoProperties_WHEN_DeltaApply_THEN_OutputsAreDefault()
         {
             //Arrange
-            var simpleObject = new SimpleTestClass();
-            var objectUnderTest = new Delta<SimpleTestClass>();
+            var simpleObject = new Author();
+            var objectUnderTest = new Delta<Author>();
 
-            objectUnderTest.FilterOut(t => t.Prop1NotIncluded);
-            objectUnderTest.ObjectPropertyValues = new Dictionary<string, object>()
-                                         {
-                                           {"Prop2","b"},
-                                           {"Prop1NotIncluded",5} 
-                                         };
             //Act
             objectUnderTest.ApplySimpleProperties(simpleObject);
 
             //Assert
-            Assert.NotNull(simpleObject.Prop2);
-            Assert.Equal(simpleObject.Prop2, "b");
-            Assert.Null(simpleObject.Prop1NotIncluded);
+            Assert.Equal(simpleObject.Id, 0);
+            Assert.Null(simpleObject.Name);
+            Assert.Equal(simpleObject.DateTimeCreated, new DateTime());
         }
-
-        [Fact]
-        public void TestEmptyPropertiesValues()
-        {
-            //Arrange
-            var simpleObject = new SimpleTestClass();
-            var objectUnderTest = new Delta<SimpleTestClass>();
-
-            //Act
-            objectUnderTest.FilterOut(t => t.Prop1NotIncluded);
-            objectUnderTest.ApplySimpleProperties(simpleObject);
-
-            //Assert
-            Assert.Null(simpleObject.Prop1NotIncluded);
-            Assert.Null(simpleObject.Prop1);
-            Assert.Null(simpleObject.Prop2);
-        }
-    }
-
-    internal class SimpleTestClass
-    {
-        public string Prop1 { get; set; }
-        public string Prop2 { get; set; }
-        public int? Prop1NotIncluded { get; set; }
-    }
-    internal class SecondSimpleTestClass
-    {
-        public string Prop1 { get; set; }
-        public string Prop2 { get; set; }
-        public int Prop1NotIncluded { get; set; }
     }
 }
