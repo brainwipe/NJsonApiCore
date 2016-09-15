@@ -75,6 +75,7 @@ namespace NJsonApi
             return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
         }
 
+        // TODO ROLA - type handling must be better in here
         public Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes)
         {
             var values = new Dictionary<string, object>();

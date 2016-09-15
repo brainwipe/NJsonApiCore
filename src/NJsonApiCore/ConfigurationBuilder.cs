@@ -43,7 +43,7 @@ namespace NJsonApi
         {
             var resource = typeof(TResource);
 
-            if (!HasOnlyOneGetMethod<TResource, TController>())
+            if (!HasOnlyOneGetMethod<TController>())
             {
                 throw new InvalidOperationException($"The controller being registered ({typeof(TController).FullName}) can only have one GET method with single id parameter for the resource type {typeof(TResource).FullName}.");
             }
@@ -70,13 +70,13 @@ namespace NJsonApi
             }
         }
 
-        private bool HasOnlyOneGetMethod<TResource, TController>()
+        private bool HasOnlyOneGetMethod<TController>()
         {
             // TODO this feels like a reproduction of logic, should be shared here and in the link builder
             return typeof(TController)
                .GetMethods()
                .Where(m =>
-                   m.ReturnType == typeof(TResource)
+                   m.CustomAttributes.Any(y => y.AttributeType.Name == "HttpGetAttribute") // This isn't very nice but it works across MvcCore and Mvc5
                    &&
                    m.GetParameters().Any(p => p.Name == "id")
                    &&
