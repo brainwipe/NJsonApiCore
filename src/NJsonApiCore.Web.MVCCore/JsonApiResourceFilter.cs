@@ -25,7 +25,8 @@ namespace NJsonApi.Web
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            if (context.HttpContext.Request.Method == "POST" || context.HttpContext.Request.Method == "PATCH")
+            if (context.ActionDescriptor.Parameters.Any(
+                x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body))
             {
                 using (var reader = new StreamReader(context.HttpContext.Request.Body))
                 {

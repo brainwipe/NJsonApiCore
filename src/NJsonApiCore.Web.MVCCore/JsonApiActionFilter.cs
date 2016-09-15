@@ -45,7 +45,8 @@ namespace NJsonApi.Web
                     return;
                 }
 
-                if (context.HttpContext.Request.Method == "POST" || context.HttpContext.Request.Method == "PATCH")
+                if (context.ActionDescriptor.Parameters.Any(
+                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body))
                 {
                     var actionDescriptorForBody = context.ActionDescriptor
                         .Parameters
@@ -61,9 +62,9 @@ namespace NJsonApi.Web
                         context.ActionArguments.Add(actionDescriptorForBody.Name,
                             context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta);
                     }
-                }
 
-                context.ModelState.Clear();
+                    context.ModelState.Clear();
+                }
             }
             else
             {
