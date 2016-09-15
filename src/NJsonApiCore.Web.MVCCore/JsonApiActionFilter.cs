@@ -45,13 +45,10 @@ namespace NJsonApi.Web
                     return;
                 }
 
-                if (context.ActionDescriptor.Parameters.Any(
-                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body))
+                var actionDescriptorForBody = context.ActionDescriptor.Parameters.SingleOrDefault(
+                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
+                if (actionDescriptorForBody != null)
                 {
-                    var actionDescriptorForBody = context.ActionDescriptor
-                        .Parameters
-                        .Single(x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
-
                     if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
                     {
                         context.ActionArguments[actionDescriptorForBody.Name] =

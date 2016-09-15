@@ -25,8 +25,9 @@ namespace NJsonApi.Web
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            if (context.ActionDescriptor.Parameters.Any(
-                x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body))
+            var actionDescriptorForBody = context.ActionDescriptor.Parameters.SingleOrDefault(
+                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
+            if (actionDescriptorForBody != null)
             {
                 using (var reader = new StreamReader(context.HttpContext.Request.Body))
                 {
@@ -36,10 +37,6 @@ namespace NJsonApi.Web
 
                         if (updateDocument != null)
                         {
-                            var actionDescriptorForBody = context.ActionDescriptor
-                                .Parameters
-                                .Single(x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
-
                             var typeInsideDeltaGeneric = actionDescriptorForBody
                                 .ParameterType
                                 .GenericTypeArguments
