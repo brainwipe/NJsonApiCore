@@ -27,34 +27,20 @@ namespace NJsonApi.Web
         {
             var actionDescriptorForBody = context.ActionDescriptor.Parameters.SingleOrDefault(
                     x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
-            if (actionDescriptorForBody != null)
+            if (actionDescriptorForBody == null)
             {
-                using (var reader = new StreamReader(context.HttpContext.Request.Body))
+                return;
+            }
+
+            using (var reader = new StreamReader(context.HttpContext.Request.Body))
+            {
+                if (context.ActionDescriptor.Properties.ContainsKey(actionDescriptorForBody.Name))
                 {
-                    using (var jsonReader = new JsonTextReader(reader))
-                    {
-                        var updateDocument = serializer.Deserialize(jsonReader, typeof(UpdateDocument)) as UpdateDocument;
-
-                        if (updateDocument != null)
-                        {
-                            var typeInsideDeltaGeneric = actionDescriptorForBody
-                                .ParameterType
-                                .GenericTypeArguments
-                                .Single();
-
-                            var jsonApiContext = new Context(new Uri(context.HttpContext.Request.Host.Value, UriKind.Absolute));
-                            var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
-
-                            if (context.ActionDescriptor.Properties.ContainsKey(actionDescriptorForBody.Name))
-                            {
-                                context.ActionDescriptor.Properties[actionDescriptorForBody.Name] = transformed;
-                            }
-                            else
-                            {
-                                context.ActionDescriptor.Properties.Add(actionDescriptorForBody.Name, transformed);
-                            }
-                        }
-                    }
+                    context.ActionDescriptor.Properties[actionDescriptorForBody.Name] = reader.ReadToEnd();
+                }
+                else
+                {
+                    context.ActionDescriptor.Properties.Add(actionDescriptorForBody.Name, reader.ReadToEnd());
                 }
             }
         }

@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NJsonApi.Serialization;
 using NJsonApi.Web.MVCCore.BadActionResultTransformers;
 using System;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using NJsonApi.Infrastructure;
 
 namespace NJsonApi.Web
@@ -49,18 +51,28 @@ namespace NJsonApi.Web
                     x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
                 if (actionDescriptorForBody != null)
                 {
-                    if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
-                    {
-                        context.ActionArguments[actionDescriptorForBody.Name] =
-                            context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta;
-                    }
-                    else
-                    {
-                        context.ActionArguments.Add(actionDescriptorForBody.Name,
-                            context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta);
-                    }
+                    var updateDocument = JsonConvert.DeserializeObject<UpdateDocument>((string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name]);
 
-                    context.ModelState.Clear();
+                    if (updateDocument != null)
+                    {
+                        var typeInsideDeltaGeneric = actionDescriptorForBody
+                            .ParameterType
+                            .GenericTypeArguments
+                            .Single();
+
+                        var jsonApiContext = new Context(new Uri(context.HttpContext.Request.Host.Value, UriKind.Absolute));
+                        var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
+                        if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                        {
+                            context.ActionArguments[actionDescriptorForBody.Name] = transformed;
+                        }
+                        else
+                        {
+                            context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
+                        }
+
+                        context.ModelState.Clear();
+                    }
                 }
             }
             else
