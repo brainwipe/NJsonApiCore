@@ -32,6 +32,8 @@ namespace NJsonApi.Web
             var isValidContentType = context.HttpContext.Request.ContentType == configuration.DefaultJsonApiMediaType;
             var controllerType = context.Controller.GetType();
             var isControllerRegistered = configuration.IsControllerRegistered(controllerType);
+            var actionDescriptorForBody = context.ActionDescriptor.Parameters.SingleOrDefault(
+                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
 
             if (isControllerRegistered)
             {
@@ -47,8 +49,6 @@ namespace NJsonApi.Web
                     return;
                 }
 
-                var actionDescriptorForBody = context.ActionDescriptor.Parameters.SingleOrDefault(
-                    x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
                 if (actionDescriptorForBody != null)
                 {
                     var updateDocument = JsonConvert.DeserializeObject<UpdateDocument>((string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name]);
@@ -77,6 +77,20 @@ namespace NJsonApi.Web
             }
             else
             {
+                if (actionDescriptorForBody != null)
+                {
+                    var type = (context.Controller as Controller).ControllerContext.ActionDescriptor.Parameters.First().ParameterType;
+                    var obj = JsonConvert.DeserializeObject((string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name], type);
+                    if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                    {
+                        context.ActionArguments[actionDescriptorForBody.Name] = obj;
+                    }
+                    else
+                    {
+                        context.ActionArguments.Add(actionDescriptorForBody.Name, obj);
+                    }
+                }
+
                 if (isValidContentType)
                 {
                     context.Result = new ContentResult()
