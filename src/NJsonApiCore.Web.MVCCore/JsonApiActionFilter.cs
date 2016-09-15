@@ -45,17 +45,22 @@ namespace NJsonApi.Web
                     return;
                 }
 
-                var actionDescriptorForBody = context.ActionDescriptor
-                    .Parameters
-                    .Single(x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
+                if (context.HttpContext.Request.Method == "POST" || context.HttpContext.Request.Method == "PATCH")
+                {
+                    var actionDescriptorForBody = context.ActionDescriptor
+                        .Parameters
+                        .Single(x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
 
-                if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
-                {
-                    context.ActionArguments[actionDescriptorForBody.Name] = context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta;
-                }
-                else
-                {
-                    context.ActionArguments.Add(actionDescriptorForBody.Name, context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta);
+                    if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                    {
+                        context.ActionArguments[actionDescriptorForBody.Name] =
+                            context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta;
+                    }
+                    else
+                    {
+                        context.ActionArguments.Add(actionDescriptorForBody.Name,
+                            context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta);
+                    }
                 }
 
                 context.ModelState.Clear();
