@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Serialization;
 using NJsonApi.Web.MVCCore.Serialization;
 
@@ -35,9 +37,11 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
                 options =>
                 {
                     options.Conventions.Add(new ApiExplorerVisibilityEnabledConvention());
+                    options.Filters.Add(typeof(JsonApiResourceFilter));
                     options.Filters.Add(typeof(JsonApiActionFilter));
                     options.Filters.Add(typeof(JsonApiExceptionFilter));
                     options.OutputFormatters.Insert(0, new JsonApiOutputFormatter(nJsonApiConfig));
+                    options.InputFormatters.OfType<JsonInputFormatter>().First().SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/vnd.api+json"));
                 });
            
             services.AddSingleton<ILinkBuilder, LinkBuilder>();

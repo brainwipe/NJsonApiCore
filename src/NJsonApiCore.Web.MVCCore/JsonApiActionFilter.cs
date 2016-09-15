@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Newtonsoft.Json;
 using NJsonApi.Serialization;
 using NJsonApi.Web.MVCCore.BadActionResultTransformers;
 using System;
-using System.IO;
 using System.Linq;
+using NJsonApi.Infrastructure;
 
 namespace NJsonApi.Web
 {
@@ -17,16 +16,13 @@ namespace NJsonApi.Web
         public bool AllowMultiple => false;
         private readonly IJsonApiTransformer jsonApiTransformer;
         private readonly IConfiguration configuration;
-        private readonly JsonSerializer serializer;
 
         public JsonApiActionFilter(
             IJsonApiTransformer jsonApiTransformer,
-            IConfiguration configuration,
-            JsonSerializer serializer)
+            IConfiguration configuration)
         {
             this.jsonApiTransformer = jsonApiTransformer;
             this.configuration = configuration;
-            this.serializer = serializer;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -49,29 +45,20 @@ namespace NJsonApi.Web
                     return;
                 }
 
-                using (var reader = new StreamReader(context.HttpContext.Request.Body))
+                var actionDescriptorForBody = context.ActionDescriptor
+                    .Parameters
+                    .Single(x => x.BindingInfo != null && x.BindingInfo.BindingSource == BindingSource.Body);
+
+                if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
                 {
-                    using (var jsonReader = new JsonTextReader(reader))
-                    {
-                        var updateDocument = serializer.Deserialize(jsonReader, typeof(UpdateDocument)) as UpdateDocument;
-
-                        if (updateDocument != null)
-                        {
-                            var actionDescriptorForBody = context.ActionDescriptor
-                                .Parameters
-                                .Single(x => x.BindingInfo.BindingSource == BindingSource.Body);
-
-                            var typeInsideDeltaGeneric = actionDescriptorForBody
-                                .ParameterType
-                                .GenericTypeArguments
-                                .Single();
-                            var jsonApiContext = new Context(new Uri(context.HttpContext.Request.Host.Value, UriKind.Absolute));
-                            var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
-                            context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
-                            context.ModelState.Clear();
-                        }
-                    }
+                    context.ActionArguments[actionDescriptorForBody.Name] = context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta;
                 }
+                else
+                {
+                    context.ActionArguments.Add(actionDescriptorForBody.Name, context.ActionDescriptor.Properties[actionDescriptorForBody.Name] as IDelta);
+                }
+
+                context.ModelState.Clear();
             }
             else
             {
