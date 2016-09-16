@@ -18,13 +18,16 @@ namespace NJsonApi.Web
         public bool AllowMultiple => false;
         private readonly IJsonApiTransformer jsonApiTransformer;
         private readonly IConfiguration configuration;
+        private readonly JsonSerializer serializer;
 
         public JsonApiActionFilter(
             IJsonApiTransformer jsonApiTransformer,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            JsonSerializer serializer)
         {
             this.jsonApiTransformer = jsonApiTransformer;
             this.configuration = configuration;
+            this.serializer = serializer;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -51,27 +54,33 @@ namespace NJsonApi.Web
 
                 if (actionDescriptorForBody != null)
                 {
-                    var updateDocument = JsonConvert.DeserializeObject<UpdateDocument>((string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name]);
-
-                    if (updateDocument != null)
+                    var json = (string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name];
+                    using (var stringReader = new StringReader(json))
                     {
-                        var typeInsideDeltaGeneric = actionDescriptorForBody
-                            .ParameterType
-                            .GenericTypeArguments
-                            .Single();
-
-                        var jsonApiContext = new Context(new Uri(context.HttpContext.Request.Host.Value, UriKind.Absolute));
-                        var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
-                        if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                        using (var jsonReader = new JsonTextReader(stringReader))
                         {
-                            context.ActionArguments[actionDescriptorForBody.Name] = transformed;
-                        }
-                        else
-                        {
-                            context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
-                        }
+                            var updateDocument = serializer.Deserialize(jsonReader, typeof(UpdateDocument)) as UpdateDocument;
+                            if (updateDocument != null)
+                            {
+                                var typeInsideDeltaGeneric = actionDescriptorForBody
+                                    .ParameterType
+                                    .GenericTypeArguments
+                                    .Single();
 
-                        context.ModelState.Clear();
+                                var jsonApiContext = new Context(new Uri(context.HttpContext.Request.Host.Value, UriKind.Absolute));
+                                var transformed = jsonApiTransformer.TransformBack(updateDocument, typeInsideDeltaGeneric, jsonApiContext);
+                                if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                                {
+                                    context.ActionArguments[actionDescriptorForBody.Name] = transformed;
+                                }
+                                else
+                                {
+                                    context.ActionArguments.Add(actionDescriptorForBody.Name, transformed);
+                                }
+
+                                context.ModelState.Clear();
+                            }
+                        }
                     }
                 }
             }
@@ -80,14 +89,21 @@ namespace NJsonApi.Web
                 if (actionDescriptorForBody != null)
                 {
                     var type = (context.Controller as Controller).ControllerContext.ActionDescriptor.Parameters.First().ParameterType;
-                    var obj = JsonConvert.DeserializeObject((string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name], type);
-                    if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                    var json = (string)context.ActionDescriptor.Properties[actionDescriptorForBody.Name];
+                    using (var stringReader = new StringReader(json))
                     {
-                        context.ActionArguments[actionDescriptorForBody.Name] = obj;
-                    }
-                    else
-                    {
-                        context.ActionArguments.Add(actionDescriptorForBody.Name, obj);
+                        using (var jsonReader = new JsonTextReader(stringReader))
+                        {
+                            var obj = serializer.Deserialize(jsonReader, type);
+                            if (context.ActionArguments.ContainsKey(actionDescriptorForBody.Name))
+                            {
+                                context.ActionArguments[actionDescriptorForBody.Name] = obj;
+                            }
+                            else
+                            {
+                                context.ActionArguments.Add(actionDescriptorForBody.Name, obj);
+                            }
+                        }
                     }
                 }
 
