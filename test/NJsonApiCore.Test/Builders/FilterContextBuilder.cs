@@ -111,7 +111,9 @@ namespace NJsonApi.Test.Builders
 
         public ActionExecutingContext BuildActionExecuting()
         {
-            var actionContext = new ActionContext(httpContextMock.Object, new RouteData(), new ActionDescriptor());
+            var actionDescriptor = new ActionDescriptor();
+            actionDescriptor.Parameters = new List<ParameterDescriptor>();
+            var actionContext = new ActionContext(httpContextMock.Object, new RouteData(), actionDescriptor);
             var actionExecutingContext = new ActionExecutingContext(
                 actionContext, new List<IFilterMetadata>(), actionArguments, controller);
             return actionExecutingContext;
