@@ -101,6 +101,7 @@
     <Compile Include="Serialization\Representations\Resources\ResourceCollection.cs" />
     <Compile Include="Serialization\Representations\Resources\SimpleLink.cs" />
     <Compile Include="Serialization\Representations\Resources\SingleResource.cs" />
+    <Compile Include="Serialization\SingleResourceIdentifierComparer.cs" />
     <Compile Include="Serialization\TransformationHelper.cs" />
     <Compile Include="Serialization\UpdateDocument.cs" />
     <Compile Include="Utils\CamelCaseUtil.cs" />
