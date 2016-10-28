@@ -319,7 +319,7 @@ namespace NJsonApi.Test.Serialization
             var context = new FilterContextBuilder()
                 .WithController<PostsController>()
                 .WithResult(new ObjectResult(post))
-                .WithQuery("include", "authors")
+                .WithQuery("include", "author")
                 .BuildActionExecuted();
 
             // Act
@@ -338,14 +338,14 @@ namespace NJsonApi.Test.Serialization
             // Arrange
             var post = new PostBuilder()
                 .WithAuthor(PostBuilder.Asimov)
-                .WithComment(1, "First")
+                .WithComment(1, "First", PostBuilder.Asimov)
                 .Build();
 
             var actionFilter = GetActionFilterForTestModel();
             var context = new FilterContextBuilder()
                 .WithController<PostsController>()
                 .WithResult(new ObjectResult(post))
-                .WithQuery("include", "authors,comments")
+                .WithQuery("include", "author,replies")
                 .BuildActionExecuted();
 
             // Act

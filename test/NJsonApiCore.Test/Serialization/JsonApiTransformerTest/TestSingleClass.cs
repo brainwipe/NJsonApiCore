@@ -87,6 +87,24 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.Equal(transformedObject.Type, "sampleClasses");
         }
 
+        [Fact]
+        public void Creates_CompondDocument_for_single_derived_class_and_propertly_map_type()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleClass objectToTransform = CreateDerivedObjectToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfiguration())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal(transformedObject.Type, "derivedClasses");
+        }
+
         private static SampleClass CreateObjectToTransform()
         {
             return new SampleClass
@@ -95,6 +113,18 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 SomeValue = "Somevalue text test string",
                 DateTime = DateTime.UtcNow,
                 NotMappedValue = "Should be not mapped"
+            };
+        }
+
+        private static DerivedClass CreateDerivedObjectToTransform()
+        {
+            return new DerivedClass
+            {
+                Id = 1,
+                SomeValue = "Somevalue text test string",
+                DateTime = DateTime.UtcNow,
+                NotMappedValue = "Should be not mapped",
+                DerivedProperty = "Derived value"
             };
         }
 
@@ -110,8 +140,15 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             mapping.AddPropertyGetter("someValue", c => c.SomeValue);
             mapping.AddPropertyGetter("date", c => c.DateTime);
 
+            var derivedMapping = new ResourceMapping<DerivedClass, DummyController>(c => c.Id);
+            derivedMapping.ResourceType = "derivedClasses";
+            derivedMapping.AddPropertyGetter("someValue", c => c.SomeValue);
+            derivedMapping.AddPropertyGetter("date", c => c.DateTime);
+            derivedMapping.AddPropertyGetter("derivedProperty", c => c.DerivedProperty);
+
             var config = new NJsonApi.Configuration();
             config.AddMapping(mapping);
+            config.AddMapping(derivedMapping);
             return config;
         }
 
@@ -121,6 +158,11 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             public string SomeValue { get; set; }
             public DateTime DateTime { get; set; }
             public string NotMappedValue { get; set; }
+        }
+
+        private class DerivedClass : SampleClass
+        {
+            public string DerivedProperty { get; set; }
         }
     }
 }
