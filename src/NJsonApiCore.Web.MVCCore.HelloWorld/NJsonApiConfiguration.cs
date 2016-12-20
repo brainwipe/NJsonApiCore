@@ -1,5 +1,7 @@
 ﻿using NJsonApi.Web.MVCCore.HelloWorld.Controllers;
 using NJsonApi.Web.MVCCore.HelloWorld.Models;
+using NJsonApiCore.Web.MVCCore.HelloWorld.Controllers;
+using NJsonApiCore.Web.MVCCore.HelloWorld.Models;
 
 namespace NJsonApi.Web.MVCCore.HelloWorld
 {
@@ -19,6 +21,14 @@ namespace NJsonApi.Web.MVCCore.HelloWorld
 
             configBuilder
                 .Resource<Comment, CommentsController>()
+                .WithAllProperties();
+
+            configBuilder
+                .Resource<Report, ReportsController>()
+                .WithAllProperties();
+
+            configBuilder
+                .Resource<StatisticsReport, StatisticsReportController>()
                 .WithAllProperties();
 
             var nJsonApiConfig = configBuilder.Build();
