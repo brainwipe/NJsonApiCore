@@ -28,14 +28,9 @@ namespace NJsonApiCore.Web.MVCCore.HelloWorld.Controllers
             return new ObjectResult(new Report());
         }
 
-        [HttpGet("{id}/statisticsReport")]
-        public IActionResult GetStatisticsReport(int id, string filter)
+        [HttpGet("{reportId}/statisticsReport")]
+        public IActionResult GetStatisticsReport(int reportId)
         {
-            if (id != 1)
-            {
-                return new NotFoundResult();
-            }
-
             return new ObjectResult(new Report().StatisticsReport);
         }
     }
