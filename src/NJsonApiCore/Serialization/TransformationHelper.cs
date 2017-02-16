@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NJsonApi.Utils;
 
 namespace NJsonApi.Serialization
 {
@@ -33,7 +34,19 @@ namespace NJsonApi.Serialization
         public List<SingleResource> CreateIncludedRepresentations(List<object> primaryResourceList, IResourceMapping resourceMapping, Context context)
         {
             var includedList = new List<SingleResource>();
-            var alreadyVisitedObjects = new HashSet<object>(primaryResourceList);
+
+            var primaryResourceIdentifiers = primaryResourceList.Select(x =>
+            {
+                var id = new SingleResourceIdentifier
+                {
+                    Id = resourceMapping.IdGetter(x).ToString(),
+                    Type = resourceMapping.ResourceType
+                };
+
+                return id;
+            });
+
+            var alreadyVisitedObjects = new HashSet<SingleResourceIdentifier>(primaryResourceIdentifiers, new SingleResourceIdentifierComparer());
 
             foreach (var resource in primaryResourceList)
             {
@@ -55,7 +68,7 @@ namespace NJsonApi.Serialization
         private List<SingleResource> AppendIncludedRepresentationRecursive(
             object resource,
             IResourceMapping resourceMapping,
-            HashSet<object> alreadyVisitedObjects,
+            HashSet<SingleResourceIdentifier> alreadyVisitedObjects,
             Context context,
             string parentRelationshipPath = "")
         {
@@ -78,12 +91,18 @@ namespace NJsonApi.Serialization
 
                 foreach (var relatedResource in relatedResources)
                 {
-                    if (alreadyVisitedObjects.Contains(relatedResource))
+                    var relatedResourceId = new SingleResourceIdentifier
+                    {
+                        Id = relationship.ResourceMapping.IdGetter(relatedResource).ToString(),
+                        Type = relationship.ResourceMapping.ResourceType
+                    };
+
+                    if (alreadyVisitedObjects.Contains(relatedResourceId))
                     {
                         continue;
                     }
 
-                    alreadyVisitedObjects.Add(relatedResource);
+                    alreadyVisitedObjects.Add(relatedResourceId);
                     includedResources.Add(
                         CreateResourceRepresentation(relatedResource, relationship.ResourceMapping, context));
 
@@ -99,11 +118,11 @@ namespace NJsonApi.Serialization
         {
             if (string.IsNullOrEmpty(parentRelationshipPath))
             {
-                return relationship.RelatedBaseResourceType;
+                return relationship.RelationshipName;
             }
             else
             {
-                return $"{parentRelationshipPath}.{relationship.RelatedBaseResourceType}";
+                return $"{parentRelationshipPath}.{relationship.RelationshipName}";
             }
         }
 
