@@ -2,8 +2,6 @@
 using NJsonApi.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace NJsonApi.Test.Utils
@@ -46,6 +44,46 @@ namespace NJsonApi.Test.Utils
 
             // Act - bang
             Assert.Throws<ArgumentNullException>(() => Reflection.FromWithinGeneric(nullType));
+        }
+
+        [Fact]
+        public void Given_ArrayType_WHEN_GetObjectType_THEN_ArrayElementTypeReturned()
+        {
+            // Arrange
+            var myEmptyObject = new string[0];
+
+            // Act
+            var result = Reflection.GetObjectType(myEmptyObject);
+
+            // Assert
+            Assert.Equal(typeof(string), result);
+        }
+
+        [Fact]
+        public void Given_GenericEnumerable_WHEN_GetObjectType_THEN_GenericTypeReturned()
+        {
+            // Arrange
+            var myStringListObject = new List<string>();
+
+            // Act
+            var result = Reflection.GetObjectType(myStringListObject);
+
+            // Assert
+            Assert.Equal(typeof(string), result);
+        }
+
+
+        [Fact]
+        public void Given_NonEnumerable_WHEN_GetObjectType_THEN_TypeReturned()
+        {
+            // Arrange
+            string myEmptyObject = string.Empty;
+
+            // Act
+            var result = Reflection.GetObjectType(myEmptyObject);
+
+            // Assert
+            Assert.Equal(typeof(string), result);
         }
     }
 }
