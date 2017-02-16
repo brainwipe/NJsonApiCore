@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NJsonApiCore</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>Rob Lang</authors>
     <owners>Rob Lang</owners>
     <projectUrl>http://brainwipe.github.io/NJsonApiCore</projectUrl>
@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>NJsonApiCore extends a ASP.NET json web service so that it returns JSON in the {json:api} format. </description>
     <copyright>Copyright 2016</copyright>
-    <releaseNotes>Fixes for model binding in POST/PATCH and model configuration warnings. https://github.com/brainwipe/NJsonApiCore/milestone/5?closed=1</releaseNotes>
+    <releaseNotes>Added support for Array return types, allowed JsonApi services to run alongside non-JsonApi services. All issues here: https://github.com/brainwipe/NJsonApiCore/milestone/6?closed=1</releaseNotes>
     <tags>jsonapi njsonapi webapi core</tags>
     <dependencies>
       <group targetFramework="dotnet">
