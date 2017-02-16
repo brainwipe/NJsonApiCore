@@ -16,9 +16,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore", "src\NJsonAp
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Web.MVCCore.HelloWorld", "src\NJsonApiCore.Web.MVCCore.HelloWorld\NJsonApiCore.Web.MVCCore.HelloWorld.xproj", "{3309A597-A8C0-4EB8-9956-7860A5F44F22}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Test", "test\NJsonApiCore.Test\NJsonApiCore.Test.xproj", "{5A06E121-32A9-4F55-8055-AB27B266EEE1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{32309EAF-E19A-4274-9D2B-800DF7E84BE5}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Test", "test\NJsonApiCore.Test\NJsonApiCore.Test.xproj", "{5A06E121-32A9-4F55-8055-AB27B266EEE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

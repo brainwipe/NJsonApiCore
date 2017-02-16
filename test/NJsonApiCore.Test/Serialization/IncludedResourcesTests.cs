@@ -20,8 +20,8 @@ namespace NJsonApi.Test.Serialization
             // Arrange
             var source = new PostBuilder()
                 .WithAuthor(PostBuilder.Asimov)
-                .WithComment(1, "Comment One")
-                .WithComment(2, "Comment Two")
+                .WithComment(1, "Comment One", PostBuilder.Asimov)
+                .WithComment(2, "Comment Two", PostBuilder.Clarke)
                 .Build();
 
             var sourceList = new List<object>()
@@ -34,7 +34,7 @@ namespace NJsonApi.Test.Serialization
             var mapping = config.GetMapping(typeof(Post));
             var context = new Context(
                 new Uri("http://dummy:4242/posts"),
-                new string[] { "authors.comments" });
+                new string[] { "replies.author" });
 
             var transformationHelper = new TransformationHelper(config, new FakeLinkBuilder());
 
@@ -45,6 +45,7 @@ namespace NJsonApi.Test.Serialization
             Assert.NotNull(result.Single(x => x.Id == "1" && x.Type == "comments"));
             Assert.NotNull(result.Single(x => x.Id == "2" && x.Type == "comments"));
             Assert.NotNull(result.Single(x => x.Id == "1" && x.Type == "authors"));
+            Assert.NotNull(result.Single(x => x.Id == "2" && x.Type == "authors"));
             Assert.False(result.Any(x => x.Type == "posts"));
         }
 
@@ -52,20 +53,23 @@ namespace NJsonApi.Test.Serialization
         public void AppendIncludedRepresentationRecursive_RecursesWholeTree_No_Duplicates()
         {
             // Arrange
-            var duplicateAuthor = PostBuilder.Asimov;
-
             var firstSource = new PostBuilder()
-                .WithAuthor(duplicateAuthor)
+                .WithAuthor(PostBuilder.Asimov)
                 .Build();
 
             var secondSource = new PostBuilder()
-                .WithAuthor(duplicateAuthor)
+                .WithAuthor(PostBuilder.Asimov)
+                .Build();
+
+            var thirdSource = new PostBuilder()
+                .WithAuthor(PostBuilder.Clarke)
                 .Build();
 
             var sourceList = new List<object>()
             {
                 firstSource,
-                secondSource
+                secondSource,
+                thirdSource
             };
 
             var config = TestModelConfigurationBuilder.BuilderForEverything.Build();
@@ -73,7 +77,7 @@ namespace NJsonApi.Test.Serialization
             var mapping = config.GetMapping(typeof(Post));
             var context = new Context(
                 new Uri("http://dummy:4242/posts"),
-                new string[] { "authors.comments" });
+                new string[] { "author.replies" });
 
             var transformationHelper = new TransformationHelper(config, new FakeLinkBuilder());
 
