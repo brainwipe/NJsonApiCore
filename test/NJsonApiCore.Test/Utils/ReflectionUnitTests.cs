@@ -50,10 +50,10 @@ namespace NJsonApi.Test.Utils
         public void Given_ArrayType_WHEN_GetObjectType_THEN_ArrayElementTypeReturned()
         {
             // Arrange
-            var type = typeof(string[]);
+            var myEmptyObject = new string[0];
 
             // Act
-            var result = Reflection.GetObjectType(type);
+            var result = Reflection.GetObjectType(myEmptyObject);
 
             // Assert
             Assert.Equal(typeof(string), result);
@@ -63,10 +63,10 @@ namespace NJsonApi.Test.Utils
         public void Given_GenericEnumerable_WHEN_GetObjectType_THEN_GenericTypeReturned()
         {
             // Arrange
-            var type = typeof(List<string>);
+            var myStringListObject = new List<string>();
 
             // Act
-            var result = Reflection.GetObjectType(type);
+            var result = Reflection.GetObjectType(myStringListObject);
 
             // Assert
             Assert.Equal(typeof(string), result);
@@ -77,10 +77,10 @@ namespace NJsonApi.Test.Utils
         public void Given_NonEnumerable_WHEN_GetObjectType_THEN_TypeReturned()
         {
             // Arrange
-            var type = typeof(string);
+            string myEmptyObject = string.Empty;
 
             // Act
-            var result = Reflection.GetObjectType(type);
+            var result = Reflection.GetObjectType(myEmptyObject);
 
             // Assert
             Assert.Equal(typeof(string), result);

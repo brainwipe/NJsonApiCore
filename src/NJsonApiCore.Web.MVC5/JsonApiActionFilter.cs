@@ -51,16 +51,7 @@ namespace NJsonApiCore.Web.MVC5
 
                 InternalActionExecuting(context, cancellationToken);
             }
-            else
-            {
-                if (isValidContentType)
-                {
-                    var unsupported = new HttpResponseMessage(HttpStatusCode.UnsupportedMediaType);
-                    unsupported.Content = new StringContent($"The Content-Type provided was {contentType} but there was no NJsonApiCore configuration mapping for {controllerType.FullName}");
-                    return unsupported;
-                }
-            }
-
+            
             if (context.Response != null)
                 return context.Response;
 
