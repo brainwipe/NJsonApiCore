@@ -78,7 +78,13 @@ namespace NJsonApi
         // TODO ROLA - type handling must be better in here
         public Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes)
         {
+            
             var values = new Dictionary<string, object>();
+
+            if (attributes == null)
+            {
+                return values;
+            }
 
             foreach (var propertySetter in PropertySettersExpressions)
             {

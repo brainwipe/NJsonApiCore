@@ -2,6 +2,10 @@
 {
     public class Person
     {
+        public Person()
+        {
+        }
+
         public Person(string firstname, string lastname, string twitter)
         {
             Id = StaticPersistentStore.GetNextId();
