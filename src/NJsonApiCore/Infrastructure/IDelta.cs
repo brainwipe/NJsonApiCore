@@ -15,5 +15,7 @@ namespace NJsonApi.Infrastructure
     {
         Dictionary<string, object> ObjectPropertyValues { get; set; }
         Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
+        Dictionary<string, object> TopLevelMetaData { get; set; }
+        Dictionary<string, object> ObjectMetaData { get; set; }
     }
 }

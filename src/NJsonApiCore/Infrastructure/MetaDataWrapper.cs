@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NJsonApi.Infrastructure
 {
-    internal class MetaDataWrapper<T> : IMetaDataWrapper where T : class
+    public class MetaDataWrapper<T> : IMetaDataWrapper where T : class
     {
         private readonly T value;
         public T Value { get { return value; } }
@@ -19,6 +19,17 @@ namespace NJsonApi.Infrastructure
         {
             MetaData = new Dictionary<string, object>();
             this.value = value;
+        }
+    }
+
+    public class MetaData : IMetaData
+    {
+        private Dictionary<string, object> _metaData = null;
+        public Dictionary<string, object> GetMetaData()
+        {
+            if (_metaData == null)
+                _metaData = new Dictionary<string, object>();
+            return _metaData;
         }
     }
 

@@ -139,6 +139,17 @@ namespace NJsonApi.Serialization
                     }
                 }
             }
+
+
+            if (updateDocument.MetaData?.Count > 0)
+            {
+                delta.TopLevelMetaData = updateDocument.MetaData;
+            }
+            if (updateDocument.Data.MetaData?.Count > 0)
+            {
+                delta.ObjectMetaData = updateDocument.Data.MetaData;
+            }
+
             return delta;
         }
     }

@@ -34,11 +34,16 @@ namespace NJsonApiCore.Web.MVC5
         }
 
         public override bool CanWriteType(Type type)
+
         {
             if (type == typeof(CompoundDocument))
             {
                 return true;
             }
+
+            if (type.IsGenericType
+                && type.GetGenericTypeDefinition() == typeof(MetaDataWrapper<>))
+                return configuration.IsResourceRegistered(type.GetGenericArguments()[0]);
 
             if (type == typeof(HttpError))
             {

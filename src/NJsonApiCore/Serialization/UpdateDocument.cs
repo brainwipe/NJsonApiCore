@@ -8,5 +8,8 @@ namespace NJsonApi.Serialization
     {
         [JsonProperty(PropertyName = "data", Required = Required.Always)]
         public SingleResource Data { get; set; }
+
+        [JsonProperty(PropertyName = "meta", Required = Required.Default)]
+        public Dictionary<string, object> MetaData { get; set; }
     }
 }

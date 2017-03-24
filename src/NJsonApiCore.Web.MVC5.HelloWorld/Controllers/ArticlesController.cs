@@ -21,7 +21,11 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            return Ok(StaticPersistentStore.Articles.Single(w => w.Id == id));
+            var a = StaticPersistentStore.Articles.Single(w => w.Id == id);
+            var md = new MetaDataWrapper<Article>(a);
+            md.MetaData.Add("response created", DateTime.Now);
+            md.MetaData.Add("response created by", this.GetType());
+            return Ok(md);
         }
 
         [Route]

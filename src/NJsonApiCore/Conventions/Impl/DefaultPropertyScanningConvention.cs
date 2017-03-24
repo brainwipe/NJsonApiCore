@@ -12,7 +12,8 @@ namespace NJsonApi.Conventions.Impl
             "id",
             "href",
             "type",
-            "links"
+            "links",
+            "meta"
         };
 
         public DefaultPropertyScanningConvention()

@@ -8,4 +8,9 @@ namespace NJsonApi.Infrastructure
         Dictionary<string, object> MetaData { get; }
         object GetValue();
     }
+
+    public interface IMetaData
+    {
+        Dictionary<string, object> GetMetaData();
+    }
 }

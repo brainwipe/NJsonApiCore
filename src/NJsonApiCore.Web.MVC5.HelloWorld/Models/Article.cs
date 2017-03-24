@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NJsonApi.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace NJsonApi.Web.MVC5.HelloWorld.Models
 {
-    public class Article
+    public class Article : MetaData
     {
         public Article()
         {

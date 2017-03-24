@@ -1,6 +1,8 @@
-﻿namespace NJsonApi.Web.MVC5.HelloWorld.Models
+﻿using NJsonApi.Infrastructure;
+
+namespace NJsonApi.Web.MVC5.HelloWorld.Models
 {
-    public class Person
+    public class Person : MetaData
     {
         public Person()
         {

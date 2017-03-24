@@ -21,5 +21,8 @@ namespace NJsonApi
         Dictionary<string, object> GetAttributes(object objectGraph);
 
         Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
+
+        bool HasMetadata { get; set; }
+        Dictionary<string, object> GetMetadata(object objectGraph);
     }
 }

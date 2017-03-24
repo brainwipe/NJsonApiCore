@@ -18,6 +18,8 @@ namespace NJsonApi.Infrastructure
 
         public Dictionary<string, object> ObjectPropertyValues { get; set; }
         public Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
+        public Dictionary<string, object> TopLevelMetaData { get; set; }
+        public Dictionary<string, object> ObjectMetaData { get; set; }
 
         public Delta()
         {
@@ -35,6 +37,8 @@ namespace NJsonApi.Infrastructure
 
             ObjectPropertyValues = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             CollectionDeltas = new Dictionary<string, ICollectionDelta>();
+            TopLevelMetaData = null;
+            ObjectMetaData = null; 
         }
 
         public void FilterOut<TProperty>(params Expression<Func<T, TProperty>>[] filter)
