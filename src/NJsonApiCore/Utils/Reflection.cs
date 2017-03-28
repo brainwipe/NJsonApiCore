@@ -1,10 +1,7 @@
 ﻿using NJsonApi.Infrastructure;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace NJsonApi.Utils
 {
@@ -19,9 +16,17 @@ namespace NJsonApi.Utils
                 objectType = objectGraph.GetType().GetGenericArguments()[0];
             }
 
-            if (typeof(IEnumerable).IsAssignableFrom(objectType) && objectType.GetTypeInfo().IsGenericType)
+            if (typeof(IEnumerable).IsAssignableFrom(objectType))
             {
-                objectType = objectType.GetGenericArguments()[0];
+                if (objectType.IsArray)
+                {
+                    objectType = objectType.GetElementType();
+                }
+                else if (objectType.GetTypeInfo().IsGenericType)
+                {
+                    objectType = objectType.GetGenericArguments()[0];
+                }
+                
             }
 
             return objectType;

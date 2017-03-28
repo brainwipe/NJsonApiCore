@@ -60,7 +60,7 @@ namespace NJsonApi
                 var parts = relationshipPath.Split('.');
                 foreach (var part in parts)
                 {
-                    var relationship = currentMapping.Relationships.SingleOrDefault(x => x.RelatedBaseResourceType == part);
+                    var relationship = currentMapping.Relationships.SingleOrDefault(x => x.RelationshipName == part);
                     if (relationship == null)
                         return false;
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using NJsonApi.Serialization.Representations.Resources;
 
 namespace NJsonApi.Serialization.Representations.Relationships

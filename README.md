@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/imxxjic8okn8g1du?svg=true)](https://ci.appveyor.com/project/brainwipe/njsonapicore)
+
 # NJsonApiCore
 The .NET server implementation of the {**json:api**} standard running on .NET Core 1.0 (aka ASP.NET 5, MVC 6, DNX/vNext/OWIN) and .NET 4.5.2 MVC 5.
 
