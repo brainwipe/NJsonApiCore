@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace NJsonApi.Serialization
 {
@@ -164,6 +165,17 @@ namespace NJsonApi.Serialization
             result.Id = resourceMapping.IdGetter(objectGraph).ToString();
             result.Type = resourceMapping.ResourceType;
             result.Attributes = resourceMapping.GetAttributes(objectGraph);
+
+            // Use the JSON serializer settings to determine how to handle null properties
+            if (configuration.GetJsonSerializerSettings().NullValueHandling == NullValueHandling.Ignore)
+            {
+                var keys = result.Attributes.Where(x => x.Value == null).Select(x => x.Key).ToList();
+                foreach(var key in keys)
+                {
+                    result.Attributes.Remove(key);
+                }
+            }
+            
             result.Links = new Dictionary<string, ILink>() { { "self", linkBuilder.FindResourceSelfLink(context, result.Id, resourceMapping) } };
 
             if (resourceMapping.Relationships.Any())
