@@ -183,18 +183,7 @@ namespace NJsonApi.Serialization
 
             result.Id = resourceMapping.IdGetter(objectGraph).ToString();
             result.Type = resourceMapping.ResourceType;
-            result.Attributes = resourceMapping.GetAttributes(objectGraph);
-
-            // Use the JSON serializer settings to determine how to handle null properties
-            if (configuration.GetJsonSerializerSettings().NullValueHandling == NullValueHandling.Ignore)
-            {
-                var keys = result.Attributes.Where(x => x.Value == null).Select(x => x.Key).ToList();
-                foreach(var key in keys)
-                {
-                    result.Attributes.Remove(key);
-                }
-            }
-            
+            result.Attributes = resourceMapping.GetAttributes(objectGraph, configuration.GetJsonSerializerSettings());            
             result.Links = new Dictionary<string, ILink>() { { "self", linkBuilder.FindResourceSelfLink(context, result.Id, resourceMapping) } };
 
             if (resourceMapping.Relationships.Any())
