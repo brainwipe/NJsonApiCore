@@ -51,6 +51,7 @@
     <Compile Include="Conventions\ILinkIdConvention.cs" />
     <Compile Include="Conventions\ILinkNameConvention.cs" />
     <Compile Include="Conventions\Impl\CamelCaseLinkNameConvention.cs" />
+    <Compile Include="Conventions\Impl\ComplexPropertyScanningConvention.cs" />
     <Compile Include="Conventions\Impl\DefaultPropertyScanningConvention.cs" />
     <Compile Include="Conventions\Impl\PluralizedCamelCaseTypeConvention.cs" />
     <Compile Include="Conventions\Impl\SimpleLinkedIdConvention.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Infrastructure\IDelta.cs" />
     <Compile Include="Infrastructure\IMetaDataWrapper.cs" />
     <Compile Include="Infrastructure\IPropertyHandle.cs" />
+    <Compile Include="Infrastructure\LinkedResourceAttribute.cs" />
     <Compile Include="Infrastructure\MetaDataWrapper.cs" />
     <Compile Include="Infrastructure\NJsonApiBaseException.cs" />
     <Compile Include="Infrastructure\PropertyHandle.cs" />

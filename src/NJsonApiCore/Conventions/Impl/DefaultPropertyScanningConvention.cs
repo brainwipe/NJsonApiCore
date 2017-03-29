@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NJsonApi.Conventions.Impl
 {
-    internal class DefaultPropertyScanningConvention : IPropertyScanningConvention
+    public class DefaultPropertyScanningConvention : IPropertyScanningConvention
     {
         private List<string> reservedPropertyKeys = new List<string>()
         {
