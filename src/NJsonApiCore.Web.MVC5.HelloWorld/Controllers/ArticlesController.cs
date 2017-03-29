@@ -1,4 +1,5 @@
 ﻿using NJsonApi.Infrastructure;
+using NJsonApi.Serialization.Representations;
 using NJsonApi.Web.MVC5.HelloWorld.Models;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,45 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
     {
         [Route("")]
         [HttpGet]
-        public IEnumerable<Article> Get()
+        public IHttpActionResult Get()
         {
-            return StaticPersistentStore.Articles;
+            var a = StaticPersistentStore.Articles;
+            var md = new TopLevelDocument<List<Article>>(a);
+            md.MetaData.Add("response created", DateTime.Now);
+            md.MetaData.Add("response created by", this.GetType());
+            md.Links.Add("link1", new SimpleLink(new Uri("http://localhost")));
+            return Ok(md);
         }
+
+        // but you could simply:
+
+        //[Route("")]
+        //[HttpGet]
+        //public IEnumerable<Article> Get()
+        //{
+        //    return StaticPersistentStore.Articles;
+        //}
 
         [Route("{id}", Name = "GetArticle")]
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
             var a = StaticPersistentStore.Articles.Single(w => w.Id == id);
-            var md = new MetaDataWrapper<Article>(a);
+            var md = new TopLevelDocument<Article>(a);
             md.MetaData.Add("response created", DateTime.Now);
             md.MetaData.Add("response created by", this.GetType());
+            md.Links.Add("link1", new SimpleLink(new Uri("http://localhost")));
             return Ok(md);
         }
+
+        // but you could simply:
+
+        //[Route("{id}", Name = "GetArticle")]
+        //[HttpGet]
+        //public Article Get2(int id)
+        //{
+        //    return StaticPersistentStore.Articles.Single(w => w.Id == id);
+        //}
 
         [Route]
         [HttpPost]

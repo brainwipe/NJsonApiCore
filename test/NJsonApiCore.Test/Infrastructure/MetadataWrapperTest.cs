@@ -4,34 +4,34 @@ using Xunit;
 
 namespace NJsonApi.Test.Infrastructure
 {
-    public class MetadataWrapperTest
+    public class TopLevelDocumentTest
     {
         [Fact]
-        public void MetadataWrapper_using_ctor_string_ok()
+        public void TopLevelDocument_using_ctor_string_ok()
         {
             // Arrange
             const string testString = "Test String";
             
             // Act
-            var sut = new MetaDataWrapper<string>(testString);
+            var sut = new TopLevelDocument<string>(testString);
 
             // Assert
             Assert.Equal(sut.Value, testString);
-            Assert.Empty(sut.MetaData);
+            Assert.Empty(sut.MetaData.GetMetaData());
         }
 
         [Fact]
-        public void MetadataWrapper_add_result_collection_ok()
+        public void TopLevelDocument_add_result_collection_ok()
         {
             // Arrange
             var testsStrings = new List<string>(){ "test1", "test2" };
 
             // Act
-            var sut = new MetaDataWrapper<List<string>>(testsStrings);
+            var sut = new TopLevelDocument<List<string>>(testsStrings);
 
             // Assert
             Assert.Equal(sut.Value, testsStrings);
-            Assert.Empty(sut.MetaData);
+            Assert.Empty(sut.MetaData.GetMetaData());
         }
     }
 }

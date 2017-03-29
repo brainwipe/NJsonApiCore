@@ -42,7 +42,7 @@ namespace NJsonApiCore.Web.MVC5
             }
 
             if (type.IsGenericType
-                && type.GetGenericTypeDefinition() == typeof(MetaDataWrapper<>))
+                && type.GetGenericTypeDefinition() == typeof(TopLevelDocument<>))
                 return configuration.IsResourceRegistered(type.GetGenericArguments()[0]);
 
             if (type == typeof(HttpError))

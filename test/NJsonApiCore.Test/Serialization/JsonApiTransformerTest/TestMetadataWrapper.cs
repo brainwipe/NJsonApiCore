@@ -9,16 +9,16 @@ using Xunit;
 
 namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
-    public class TestMetadataWrapper
+    public class TestTopLevelDocument
     {
         private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
 
         [Fact]
-        public void Creates_CompondDocument_for_metadatawrapper_single_not_nested_class_and_propertly_map_resourceName()
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_resourceName()
         {
             // Arrange
             var context = CreateContext();
-            MetaDataWrapper<SampleClass> objectToTransform = CreateObjectToTransform();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
             var transfomer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
                 .Build();
@@ -33,11 +33,11 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
-        public void Creates_CompondDocument_for_metadatawrapper_single_not_nested_class_and_propertly_map_id()
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_id()
         {
             // Arrange
             var context = CreateContext();
-            MetaDataWrapper<SampleClass> objectToTransform = CreateObjectToTransform();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
             var transfomer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
                 .Build();
@@ -51,11 +51,11 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
-        public void Creates_CompondDocument_for_metadatawrapper_single_not_nested_class_and_propertly_map_properties()
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_properties()
         {
             // Arrange
             var context = CreateContext();
-            MetaDataWrapper<SampleClass> objectToTransform = CreateObjectToTransform();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
             var transfomer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
                 .Build();
@@ -71,11 +71,11 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
-        public void Creates_CompondDocument_for_metadatawrapper_single_not_nested_class_and_propertly_map_type()
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_type()
         {
             // Arrange
             var context = CreateContext();
-            MetaDataWrapper<SampleClass> objectToTransform = CreateObjectToTransform();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
             var transfomer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
                 .Build();
@@ -89,14 +89,14 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
-        public void Creates_CompondDocument_for_metadatawrapper_single_not_nested_class_and_propertly_map_metadata()
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_metadata()
         {
             // Arrange
             const string pagingValue = "1";
             const string countValue = "2";
 
             var context = CreateContext();
-            MetaDataWrapper<SampleClass> objectToTransform = CreateObjectToTransform();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
             objectToTransform.MetaData.Add("Paging", pagingValue);
             objectToTransform.MetaData.Add("Count", countValue);
             var transfomer = new JsonApiTransformerBuilder()
@@ -112,7 +112,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.Equal(transformedObjectMetadata["Count"], countValue);
         }
 
-        private static MetaDataWrapper<SampleClass> CreateObjectToTransform()
+        private static TopLevelDocument<SampleClass> CreateObjectToTransform()
         {
             var objectToTransform = new SampleClass
             {
@@ -121,7 +121,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 DateTime = DateTime.UtcNow,
                 NotMappedValue = "Should be not mapped"
             };
-            return new MetaDataWrapper<SampleClass>(objectToTransform);
+            return new TopLevelDocument<SampleClass>(objectToTransform);
         }
 
         private Context CreateContext()
