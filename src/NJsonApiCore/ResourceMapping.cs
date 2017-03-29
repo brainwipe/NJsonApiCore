@@ -96,11 +96,10 @@ namespace NJsonApi
             return values;
         }
 
-        public Dictionary<string, object> GetMetadata(object objectGraph)
+        public MetaData GetMetadata(object objectGraph)
         {
-            var metadata = (objectGraph as IMetaData)?.GetMetaData();
-
-            return metadata?.Count > 0 ? metadata : null; 
+            var metadata = (objectGraph as IMetaDataContainer);
+            return metadata?.GetMetaData().Count > 0 ? metadata.GetMetaData() : null; 
         }
     }
 }

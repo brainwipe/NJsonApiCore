@@ -59,6 +59,7 @@
     <Compile Include="Conventions\IResourceTypeConvention.cs" />
     <Compile Include="Exceptions\MissingMappingException.cs" />
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="Infrastructure\IMetaDataContainer.cs" />
     <Compile Include="Infrastructure\TopLevelDocument.cs" />
     <Compile Include="Infrastructure\CollectionDelta.cs" />
     <Compile Include="Infrastructure\Delta.cs" />

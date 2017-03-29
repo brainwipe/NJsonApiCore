@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 
 namespace NJsonApi.Infrastructure
 {
-    public interface IMetaData
+    public interface IMetaData : IDictionary<string, object>
     {
-        Dictionary<string, object> GetMetaData();
-        void Add(string key, object value);
     }
 }

@@ -17,7 +17,7 @@ namespace NJsonApi.Test.Infrastructure
 
             // Assert
             Assert.Equal(sut.Value, testString);
-            Assert.Empty(sut.MetaData.GetMetaData());
+            Assert.Empty(sut.GetMetaData());
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace NJsonApi.Test.Infrastructure
 
             // Assert
             Assert.Equal(sut.Value, testsStrings);
-            Assert.Empty(sut.MetaData.GetMetaData());
+            Assert.Empty(sut.GetMetaData());
         }
     }
 }

@@ -163,12 +163,12 @@ namespace NJsonApi.Serialization
             return objectGraph;
         }
 
-        public Dictionary<string, object> GetMetadata(object objectGraph)
+        public IMetaData GetMetadata(object objectGraph)
         {
-            if (objectGraph is ITopLevelDocument)
+            if (objectGraph is IMetaDataContainer)
             {
-                var topLevelDoc = objectGraph as ITopLevelDocument;
-                return topLevelDoc.MetaData.GetMetaData();
+                var metaDataContainer = objectGraph as IMetaDataContainer;
+                return metaDataContainer.GetMetaData();
             }
             return null;
         }

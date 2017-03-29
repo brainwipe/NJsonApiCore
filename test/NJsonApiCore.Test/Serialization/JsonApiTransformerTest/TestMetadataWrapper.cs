@@ -97,8 +97,8 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
             var context = CreateContext();
             TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
-            objectToTransform.MetaData.Add("Paging", pagingValue);
-            objectToTransform.MetaData.Add("Count", countValue);
+            objectToTransform.GetMetaData().Add("Paging", pagingValue);
+            objectToTransform.GetMetaData().Add("Count", countValue);
             var transfomer = new JsonApiTransformerBuilder()
                 .With(CreateConfiguration())
                 .Build();

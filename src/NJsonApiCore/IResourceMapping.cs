@@ -1,3 +1,4 @@
+using NJsonApi.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -23,6 +24,6 @@ namespace NJsonApi
         Dictionary<string, object> GetValuesFromAttributes(Dictionary<string, object> attributes);
 
         bool HasMetadata { get; set; }
-        Dictionary<string, object> GetMetadata(object objectGraph);
+        MetaData GetMetadata(object objectGraph);
     }
 }

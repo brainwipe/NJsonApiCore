@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Representations.Resources;
 using System.Collections.Generic;
 
@@ -10,6 +11,6 @@ namespace NJsonApi.Serialization
         public SingleResource Data { get; set; }
 
         [JsonProperty(PropertyName = "meta", Required = Required.Default)]
-        public Dictionary<string, object> MetaData { get; set; }
+        public MetaData MetaData { get; set; }
     }
 }

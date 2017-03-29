@@ -12,7 +12,7 @@ namespace NJsonApi.Infrastructure
         Type ValueType { get; }
 
         // below, other top level document data
-        IMetaData MetaData { get; }
+        MetaData GetMetaData();
         Dictionary<string, ILink> Links { get; }
     }
 }

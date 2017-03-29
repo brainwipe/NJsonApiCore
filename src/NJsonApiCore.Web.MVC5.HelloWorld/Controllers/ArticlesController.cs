@@ -17,8 +17,8 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
         {
             var a = StaticPersistentStore.Articles;
             var md = new TopLevelDocument<List<Article>>(a);
-            md.MetaData.Add("response created", DateTime.Now);
-            md.MetaData.Add("response created by", this.GetType());
+            md.GetMetaData().Add("response created", DateTime.Now);
+            md.GetMetaData().Add("response created by", this.GetType());
             md.Links.Add("link1", new SimpleLink(new Uri("http://localhost")));
             return Ok(md);
         }
@@ -38,8 +38,8 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Controllers
         {
             var a = StaticPersistentStore.Articles.Single(w => w.Id == id);
             var md = new TopLevelDocument<Article>(a);
-            md.MetaData.Add("response created", DateTime.Now);
-            md.MetaData.Add("response created by", this.GetType());
+            md.GetMetaData().Add("response created", DateTime.Now);
+            md.GetMetaData().Add("response created by", this.GetType());
             md.Links.Add("link1", new SimpleLink(new Uri("http://localhost")));
             return Ok(md);
         }
