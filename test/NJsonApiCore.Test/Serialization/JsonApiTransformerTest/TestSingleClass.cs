@@ -1,4 +1,5 @@
-﻿using NJsonApi.Serialization.Documents;
+﻿using NJsonApi.Infrastructure;
+using NJsonApi.Serialization.Documents;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestControllers;
@@ -10,8 +11,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestSingleClass
     {
-        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-
         [Fact]
         public void Creates_CompondDocument_for_single_not_nested_class_and_propertly_map_resourceName()
         {
@@ -105,6 +104,43 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.Equal(transformedObject.Type, "derivedClasses");
         }
 
+        [Fact]
+        public void Creates_CompondDocument_for_single_class_with_metadata_and_propertly_map_metadata()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleClassWithMetadata objectToTransform = CreateObjectWithMetadataToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfiguration())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal("value1", transformedObject.MetaData["meta1"]);
+            Assert.Equal("value2", transformedObject.MetaData["meta2"]);
+        }
+
+        [Fact]
+        public void Creates_CompondDocument_for_single_class_with_nometadata_and_propertly_map_nometadata()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleClass objectToTransform = CreateObjectToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfiguration())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Null(transformedObject.MetaData);
+        }
+
         private static SampleClass CreateObjectToTransform()
         {
             return new SampleClass
@@ -128,6 +164,18 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             };
         }
 
+        private static SampleClassWithMetadata CreateObjectWithMetadataToTransform()
+        {
+            var o = new SampleClassWithMetadata
+            {
+                Id = 1,
+                SomeValue = "Somevalue text test string"
+            };
+            o.GetMetaData().Add("meta1", "value1");
+            o.GetMetaData().Add("meta2", "value2");
+            return o;
+        }
+
         private Context CreateContext()
         {
             return new Context(new Uri("http://fakehost:1234/", UriKind.Absolute));
@@ -146,9 +194,14 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             derivedMapping.AddPropertyGetter("date", c => c.DateTime);
             derivedMapping.AddPropertyGetter("derivedProperty", c => c.DerivedProperty);
 
+            var mappingWithMeta = new ResourceMapping<SampleClassWithMetadata, DummyController>(c => c.Id);
+            mappingWithMeta.ResourceType = "sampleClassesWithMeta";
+            mappingWithMeta.AddPropertyGetter("someValue", c => c.SomeValue);
+
             var config = new NJsonApi.Configuration();
             config.AddMapping(mapping);
             config.AddMapping(derivedMapping);
+            config.AddMapping(mappingWithMeta);
             return config;
         }
 
@@ -163,6 +216,19 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         private class DerivedClass : SampleClass
         {
             public string DerivedProperty { get; set; }
+        }
+
+        private class SampleClassWithMetadata : IMetaDataContainer
+        {
+            private MetaData _metaData = new MetaData();
+
+            public int Id { get; set; }
+            public string SomeValue { get; set; }
+
+            public MetaData GetMetaData()
+            {
+                return _metaData;
+            }
         }
     }
 }
