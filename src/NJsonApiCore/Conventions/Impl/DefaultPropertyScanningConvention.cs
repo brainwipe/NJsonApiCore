@@ -7,15 +7,6 @@ namespace NJsonApi.Conventions.Impl
 {
     internal class DefaultPropertyScanningConvention : IPropertyScanningConvention
     {
-        private List<string> reservedPropertyKeys = new List<string>()
-        {
-            "id",
-            "href",
-            "type",
-            "links",
-            "meta"
-        };
-
         public DefaultPropertyScanningConvention()
         {
             ThrowOnUnmappedLinkedType = true;

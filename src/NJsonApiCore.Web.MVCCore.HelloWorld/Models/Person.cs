@@ -1,6 +1,8 @@
-﻿namespace NJsonApi.Web.MVCCore.HelloWorld.Models
+﻿using NJsonApi.Infrastructure;
+
+namespace NJsonApi.Web.MVCCore.HelloWorld.Models
 {
-    public class Person
+    public class Person : MetaDataContainer
     {
         public Person(string firstname, string lastname, string twitter)
         {

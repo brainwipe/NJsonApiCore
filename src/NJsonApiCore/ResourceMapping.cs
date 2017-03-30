@@ -18,7 +18,6 @@ namespace NJsonApi
         public Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; private set; }
         public List<IRelationshipMapping> Relationships { get; set; }
         public Type Controller { get; set; }
-        public bool HasMetadata { get; set; }
         
         public ResourceMapping()
         {

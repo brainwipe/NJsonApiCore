@@ -1,5 +1,6 @@
 ﻿using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Documents;
+using NJsonApi.Serialization.Representations;
 using NJsonApi.Serialization.Representations.Resources;
 using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestControllers;
@@ -11,8 +12,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestTopLevelDocument
     {
-        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-
         [Fact]
         public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_resourceName()
         {
@@ -110,6 +109,30 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             var transformedObjectMetadata = result.Meta;
             Assert.Equal(transformedObjectMetadata["Paging"], pagingValue);
             Assert.Equal(transformedObjectMetadata["Count"], countValue);
+        }
+
+        [Fact]
+        public void Creates_CompondDocument_for_TopLevelDocument_single_not_nested_class_and_propertly_map_links()
+        {
+            // Arrange
+            SimpleLink linkSome = new SimpleLink(new Uri("http://somehost/"));
+            SimpleLink linkOther = new SimpleLink(new Uri("http://otherhost/"));
+
+            var context = CreateContext();
+            TopLevelDocument<SampleClass> objectToTransform = CreateObjectToTransform();
+            objectToTransform.Links.Add("linkSome", linkSome);
+            objectToTransform.Links.Add("linkOther", linkOther);
+            var transfomer = new JsonApiTransformerBuilder()
+                .With(CreateConfiguration())
+                .Build();
+
+            // Act
+            CompoundDocument result = transfomer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObjectLinks = result.Links;
+            Assert.Same(linkSome, transformedObjectLinks["linkSome"]);
+            Assert.Same(linkOther, transformedObjectLinks["linkOther"]);
         }
 
         private static TopLevelDocument<SampleClass> CreateObjectToTransform()

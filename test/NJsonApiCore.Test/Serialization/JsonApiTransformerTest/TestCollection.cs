@@ -13,8 +13,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestCollection
     {
-        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-
         [Fact]
         public void Creates_CompondDocument_for_collection_not_nested_class_and_propertly_map_resourceName()
         {

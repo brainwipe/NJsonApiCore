@@ -140,7 +140,6 @@ namespace NJsonApi.Serialization
                 }
             }
 
-
             if (updateDocument.MetaData?.Count > 0)
             {
                 delta.TopLevelMetaData = updateDocument.MetaData;
