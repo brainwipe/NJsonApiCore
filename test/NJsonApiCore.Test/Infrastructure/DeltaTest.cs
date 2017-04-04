@@ -46,5 +46,30 @@ namespace NJsonApi.Test.Infrastructure
             Assert.Null(simpleObject.Name);
             Assert.Equal(simpleObject.DateTimeCreated, new DateTime());
         }
+
+        [Fact]
+        public void GIVEN_SimplePropertiesOfDifferentTypes_WHEN_ApplySimpleProperties_THEN_PropertiesAreApplied()
+        {
+            //Arrange
+            var simpleObject = new SimpleTypes();
+            var objectUnderTest = new Delta<SimpleTypes>();
+
+            //Act
+            objectUnderTest.ObjectPropertyValues =
+                new Dictionary<string, object>()
+                {
+                    {"TestInt", 154},
+                    {"NullableInt", "54"},
+                    {"TestDouble", 100},
+                    {"NullableDouble", 115.5f}
+                };
+            objectUnderTest.ApplySimpleProperties(simpleObject);
+
+            //Assert
+            Assert.Equal(simpleObject.TestInt, 154);
+            Assert.Equal(simpleObject.NullableInt, 54);
+            Assert.Equal(simpleObject.TestDouble, 100d);
+            Assert.Equal(simpleObject.NullableDouble, 115.5d);
+        }
     }
 }

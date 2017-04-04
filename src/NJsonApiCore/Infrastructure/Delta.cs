@@ -73,8 +73,20 @@ namespace NJsonApi.Infrastructure
                 Action<T, object> setter;
 
                 currentTypeSetters.TryGetValue(ToProperCase(objectPropertyNameValue.Key), out setter);
+
+                PropertyInfo propertyInfo = typeof(T)
+                    .GetProperties()
+                    .SingleOrDefault(p => !(typeof(ICollection).IsAssignableFrom(p.PropertyType)) && p.Name == ToProperCase(objectPropertyNameValue.Key));
+
                 if (setter != null)
-                    setter(inputObject, objectPropertyNameValue.Value);
+                {
+                    object value = objectPropertyNameValue.Value;
+                    if (value != null)
+                        if (propertyInfo != null && (value.GetType() != propertyInfo.PropertyType))
+                            value = Convert.ChangeType(value, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
+
+                    setter(inputObject, value);
+                }
             }
         }
 
