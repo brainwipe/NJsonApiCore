@@ -1,11 +1,21 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace NJsonApi.Utils
 {
     public static class ExpressionUtils
     {
+        // JObject.ToObject(value) method info
+        private static readonly MethodInfo JObjectToObjectMethodInfo =
+            typeof(JObject).GetMethod("ToObject",
+            BindingFlags.Instance | BindingFlags.Public,
+            null,
+            CallingConventions.HasThis,
+            new[] {typeof(Type)}, null);
+
         public static PropertyInfo GetPropertyInfo(this LambdaExpression propertyExpression)
         {
             var expression = propertyExpression.Body;
@@ -73,18 +83,40 @@ namespace NJsonApi.Utils
             if (!tValue.IsAssignableFrom(pi.PropertyType) && !pi.PropertyType.IsAssignableFrom(tValue))
                 throw new InvalidOperationException($"Unsupported type combination: {tValue} and {pi.GetType()}.");
 
-            var mi = pi.GetSetMethod();
+             
+            if (Type.GetTypeCode(pi.PropertyType) == TypeCode.Object)
+            {
+                // Complex types
+                // Use "(targetType) JObject.ToObject(value)" to get deserialized object
+                var mi = pi.GetSetMethod();
 
-            var instanceParameter = Expression.Parameter(tInstance);
-            var valueParameter = Expression.Parameter(tValue);
-            Expression valueExpression = valueParameter;
+                var instanceParameter = Expression.Parameter(tInstance);
+                var valueParameter = Expression.Parameter(tValue);
+                var typeConstant = Expression.Constant(pi.PropertyType);
 
-            if (pi.PropertyType != tValue)
-                valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
+                var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(JObject));
+                var toObjectCall = Expression.Call(convertToJObjectExpression, JObjectToObjectMethodInfo, typeConstant);
+                var convertToTargetTypeExpression = Expression.Convert(toObjectCall, pi.PropertyType);
+                var body = Expression.Call(instanceParameter, mi, convertToTargetTypeExpression);
 
-            var body = Expression.Call(instanceParameter, mi, valueExpression);
+                return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+            }
+            else
+            {
+                // Simple types
+                var mi = pi.GetSetMethod();
 
-            return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+                var instanceParameter = Expression.Parameter(tInstance);
+                var valueParameter = Expression.Parameter(tValue);
+                Expression valueExpression = valueParameter;
+
+                if (pi.PropertyType != tValue)
+                    valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
+
+                var body = Expression.Call(instanceParameter, mi, valueExpression);
+
+                return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+            }
         }
 
         public static Action<TInstance, TValue> ToCompiledSetterAction<TInstance, TValue>(this PropertyInfo pi)
