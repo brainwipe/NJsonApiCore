@@ -86,42 +86,50 @@ namespace NJsonApi.Utils
              
             if (Type.GetTypeCode(pi.PropertyType) == TypeCode.Object)
             {
-                // Complex types
-                // Use "(targetType) JObject.ToObject(value)" to get deserialized object
-                var mi = pi.GetSetMethod();
-
-                var instanceParameter = Expression.Parameter(tInstance);
-                var valueParameter = Expression.Parameter(tValue);
-                var typeConstant = Expression.Constant(pi.PropertyType);
-
-                var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(JObject));
-                var toObjectCall = Expression.Call(convertToJObjectExpression, JObjectToObjectMethodInfo, typeConstant);
-                var convertToTargetTypeExpression = Expression.Convert(toObjectCall, pi.PropertyType);
-                var body = Expression.Call(instanceParameter, mi, convertToTargetTypeExpression);
-
-                return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+                return CreateCompiledComplexTypeSetterDelegate(pi, tInstance, tValue);
             }
             else
             {
-                // Simple types
-                var mi = pi.GetSetMethod();
-
-                var instanceParameter = Expression.Parameter(tInstance);
-                var valueParameter = Expression.Parameter(tValue);
-                Expression valueExpression = valueParameter;
-
-                if (pi.PropertyType != tValue)
-                    valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
-
-                var body = Expression.Call(instanceParameter, mi, valueExpression);
-
-                return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+                return CreateCompiledSimpleTypeSetterDelegate(pi, tInstance, tValue);
             }
         }
 
         public static Action<TInstance, TValue> ToCompiledSetterAction<TInstance, TValue>(this PropertyInfo pi)
         {
             return (Action<TInstance, TValue>)ToCompiledSetterDelegate(pi, typeof(TInstance), typeof(TValue));
+        }
+
+        private static Delegate CreateCompiledSimpleTypeSetterDelegate(PropertyInfo pi, Type tInstance, Type tValue)
+        {
+            // Use "(targetType) JObject.ToObject(value)" to get deserialized object
+            var mi = pi.GetSetMethod();
+
+            var instanceParameter = Expression.Parameter(tInstance);
+            var valueParameter = Expression.Parameter(tValue);
+            Expression valueExpression = valueParameter;
+
+            if (pi.PropertyType != tValue)
+                valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
+
+            var body = Expression.Call(instanceParameter, mi, valueExpression);
+
+            return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+        }
+
+        private static Delegate CreateCompiledComplexTypeSetterDelegate(PropertyInfo pi, Type tInstance, Type tValue)
+        {
+            var mi = pi.GetSetMethod();
+
+            var instanceParameter = Expression.Parameter(tInstance);
+            var valueParameter = Expression.Parameter(tValue);
+            var typeConstant = Expression.Constant(pi.PropertyType);
+
+            var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(JObject));
+            var toObjectCall = Expression.Call(convertToJObjectExpression, JObjectToObjectMethodInfo, typeConstant);
+            var convertToTargetTypeExpression = Expression.Convert(toObjectCall, pi.PropertyType);
+            var body = Expression.Call(instanceParameter, mi, convertToTargetTypeExpression);
+
+            return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
         }
     }
 
