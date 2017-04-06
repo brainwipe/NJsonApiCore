@@ -8,13 +8,19 @@ namespace NJsonApi.Utils
 {
     public static class ExpressionUtils
     {
+#if (NETCOREAPP1_0)
+        // JObject.ToObject(value) method info
+        private static readonly MethodInfo JObjectToObjectMethodInfo =
+            typeof(JObject).GetMethods().Single(x => x.Name == "ToObject" && !x.ContainsGenericParameters && x.GetParameters().Length == 1);
+#else
         // JObject.ToObject(value) method info
         private static readonly MethodInfo JObjectToObjectMethodInfo =
             typeof(JObject).GetMethod("ToObject",
             BindingFlags.Instance | BindingFlags.Public,
             null,
             CallingConventions.HasThis,
-            new[] {typeof(Type)}, null);
+            new[] { typeof(Type) }, null);
+#endif
 
         public static PropertyInfo GetPropertyInfo(this LambdaExpression propertyExpression)
         {
@@ -83,14 +89,24 @@ namespace NJsonApi.Utils
             if (!tValue.IsAssignableFrom(pi.PropertyType) && !pi.PropertyType.IsAssignableFrom(tValue))
                 throw new InvalidOperationException($"Unsupported type combination: {tValue} and {pi.GetType()}.");
 
-             
-            if (Type.GetTypeCode(pi.PropertyType) == TypeCode.Object)
+            var instanceParameter = Expression.Parameter(tInstance);
+            var valueParameter = Expression.Parameter(tValue);
+
+            if (Type.GetTypeCode(tValue) == TypeCode.Object)
             {
-                return CreateCompiledComplexTypeSetterDelegate(pi, tInstance, tValue);
+                var canConvertToJObject = Expression.Equal(Expression.TypeAs(valueParameter, typeof(JObject)),
+                    Expression.Constant(null));
+
+                var exp = Expression.IfThenElse(canConvertToJObject,
+                    CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter),
+                    CreateJObjectTypeSetterExpression(pi, instanceParameter, valueParameter));
+
+                return Expression.Lambda(exp, instanceParameter, valueParameter).Compile();
             }
             else
             {
-                return CreateCompiledSimpleTypeSetterDelegate(pi, tInstance, tValue);
+                var exp = CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter);
+                return Expression.Lambda(exp, instanceParameter, valueParameter).Compile();
             }
         }
 
@@ -99,29 +115,24 @@ namespace NJsonApi.Utils
             return (Action<TInstance, TValue>)ToCompiledSetterDelegate(pi, typeof(TInstance), typeof(TValue));
         }
 
-        private static Delegate CreateCompiledSimpleTypeSetterDelegate(PropertyInfo pi, Type tInstance, Type tValue)
+        private static Expression CreateSimpleTypeSetterExpression(PropertyInfo pi, ParameterExpression instanceParameter, ParameterExpression valueParameter)
         {
-            // Use "(targetType) JObject.ToObject(value)" to get deserialized object
+            
             var mi = pi.GetSetMethod();
-
-            var instanceParameter = Expression.Parameter(tInstance);
-            var valueParameter = Expression.Parameter(tValue);
             Expression valueExpression = valueParameter;
 
-            if (pi.PropertyType != tValue)
+            if (pi.PropertyType != valueParameter.Type)
                 valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
 
             var body = Expression.Call(instanceParameter, mi, valueExpression);
 
-            return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+            return body;
         }
 
-        private static Delegate CreateCompiledComplexTypeSetterDelegate(PropertyInfo pi, Type tInstance, Type tValue)
+        private static Expression CreateJObjectTypeSetterExpression(PropertyInfo pi, ParameterExpression instanceParameter, ParameterExpression valueParameter)
         {
+            // Use "(targetType) JObject.ToObject(value)" to get deserialized object
             var mi = pi.GetSetMethod();
-
-            var instanceParameter = Expression.Parameter(tInstance);
-            var valueParameter = Expression.Parameter(tValue);
             var typeConstant = Expression.Constant(pi.PropertyType);
 
             var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(JObject));
@@ -129,7 +140,7 @@ namespace NJsonApi.Utils
             var convertToTargetTypeExpression = Expression.Convert(toObjectCall, pi.PropertyType);
             var body = Expression.Call(instanceParameter, mi, convertToTargetTypeExpression);
 
-            return Expression.Lambda(body, instanceParameter, valueParameter).Compile();
+            return body;
         }
     }
 
