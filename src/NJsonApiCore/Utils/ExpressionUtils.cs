@@ -122,7 +122,7 @@ namespace NJsonApi.Utils
             Expression valueExpression = valueParameter;
 
             if (pi.PropertyType != valueParameter.Type)
-                valueExpression = Expression.Convert(valueExpression, pi.PropertyType);
+                valueExpression = Expression.Convert(valueParameter, pi.PropertyType);
 
             var body = Expression.Call(instanceParameter, mi, valueExpression);
 
