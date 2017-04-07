@@ -69,6 +69,38 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("AuthorId"));
         }
 
+        [Fact]
+        public void Transform_UpdateDocument_To_Delta_Containing_ComplexObject()
+        {
+            // Arrange
+            var dimensions = new Dimensions() {Height = "80mm", Width = "10mm"};
+            var updateDocument = new UpdateDocument
+            {
+                Data = new SingleResource()
+                {
+                    Id = "123",
+                    Type = "product",
+                    Attributes = new Dictionary<string, object>()
+                    {
+                        {"name", "Widget" },
+                        {"dimensions", dimensions }
+                    }
+                }
+            };
+
+            var config = TestModelConfigurationBuilder.BuilderForEverything.Build();
+            var context = new Context(new Uri("http://fakehost:1234", UriKind.Absolute));
+            var transformer = new JsonApiTransformerBuilder().With(config).Build();
+
+            // Act
+            var resultDelta = transformer.TransformBack(updateDocument, typeof(Product), context);
+
+            // Assert
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Name"));
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Dimensions"));
+            Assert.Equal(resultDelta.ObjectPropertyValues["Dimensions"], dimensions);
+        }
+
         private class PostUpdateOneField
         {
             public string Title { get; set; }

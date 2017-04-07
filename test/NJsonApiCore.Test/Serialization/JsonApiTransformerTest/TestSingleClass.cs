@@ -105,6 +105,27 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.Equal(transformedObject.Type, "derivedClasses");
         }
 
+        [Fact]
+        public void Creates_CompoundDocument_for_complex_class_and_property_map_type()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleComplexClass objectToTransform = CreateComplexObjectToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfigurationForComplexType())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal(transformedObject.Type, "sampleComplexClasses");
+            Assert.Equal(transformedObject.Attributes.Count, 2);
+            Assert.True(transformedObject.Attributes.ContainsKey("complexAttribute"));
+            Assert.Equal(objectToTransform.ComplexAttribute, transformedObject.Attributes["complexAttribute"]);
+        }
+
         private static SampleClass CreateObjectToTransform()
         {
             return new SampleClass
@@ -125,6 +146,16 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 DateTime = DateTime.UtcNow,
                 NotMappedValue = "Should be not mapped",
                 DerivedProperty = "Derived value"
+            };
+        }
+
+        private static SampleComplexClass CreateComplexObjectToTransform()
+        {
+            return new SampleComplexClass()
+            {
+                Id = 1,
+                SimpleAttribute = "Simpleattribute text string",
+                ComplexAttribute = CreateObjectToTransform()
             };
         }
 
@@ -151,6 +182,17 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             config.AddMapping(derivedMapping);
             return config;
         }
+        private IConfiguration CreateConfigurationForComplexType()
+        {
+            var mapping = new ResourceMapping<SampleComplexClass, DummyController>(c => c.Id);
+            mapping.ResourceType = "sampleComplexClasses";
+            mapping.AddPropertyGetter("simpleAttribute", c => c.SimpleAttribute);
+            mapping.AddPropertyGetter("complexAttribute", c => c.ComplexAttribute);
+
+            var config = new NJsonApi.Configuration();
+            config.AddMapping(mapping);
+            return config;
+        }
 
         private class SampleClass
         {
@@ -163,6 +205,13 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         private class DerivedClass : SampleClass
         {
             public string DerivedProperty { get; set; }
+        }
+
+        private class SampleComplexClass
+        {
+            public int Id { get; set; }
+            public string SimpleAttribute { get; set; }
+            public SampleClass ComplexAttribute { get; set; }
         }
     }
 }
