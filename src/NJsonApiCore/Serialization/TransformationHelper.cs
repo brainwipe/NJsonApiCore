@@ -142,9 +142,9 @@ namespace NJsonApi.Serialization
 
         public void VerifyTypeSupport(Type innerObjectType)
         {
-            if (typeof(IMetaDataWrapper).IsAssignableFrom(innerObjectType))
+            if (typeof(ITopLevelDocument).IsAssignableFrom(innerObjectType))
             {
-                throw new NotSupportedException(string.Format("Error while serializing type {0}. IEnumerable<MetaDataWrapper<>> is not supported.", innerObjectType));
+                throw new NotSupportedException(string.Format("Error while serializing type {0}. IEnumerable<ITopLevelDocument<>> is not supported.", innerObjectType));
             }
 
             if (typeof(IEnumerable).IsAssignableFrom(innerObjectType) && !innerObjectType.GetTypeInfo().IsGenericType)
@@ -155,20 +155,20 @@ namespace NJsonApi.Serialization
 
         public object UnwrapResourceObject(object objectGraph)
         {
-            if (!(objectGraph is IMetaDataWrapper))
+            if (objectGraph is ITopLevelDocument)
             {
-                return objectGraph;
+                var topLevelDocument = objectGraph as ITopLevelDocument;
+                return topLevelDocument.Value;
             }
-            var metadataWrapper = objectGraph as IMetaDataWrapper;
-            return metadataWrapper.GetValue();
+            return objectGraph;
         }
 
-        public Dictionary<string, object> GetMetadata(object objectGraph)
+        public IMetaData GetMetadata(object objectGraph)
         {
-            if (objectGraph is IMetaDataWrapper)
+            if (objectGraph is IMetaDataContainer)
             {
-                var metadataWrapper = objectGraph as IMetaDataWrapper;
-                return metadataWrapper.MetaData;
+                var metaDataContainer = objectGraph as IMetaDataContainer;
+                return metaDataContainer.GetMetaData();
             }
             return null;
         }
@@ -184,6 +184,7 @@ namespace NJsonApi.Serialization
             result.Type = resourceMapping.ResourceType;
             result.Attributes = resourceMapping.GetAttributes(objectGraph);
             result.Links = new Dictionary<string, ILink>() { { "self", linkBuilder.FindResourceSelfLink(context, result.Id, resourceMapping) } };
+            result.MetaData = resourceMapping.GetMetadata(objectGraph);
 
             if (resourceMapping.Relationships.Any())
             {
@@ -279,9 +280,10 @@ namespace NJsonApi.Serialization
             }
         }
 
-        public Dictionary<string, ILink> GetTopLevelLinks(Uri requestUri)
+        public Dictionary<string, ILink> GetTopLevelLinks(object objectGraph, Uri requestUri)
         {
-            var topLevel = new Dictionary<string, ILink>();
+            var links = (objectGraph as ITopLevelDocument)?.Links;
+            var topLevel = links == null ? new Dictionary<string, ILink>() : new Dictionary<string, ILink>(links);
             topLevel.Add("self", new SimpleLink(requestUri));
             return topLevel;
         }

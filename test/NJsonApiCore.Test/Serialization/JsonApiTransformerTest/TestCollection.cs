@@ -13,8 +13,6 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
     public class TestCollection
     {
-        private readonly List<string> reservedKeys = new List<string> { "id", "type", "href", "links" };
-
         [Fact]
         public void Creates_CompondDocument_for_collection_not_nested_class_and_propertly_map_resourceName()
         {
@@ -120,13 +118,13 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
-        public void Creates_CompondDocument_for_collectione_of_metadatawrapper_throws_notSupportedException()
+        public void Creates_CompondDocument_for_collectione_of_TopLevelDocument_throws_notSupportedException()
         {
             // Arrange
             var configuration = CreateContext();
-            var objectsToTransform = new List<MetaDataWrapper<SampleClass>>
+            var objectsToTransform = new List<TopLevelDocument<SampleClass>>
             {
-                new MetaDataWrapper<SampleClass>(new SampleClass())
+                new TopLevelDocument<SampleClass>(new SampleClass())
             };
             var transformer = new JsonApiTransformerBuilder().Build();
 

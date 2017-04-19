@@ -1,4 +1,5 @@
-﻿using NJsonApi.Utils;
+﻿using NJsonApi.Infrastructure;
+using NJsonApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace NJsonApi
         public Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; private set; }
         public List<IRelationshipMapping> Relationships { get; set; }
         public Type Controller { get; set; }
-
+        
         public ResourceMapping()
         {
             ResourceRepresentationType = typeof(TEntity);
@@ -50,6 +51,7 @@ namespace NJsonApi
             PropertySettersExpressions.Add(key, convertedExpression);
             PropertySetters.Add(key, convertedExpression.Compile());
         }
+
 
         public bool ValidateIncludedRelationshipPaths(string[] includedPaths)
         {
@@ -91,6 +93,12 @@ namespace NJsonApi
             }
 
             return values;
+        }
+
+        public MetaData GetMetadata(object objectGraph)
+        {
+            var metadata = (objectGraph as IMetaDataContainer);
+            return metadata?.GetMetaData().Count > 0 ? metadata.GetMetaData() : null; 
         }
     }
 }
