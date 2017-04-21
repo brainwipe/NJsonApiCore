@@ -40,8 +40,6 @@ namespace NJsonApi.Common.Test.Utils
             Assert.Equal("bar", value);
 
             var del = typeof(Foo).GetProperty(nameof(foo.Bar)).ToCompiledGetterDelegate(typeof(Foo), typeof(string));
-            Assert.Equal("bar", "not bar");
-
         }
 
         [Fact]
