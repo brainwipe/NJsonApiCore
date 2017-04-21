@@ -6,6 +6,7 @@ using NJsonApi.Test.TestControllers;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using Newtonsoft.Json;
 
 namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 {
@@ -87,6 +88,48 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
         }
 
         [Fact]
+        public void Creates_CompoundDocument_for_single_not_nested_class_and_properly_suppress_nullable_properties()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleClassWithNullableProperty objectToTransform = CreateObjectWithNullPropertyToTransform();
+            var config = CreateConfiguration();
+            config.GetJsonSerializerSettings().NullValueHandling = NullValueHandling.Ignore;
+            var transformer = new JsonApiTransformerBuilder()
+                .With(config)
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal(transformedObject.Attributes["someValue"], objectToTransform.SomeValue);
+            Assert.False(transformedObject.Attributes.ContainsKey("date"));
+            Assert.Equal(transformedObject.Attributes.Count, 1);
+        }
+
+        [Fact]
+        public void Creates_CompoundDocument_for_single_not_nested_class_and_properly_do_not_suppress_nullable_properties()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleClassWithNullableProperty objectToTransform = CreateObjectWithNullPropertyToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfiguration())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal(transformedObject.Attributes["someValue"], objectToTransform.SomeValue);
+            Assert.Equal(transformedObject.Attributes["date"], null);
+            Assert.Equal(transformedObject.Attributes.Count, 2);
+        }
+
+        [Fact]
         public void Creates_CompondDocument_for_single_derived_class_and_propertly_map_type()
         {
             // Arrange
@@ -151,6 +194,16 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 NotMappedValue = "Should be not mapped"
             };
         }
+        private static SampleClassWithNullableProperty CreateObjectWithNullPropertyToTransform()
+        {
+            return new SampleClassWithNullableProperty()
+            {
+                Id = 1,
+                SomeValue = "Somevalue text test string",
+                DateTime = null,
+                NotMappedValue = "Should be not mapped"
+            };
+        }
 
         private static DerivedClass CreateDerivedObjectToTransform()
         {
@@ -188,6 +241,11 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             mapping.AddPropertyGetter("someValue", c => c.SomeValue);
             mapping.AddPropertyGetter("date", c => c.DateTime);
 
+            var nullableMapping = new ResourceMapping<SampleClassWithNullableProperty, DummyController>(c => c.Id);
+            nullableMapping.ResourceType = "sampleClassesWithNullableProperty";
+            nullableMapping.AddPropertyGetter("someValue", c => c.SomeValue);
+            nullableMapping.AddPropertyGetter("date", c => c.DateTime);
+
             var derivedMapping = new ResourceMapping<DerivedClass, DummyController>(c => c.Id);
             derivedMapping.ResourceType = "derivedClasses";
             derivedMapping.AddPropertyGetter("someValue", c => c.SomeValue);
@@ -200,6 +258,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
             var config = new NJsonApi.Configuration();
             config.AddMapping(mapping);
+            config.AddMapping(nullableMapping);
             config.AddMapping(derivedMapping);
             config.AddMapping(mappingWithMeta);
             return config;
@@ -210,6 +269,13 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             public int Id { get; set; }
             public string SomeValue { get; set; }
             public DateTime DateTime { get; set; }
+            public string NotMappedValue { get; set; }
+        }
+        private class SampleClassWithNullableProperty
+        {
+            public int Id { get; set; }
+            public string SomeValue { get; set; }
+            public DateTime? DateTime { get; set; }
             public string NotMappedValue { get; set; }
         }
 

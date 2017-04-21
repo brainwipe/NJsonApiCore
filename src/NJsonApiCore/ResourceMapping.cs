@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace NJsonApi
 {
@@ -72,9 +73,18 @@ namespace NJsonApi
             return true;
         }
 
-        public Dictionary<string, object> GetAttributes(object objectGraph)
+        public Dictionary<string, object> GetAttributes(object objectGraph, JsonSerializerSettings settings)
         {
-            return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            if (settings.NullValueHandling == NullValueHandling.Ignore)
+            {
+                return PropertyGetters
+                    .Where(x => x.Value(objectGraph) != null)
+                    .ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            }
+            else
+            {
+                return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            }
         }
 
         // TODO ROLA - type handling must be better in here
