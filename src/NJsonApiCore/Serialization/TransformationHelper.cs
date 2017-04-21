@@ -8,7 +8,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Newtonsoft.Json;
 using NJsonApi.Utils;
 
 namespace NJsonApi.Serialization
