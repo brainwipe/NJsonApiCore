@@ -1,7 +1,6 @@
 ﻿
 using NJsonApi.Infrastructure;
 using System;
-using System.Reflection;
 
 namespace NJsonApi
 {
