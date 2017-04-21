@@ -49,7 +49,7 @@
     <Reference Include="Humanizer, Version=2.1.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Humanizer.Core.2.1.0\lib\netstandard1.0\Humanizer.dll</HintPath>
       <Private>True</Private>
-    </Reference>  
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
@@ -124,7 +124,7 @@
     <Content Include="njsonapicore-logo.png.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NJsonApiCore.project.json" />
+    <None Include="NJsonApiCoreCore.project.json" />
     <None Include="nuget.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
