@@ -1,8 +1,10 @@
-﻿using NJsonApi.Utils;
+﻿using NJsonApi.Infrastructure;
+using NJsonApi.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace NJsonApi
 {
@@ -17,7 +19,7 @@ namespace NJsonApi
         public Dictionary<string, Expression<Action<object, object>>> PropertySettersExpressions { get; private set; }
         public List<IRelationshipMapping> Relationships { get; set; }
         public Type Controller { get; set; }
-
+        
         public ResourceMapping()
         {
             ResourceRepresentationType = typeof(TEntity);
@@ -51,6 +53,7 @@ namespace NJsonApi
             PropertySetters.Add(key, convertedExpression.Compile());
         }
 
+
         public bool ValidateIncludedRelationshipPaths(string[] includedPaths)
         {
             foreach (var relationshipPath in includedPaths)
@@ -70,9 +73,18 @@ namespace NJsonApi
             return true;
         }
 
-        public Dictionary<string, object> GetAttributes(object objectGraph)
+        public Dictionary<string, object> GetAttributes(object objectGraph, JsonSerializerSettings settings)
         {
-            return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            if (settings.NullValueHandling == NullValueHandling.Ignore)
+            {
+                return PropertyGetters
+                    .Where(x => x.Value(objectGraph) != null)
+                    .ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            }
+            else
+            {
+                return PropertyGetters.ToDictionary(kvp => CamelCaseUtil.ToCamelCase(kvp.Key), kvp => kvp.Value(objectGraph));
+            }
         }
 
         // TODO ROLA - type handling must be better in here
@@ -91,6 +103,12 @@ namespace NJsonApi
             }
 
             return values;
+        }
+
+        public MetaData GetMetadata(object objectGraph)
+        {
+            var metadata = (objectGraph as IMetaDataContainer);
+            return metadata?.GetMetaData().Count > 0 ? metadata.GetMetaData() : null; 
         }
     }
 }

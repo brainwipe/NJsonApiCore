@@ -29,6 +29,7 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Models
             var article2 = new Article("JSON API makes the tea!");
 
             var person1 = new Person("Dan", "Gebhardt", "dgeb");
+            person1.GetMetaData().Add("person created", DateTime.Now);
             var person2 = new Person("Rob", "Lang", "brainwipe");
 
             var comment1 = new Comment("First!");
@@ -37,6 +38,7 @@ namespace NJsonApi.Web.MVC5.HelloWorld.Models
             article1.Author = person1;
             article1.Comments.Add(comment1);
             article1.Comments.Add(comment2);
+            article1.GetMetaData().Add("article created", DateTime.Now);
             Articles.Add(article1);
 
             article2.Author = person2;
