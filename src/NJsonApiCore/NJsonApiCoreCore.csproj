@@ -17,6 +17,10 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\artifacts\src\NJsonApiCore\bin\release\</OutputPath>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Humanizer.Core" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.3" />
