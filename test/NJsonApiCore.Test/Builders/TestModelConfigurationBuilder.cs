@@ -27,6 +27,11 @@ namespace NJsonApi.Test.Builders
                     .Resource<Comment, CommentsController>()
                     .WithAllProperties();
 
+                builder
+                    .Resource<Product, ProductsController>()
+                    .WithAllSimpleProperties()
+                    .WithSimpleProperty(x => x.Dimensions);
+
                 return builder;
             }
         }

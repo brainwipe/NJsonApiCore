@@ -9,12 +9,13 @@ namespace NJsonApi.Utils
     {
         public static Type GetObjectType(object objectGraph)
         {
-            Type objectType = objectGraph.GetType();
+            Type objectType;
 
-            if (objectGraph is IMetaDataWrapper)
-            {
-                objectType = objectGraph.GetType().GetGenericArguments()[0];
-            }
+            var topLevelDocument = objectGraph as ITopLevelDocument;
+            if (topLevelDocument == null)
+                objectType = objectGraph.GetType();
+            else
+                objectType = topLevelDocument.ValueType;
 
             if (typeof(IEnumerable).IsAssignableFrom(objectType))
             {

@@ -2,7 +2,9 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NJsonApi.Common.Test.Utils
 {
@@ -71,6 +73,23 @@ namespace NJsonApi.Common.Test.Utils
         }
 
         [Fact]
+        public void ToCompiledSetterAction_GivenComplexType_ReturnsWorkingDelegate()
+        {
+            // Arrange
+            var complex = new ComplexClass();
+            var foo = new Foo() { Bar = "bar" };
+            var obj = JObject.FromObject(foo);
+
+            var action = typeof(ComplexClass).GetProperty(nameof(complex.Foo)).ToCompiledSetterAction<ComplexClass, object>();
+
+            // Act
+            action(complex, obj);
+
+            // Assert
+            Assert.Equal("bar", complex.Foo.Bar);
+        }
+
+        [Fact]
         public void ToCompiledSetterAction_GivenBaseTypeAndInvalidObject_ThrowsInvalidCastException()
         {
             // Arrange
@@ -126,6 +145,15 @@ namespace NJsonApi.Common.Test.Utils
         {
             public string Bar { get; set; }
             public object Baz { get; set; }
+        }
+
+        private class ComplexClass
+        {
+            public Foo Foo
+            {
+                get;
+                set;
+            }
         }
     }
 }

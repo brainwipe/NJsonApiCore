@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NJsonApi.Infrastructure;
 using NJsonApi.Serialization.Representations;
 using NJsonApi.Serialization.Representations.Resources;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace NJsonApi.Serialization.Documents
         public List<Error> Errors { get; set; }
 
         [JsonProperty(PropertyName = "meta", NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, object> Meta { get; set; }
+        public IMetaData Meta { get; set; }
 
         [JsonExtensionData]
         public Dictionary<string, JToken> UnmappedAttributes { get; set; }
