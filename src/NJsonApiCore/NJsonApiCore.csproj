@@ -42,6 +42,14 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Humanizer, Version=2.1.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Humanizer.Core.2.1.0\lib\netstandard1.0\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
@@ -59,14 +67,17 @@
     <Compile Include="Conventions\IResourceTypeConvention.cs" />
     <Compile Include="Exceptions\MissingMappingException.cs" />
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="Infrastructure\IMetaDataContainer.cs" />
+    <Compile Include="Infrastructure\TopLevelDocument.cs" />
     <Compile Include="Infrastructure\CollectionDelta.cs" />
     <Compile Include="Infrastructure\Delta.cs" />
     <Compile Include="Infrastructure\ICollectionDelta.cs" />
     <Compile Include="Infrastructure\IdAndTypeComparer.cs" />
     <Compile Include="Infrastructure\IDelta.cs" />
-    <Compile Include="Infrastructure\IMetaDataWrapper.cs" />
+    <Compile Include="Infrastructure\IMetaData.cs" />
     <Compile Include="Infrastructure\IPropertyHandle.cs" />
-    <Compile Include="Infrastructure\MetaDataWrapper.cs" />
+    <Compile Include="Infrastructure\ITopLevelDocument.cs" />
+    <Compile Include="Infrastructure\MetaData.cs" />
     <Compile Include="Infrastructure\NJsonApiBaseException.cs" />
     <Compile Include="Infrastructure\PropertyHandle.cs" />
     <Compile Include="IRelationshipMapping.cs" />
@@ -113,7 +124,7 @@
     <Content Include="njsonapicore-logo.png.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NJsonApiCore.project.json" />
+    <None Include="NJsonApiCoreCore.project.json" />
     <None Include="nuget.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
