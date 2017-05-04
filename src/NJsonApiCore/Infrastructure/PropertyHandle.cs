@@ -18,7 +18,7 @@ namespace NJsonApi.Infrastructure
 
         public Expression<Func<TResource, TProperty>> Expression { get; private set; }
         public Func<TResource, TProperty> Getter { get; private set; }
-        public Action<TResource, TProperty> Setter { get; private set; }
+        public Action<TResource, object> Setter { get; private set; }
         public string Name { get; private set; }
 
         public Delegate GetterDelegate { get { return Getter; } }

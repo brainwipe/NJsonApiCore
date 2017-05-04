@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "NJsonApiCore Class Library",
+  "authors": [
+    "Rob"
+  ],
+  "tags": [
+    ""
+  ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "runtimes": {
+    "win": {}
+  },
+  "frameworks": {
+    "net452": {}
+  },
+  "dependencies": {
+    "Humanizer.Core": "2.1.0",
+    "Microsoft.AspNet.Mvc": "5.2.3",
+    "Newtonsoft.Json": "9.0.1"
+  }
+}

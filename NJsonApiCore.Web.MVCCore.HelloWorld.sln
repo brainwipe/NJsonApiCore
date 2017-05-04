@@ -1,24 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{608F0EB7-DEF1-4303-934A-1FD87174B483}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{195DFA6B-E8C8-4D60-9673-1A10E60D8279}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Web.MVCCore", "src\NJsonApiCore.Web.MVCCore\NJsonApiCore.Web.MVCCore.xproj", "{ED4F18FF-7D61-4413-B2EA-96DDA140A442}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore", "src\NJsonApiCore\NJsonApiCore.xproj", "{2FA32B71-2BAD-4F4D-85A3-48743CEC489C}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Web.MVCCore.HelloWorld", "src\NJsonApiCore.Web.MVCCore.HelloWorld\NJsonApiCore.Web.MVCCore.HelloWorld.xproj", "{3309A597-A8C0-4EB8-9956-7860A5F44F22}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{32309EAF-E19A-4274-9D2B-800DF7E84BE5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NJsonApiCore.Test", "test\NJsonApiCore.Test\NJsonApiCore.Test.xproj", "{5A06E121-32A9-4F55-8055-AB27B266EEE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJsonApiCoreCore", "src\NJsonApiCore\NJsonApiCoreCore.csproj", "{CD115F90-BF6B-4921-9028-60AA013EAD37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJsonApiCore.Web.MVCCore", "src\NJsonApiCore.Web.MVCCore\NJsonApiCore.Web.MVCCore.csproj", "{73CD422D-C910-4AE0-8B5E-40D1081DACD8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJsonApiCore.Web.MVCCore.HelloWorld", "src\NJsonApiCore.Web.MVCCore.HelloWorld\NJsonApiCore.Web.MVCCore.HelloWorld.csproj", "{186F4E59-AF68-4037-92A3-B943856B8BC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NJsonApiCore.Test", "test\NJsonApiCore.Test\NJsonApiCore.Test.csproj", "{D2C938B9-961A-442D-BE7D-9413E112F04F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,30 +21,30 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{ED4F18FF-7D61-4413-B2EA-96DDA140A442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED4F18FF-7D61-4413-B2EA-96DDA140A442}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED4F18FF-7D61-4413-B2EA-96DDA140A442}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED4F18FF-7D61-4413-B2EA-96DDA140A442}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FA32B71-2BAD-4F4D-85A3-48743CEC489C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FA32B71-2BAD-4F4D-85A3-48743CEC489C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FA32B71-2BAD-4F4D-85A3-48743CEC489C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FA32B71-2BAD-4F4D-85A3-48743CEC489C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3309A597-A8C0-4EB8-9956-7860A5F44F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3309A597-A8C0-4EB8-9956-7860A5F44F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3309A597-A8C0-4EB8-9956-7860A5F44F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3309A597-A8C0-4EB8-9956-7860A5F44F22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A06E121-32A9-4F55-8055-AB27B266EEE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A06E121-32A9-4F55-8055-AB27B266EEE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A06E121-32A9-4F55-8055-AB27B266EEE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A06E121-32A9-4F55-8055-AB27B266EEE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD115F90-BF6B-4921-9028-60AA013EAD37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD115F90-BF6B-4921-9028-60AA013EAD37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD115F90-BF6B-4921-9028-60AA013EAD37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD115F90-BF6B-4921-9028-60AA013EAD37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73CD422D-C910-4AE0-8B5E-40D1081DACD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73CD422D-C910-4AE0-8B5E-40D1081DACD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73CD422D-C910-4AE0-8B5E-40D1081DACD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73CD422D-C910-4AE0-8B5E-40D1081DACD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{186F4E59-AF68-4037-92A3-B943856B8BC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{186F4E59-AF68-4037-92A3-B943856B8BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{186F4E59-AF68-4037-92A3-B943856B8BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{186F4E59-AF68-4037-92A3-B943856B8BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2C938B9-961A-442D-BE7D-9413E112F04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2C938B9-961A-442D-BE7D-9413E112F04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2C938B9-961A-442D-BE7D-9413E112F04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2C938B9-961A-442D-BE7D-9413E112F04F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{ED4F18FF-7D61-4413-B2EA-96DDA140A442} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
-		{2FA32B71-2BAD-4F4D-85A3-48743CEC489C} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
-		{3309A597-A8C0-4EB8-9956-7860A5F44F22} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
-		{5A06E121-32A9-4F55-8055-AB27B266EEE1} = {32309EAF-E19A-4274-9D2B-800DF7E84BE5}
+		{CD115F90-BF6B-4921-9028-60AA013EAD37} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
+		{73CD422D-C910-4AE0-8B5E-40D1081DACD8} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
+		{186F4E59-AF68-4037-92A3-B943856B8BC5} = {608F0EB7-DEF1-4303-934A-1FD87174B483}
+		{D2C938B9-961A-442D-BE7D-9413E112F04F} = {32309EAF-E19A-4274-9D2B-800DF7E84BE5}
 	EndGlobalSection
 EndGlobal

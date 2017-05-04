@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using NJsonApi;
 using NJsonApi.Test.TestModel;
 using NJsonApi.Test.TestControllers;
+using NJsonApiCore.Test.TestModel;
 
 namespace NJsonApi.Test.Builders
 {
@@ -26,6 +27,16 @@ namespace NJsonApi.Test.Builders
                 builder
                     .Resource<Comment, CommentsController>()
                     .WithAllProperties();
+
+                builder
+                    .Resource<Product, ProductsController>()
+                    .WithAllSimpleProperties()
+                    .WithSimpleProperty(x => x.Dimensions);
+
+                builder
+                    .Resource<Widget, WidgetsController>()
+                    .WithAllSimpleProperties()
+                    .WithSimpleProperty(x => x.Parts);
 
                 return builder;
             }

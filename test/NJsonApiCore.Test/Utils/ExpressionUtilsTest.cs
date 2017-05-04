@@ -1,8 +1,12 @@
 ﻿using NJsonApi.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace NJsonApi.Common.Test.Utils
 {
@@ -71,6 +75,42 @@ namespace NJsonApi.Common.Test.Utils
         }
 
         [Fact]
+        public void ToCompiledSetterAction_GivenComplexType_ReturnsWorkingDelegate()
+        {
+            // Arrange
+            var complex = new ComplexClass();
+            var foo = new Foo() { Bar = "bar" };
+            var obj = JObject.FromObject(foo);
+
+            var action = typeof(ComplexClass).GetProperty(nameof(complex.Foo)).ToCompiledSetterAction<ComplexClass, object>();
+
+            // Act
+            action(complex, obj);
+
+            // Assert
+            Assert.Equal("bar", complex.Foo.Bar);
+        }
+
+        [Fact]
+        public void ToCompiledSetterAction_GivenListType_ReturnsWorkingDelegate()
+        {
+            // Arrange
+            var complex = new ListClass();
+            var listType = new List<ComplexClass>() {new ComplexClass() {Foo = new Foo() {Bar ="bar"}}};
+            var obj = JArray.FromObject(listType);
+
+            var action = typeof(ListClass).GetProperty(nameof(complex.ListType)).ToCompiledSetterAction<ListClass, List<ComplexClass>>();
+
+            // Act
+            action(complex, obj);
+
+            // Assert
+            Assert.NotNull(complex.ListType);
+            Assert.Equal(complex.ListType.Count, 1);
+            Assert.Equal("bar", complex.ListType[0].Foo.Bar);
+        }
+
+        [Fact]
         public void ToCompiledSetterAction_GivenBaseTypeAndInvalidObject_ThrowsInvalidCastException()
         {
             // Arrange
@@ -126,6 +166,20 @@ namespace NJsonApi.Common.Test.Utils
         {
             public string Bar { get; set; }
             public object Baz { get; set; }
+        }
+
+        private class ComplexClass
+        {
+            public Foo Foo
+            {
+                get;
+                set;
+            }
+        }
+
+        private class ListClass
+        {
+            public IList<ComplexClass> ListType { get; set; }
         }
     }
 }
