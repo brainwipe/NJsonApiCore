@@ -5,6 +5,10 @@ using NJsonApi.Test.Builders;
 using NJsonApi.Test.TestModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NJsonApiCore.Test.TestModel;
 using Xunit;
 
 namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
@@ -99,7 +103,44 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             // Assert
             Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Name"));
             Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Dimensions"));
-            Assert.Equal(resultDelta.ObjectPropertyValues["Dimensions"], dimensions);
+            Assert.Equal(dimensions, resultDelta.ObjectPropertyValues["Dimensions"]);
+        }
+
+        [Fact]
+        public void Transform_UpdateDocument_To_Delta_Containing_ListAttribute()
+        {
+            //DS: TODO - should widgetParts be provided as a JArray?
+            // Arrange
+            var widgetParts = new List<WidgetPart>()
+            {
+                new WidgetPart() { PartNumber = "WIDGET-001" },
+                new WidgetPart() { PartNumber = "WIDGET-002" }
+            };
+            var updateDocument = new UpdateDocument
+            {
+                Data = new SingleResource()
+                {
+                    Id = "123",
+                    Type = "widget",
+                    Attributes = new Dictionary<string, object>()
+                    {
+                        {"name", "A widget" },
+                        {"parts", widgetParts }
+                    }
+                }
+            };
+
+            var config = TestModelConfigurationBuilder.BuilderForEverything.Build();
+            var context = new Context(new Uri("http://fakehost:1234", UriKind.Absolute));
+            var transformer = new JsonApiTransformerBuilder().With(config).Build();
+
+            // Act
+            var resultDelta = transformer.TransformBack(updateDocument, typeof(Widget), context);
+
+            // Assert
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Name"));
+            Assert.True(resultDelta.ObjectPropertyValues.ContainsKey("Parts"));
+            Assert.Equal(resultDelta.ObjectPropertyValues["Parts"], widgetParts);
         }
 
         [Fact]

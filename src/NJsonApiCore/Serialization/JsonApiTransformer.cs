@@ -149,6 +149,8 @@ namespace NJsonApi.Serialization
                 delta.ObjectMetaData = updateDocument.Data.MetaData;
             }
 
+            delta.Scan();
+
             return delta;
         }
     }

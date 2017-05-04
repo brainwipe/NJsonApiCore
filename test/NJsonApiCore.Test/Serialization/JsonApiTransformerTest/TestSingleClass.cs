@@ -205,6 +205,27 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             Assert.Equal(objectToTransform.ComplexAttribute, transformedObject.Attributes["complexAttribute"]);
         }
 
+        [Fact]
+        public void Creates_CompoundDocument_for_list_class_and_property_map_type()
+        {
+            // Arrange
+            var context = CreateContext();
+            SampleListClass objectToTransform = CreateListObjectToTransform();
+            var transformer = new JsonApiTransformerBuilder()
+                .With(CreateConfigurationForListType())
+                .Build();
+
+            // Act
+            CompoundDocument result = transformer.Transform(objectToTransform, context);
+
+            // Assert
+            var transformedObject = result.Data as SingleResource;
+            Assert.Equal(transformedObject.Type, "sampleListClasses");
+            Assert.Equal(transformedObject.Attributes.Count, 2);
+            Assert.True(transformedObject.Attributes.ContainsKey("listAttribute"));
+            Assert.Equal(objectToTransform.ListAttribute, transformedObject.Attributes["listAttribute"]);
+        }
+
         private static SampleClass CreateObjectToTransform()
         {
             return new SampleClass
@@ -245,6 +266,20 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 Id = 1,
                 SimpleAttribute = "Simpleattribute text string",
                 ComplexAttribute = CreateObjectToTransform()
+            };
+        }
+
+        private static SampleListClass CreateListObjectToTransform()
+        {
+            return new SampleListClass()
+            {
+                Id = 1,
+                SimpleAttribute = "Simpleattribute text string",
+                ListAttribute = new List<SampleClass>()
+                {
+                    new SampleClass() { DateTime = new DateTime(2017,04,27), Id = 101, SomeValue = "Some value here"},
+                    new SampleClass() { DateTime = new DateTime(2017,04,27), Id = 201, SomeValue = "Another value here"}
+                }
             };
         }
 
@@ -306,6 +341,18 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             return config;
         }
 
+        private IConfiguration CreateConfigurationForListType()
+        {
+            var mapping = new ResourceMapping<SampleListClass, DummyController>(c => c.Id);
+            mapping.ResourceType = "sampleListClasses";
+            mapping.AddPropertyGetter("simpleAttribute", c => c.SimpleAttribute);
+            mapping.AddPropertyGetter("listAttribute", c => c.ListAttribute);
+
+            var config = new NJsonApi.Configuration();
+            config.AddMapping(mapping);
+            return config;
+        }
+
         private class SampleClass
         {
             public int Id { get; set; }
@@ -331,6 +378,13 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             public int Id { get; set; }
             public string SimpleAttribute { get; set; }
             public SampleClass ComplexAttribute { get; set; }
+        }
+
+        private class SampleListClass
+        {
+            public int Id { get; set; }
+            public string SimpleAttribute { get; set; }
+            public IList<SampleClass> ListAttribute { get; set; }
         }
 
         private class SampleClassWithMetadata : IMetaDataContainer

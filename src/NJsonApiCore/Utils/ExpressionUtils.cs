@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -12,10 +14,19 @@ namespace NJsonApi.Utils
         // JObject.ToObject(value) method info
         private static readonly MethodInfo JObjectToObjectMethodInfo =
             typeof(JObject).GetMethods().Single(x => x.Name == "ToObject" && !x.ContainsGenericParameters && x.GetParameters().Length == 1);
+        private static readonly MethodInfo JArrayToObjectMethodInfo =
+            typeof(JArray).GetMethods().Single(x => x.Name == "ToObject" && !x.ContainsGenericParameters && x.GetParameters().Length == 1);
 #else
         // JObject.ToObject(value) method info
         private static readonly MethodInfo JObjectToObjectMethodInfo =
             typeof(JObject).GetMethod("ToObject",
+            BindingFlags.Instance | BindingFlags.Public,
+            null,
+            CallingConventions.HasThis,
+            new[] { typeof(Type) }, null);
+
+        private static readonly MethodInfo JArrayToObjectMethodInfo =
+            typeof(JArray).GetMethod("ToObject",
             BindingFlags.Instance | BindingFlags.Public,
             null,
             CallingConventions.HasThis,
@@ -84,40 +95,50 @@ namespace NJsonApi.Utils
             return (Func<TInstance, TResult>)ToCompiledGetterDelegate(pi, typeof(TInstance), typeof(TResult));
         }
 
+        public static bool IsGenericType(Type type)
+        {
+            return type.GetTypeInfo().IsGenericType;
+        }
+
         public static Delegate ToCompiledSetterDelegate(this PropertyInfo pi, Type tInstance, Type tValue)
         {
             if (!tValue.IsAssignableFrom(pi.PropertyType) && !pi.PropertyType.IsAssignableFrom(tValue))
                 throw new InvalidOperationException($"Unsupported type combination: {tValue} and {pi.GetType()}.");
 
             var instanceParameter = Expression.Parameter(tInstance);
-            var valueParameter = Expression.Parameter(tValue);
+            var valueParameter = Expression.Parameter(typeof(object));
 
-            if (Type.GetTypeCode(tValue) == TypeCode.Object)
+            Expression exp;
+            if (Type.GetTypeCode(pi.PropertyType) == TypeCode.Object)
             {
-                var canConvertToJObject = Expression.Equal(Expression.TypeAs(valueParameter, typeof(JObject)),
-                    Expression.Constant(null));
+                if (pi.PropertyType.GetInterfaces().Any(x => x == typeof(IEnumerable)))
+                {
+                    exp = CreateJArrayTypeSetterExpression(pi, instanceParameter, valueParameter);
+                }
+                else
+                {
+                    var canConvertToJObject = Expression.Equal(Expression.TypeAs(valueParameter, typeof(JObject)),
+                        Expression.Constant(null));
 
-                var exp = Expression.IfThenElse(canConvertToJObject,
-                    CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter),
-                    CreateJObjectTypeSetterExpression(pi, instanceParameter, valueParameter));
-
-                return Expression.Lambda(exp, instanceParameter, valueParameter).Compile();
+                    exp = Expression.IfThenElse(canConvertToJObject,
+                        CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter),
+                        CreateJObjectTypeSetterExpression(pi, instanceParameter, valueParameter));
+                }
             }
             else
             {
-                var exp = CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter);
-                return Expression.Lambda(exp, instanceParameter, valueParameter).Compile();
+                exp = CreateSimpleTypeSetterExpression(pi, instanceParameter, valueParameter);
             }
+            return Expression.Lambda(exp, instanceParameter, valueParameter).Compile();
         }
 
-        public static Action<TInstance, TValue> ToCompiledSetterAction<TInstance, TValue>(this PropertyInfo pi)
+        public static Action<TInstance, object> ToCompiledSetterAction<TInstance, TValue>(this PropertyInfo pi)
         {
-            return (Action<TInstance, TValue>)ToCompiledSetterDelegate(pi, typeof(TInstance), typeof(TValue));
+            return (Action<TInstance, object>)ToCompiledSetterDelegate(pi, typeof(TInstance), typeof(TValue));
         }
 
         private static Expression CreateSimpleTypeSetterExpression(PropertyInfo pi, ParameterExpression instanceParameter, ParameterExpression valueParameter)
         {
-            
             var mi = pi.GetSetMethod();
             Expression valueExpression = valueParameter;
 
@@ -129,14 +150,27 @@ namespace NJsonApi.Utils
             return body;
         }
 
-        private static Expression CreateJObjectTypeSetterExpression(PropertyInfo pi, ParameterExpression instanceParameter, ParameterExpression valueParameter)
+        private static Expression CreateJObjectTypeSetterExpression(PropertyInfo pi,
+            ParameterExpression instanceParameter, ParameterExpression valueParameter)
         {
-            // Use "(targetType) JObject.ToObject(value)" to get deserialized object
+            return CreateJTokenSetterExpression<JObject>(pi, instanceParameter, valueParameter, JObjectToObjectMethodInfo);
+        }
+
+        private static Expression CreateJArrayTypeSetterExpression(PropertyInfo pi,
+            ParameterExpression instanceParameter, ParameterExpression valueParameter)
+        {
+            return CreateJTokenSetterExpression<JArray>(pi, instanceParameter, valueParameter, JArrayToObjectMethodInfo);
+        }
+
+        private static Expression CreateJTokenSetterExpression<TJTokenType>(PropertyInfo pi,
+            ParameterExpression instanceParameter, ParameterExpression valueParameter, MethodInfo method) where TJTokenType : JToken
+        {
+            // Use "(targetType) {JObject/JArray}.ToObject(value)" to get deserialized object
             var mi = pi.GetSetMethod();
             var typeConstant = Expression.Constant(pi.PropertyType);
 
-            var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(JObject));
-            var toObjectCall = Expression.Call(convertToJObjectExpression, JObjectToObjectMethodInfo, typeConstant);
+            var convertToJObjectExpression = Expression.Convert(valueParameter, typeof(TJTokenType));
+            var toObjectCall = Expression.Call(convertToJObjectExpression, method, typeConstant);
             var convertToTargetTypeExpression = Expression.Convert(toObjectCall, pi.PropertyType);
             var body = Expression.Call(instanceParameter, mi, convertToTargetTypeExpression);
 

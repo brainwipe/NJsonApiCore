@@ -17,5 +17,6 @@ namespace NJsonApi.Infrastructure
         Dictionary<string, ICollectionDelta> CollectionDeltas { get; set; }
         IMetaData TopLevelMetaData { get; set; }
         IMetaData ObjectMetaData { get; set; }
+        void Scan();
     }
 }

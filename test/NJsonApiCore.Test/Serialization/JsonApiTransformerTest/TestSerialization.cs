@@ -26,7 +26,8 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
 
             // Assert
             Assert.DoesNotContain(json, "Data");
-            Assert.True(json.Contains("\"complexAttribute\":{\"Label\":\"This is complex attribute class\",\"InnerComplexAttribute\":{\"AnotherLabel\":\"This is inner complex attribute class\"}}}"));
+            Assert.True(json.Contains("\"complexAttribute\":{\"Label\":\"This is complex attribute class\",\"InnerComplexAttribute\":{\"AnotherLabel\":\"This is inner complex attribute class\"}}"));
+            Assert.True(json.Contains("\"listAttribute\":[{\"Label\":\"Complex 1\",\"InnerComplexAttribute\":{\"AnotherLabel\":\"This is inner complex attribute class\"}},{\"Label\":\"Complex 2\",\"InnerComplexAttribute\":{\"AnotherLabel\":\"This is inner complex attribute class\"}}]"));
         }
 
         private static SampleClass CreateObjectToTransform()
@@ -42,6 +43,20 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 InnerComplexAttribute = innerComplexAttribute
             };
 
+            var listAttribute = new List<ComplexAttributeClass>()
+            {
+                new ComplexAttributeClass()
+                {
+                    Label = "Complex 1",
+                    InnerComplexAttribute = innerComplexAttribute
+                },
+                new ComplexAttributeClass()
+                {
+                    Label = "Complex 2",
+                    InnerComplexAttribute = innerComplexAttribute
+                }
+            };
+
             var deepest = new DeeplyNestedClass()
             {
                 Id = 100,
@@ -55,6 +70,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
                 DateTime = DateTime.UtcNow,
                 NotMappedValue = "Should be not mapped",
                 ComplexAttribute = complexAttribute,
+                ListAttribute = listAttribute,
                 NestedClass = new List<NestedClass>()
                 {
                     new NestedClass()
@@ -91,6 +107,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             sampleClassMapping.AddPropertyGetter("someValue", c => c.SomeValue);
             sampleClassMapping.AddPropertyGetter("date", c => c.DateTime);
             sampleClassMapping.AddPropertyGetter("complexAttribute", c => c.ComplexAttribute);
+            sampleClassMapping.AddPropertyGetter("listAttribute", c => c.ListAttribute);
 
             var nestedClassMapping = new ResourceMapping<NestedClass, DummyController>(c => c.Id);
             nestedClassMapping.ResourceType = "nestedClasses";
@@ -132,6 +149,7 @@ namespace NJsonApi.Test.Serialization.JsonApiTransformerTest
             public DateTime DateTime { get; set; }
             public string NotMappedValue { get; set; }
             public ComplexAttributeClass ComplexAttribute { get; set; }
+            public List<ComplexAttributeClass> ListAttribute { get; set; }
             public IEnumerable<NestedClass> NestedClass { get; set; }
         }
 
